@@ -1,0 +1,26 @@
+order id
+order date
+status->{assign,allocate,track}
+
+assign=>{
+    truckCapacity: string,
+    truckNumbers:[{
+        truckNumber: string
+    },...],
+    orderId: string
+}
+allocate:{
+    orderId:string,
+    driverDetails:[{
+        truckNumber:string,
+        driverName: string,
+        driverPhoneNumber: string
+    },...],
+    estimatedPickupTime:string,
+    estimatedDeliveryTime:string
+}
+
+
+ask:{
+    orderDate is not in details
+}

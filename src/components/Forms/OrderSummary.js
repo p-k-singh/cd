@@ -1,0 +1,291 @@
+import React, { useState , useEffect} from 'react'
+import { makeStyles } from '@material-ui/core/styles';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import {connect} from 'react-redux';
+import * as actions from '../../store/actions/index';
+import constants from '../../Constants/constants';
+import {API} from 'aws-amplify';
+import EditIcon from '@material-ui/icons/Edit';
+import {
+    Card,
+    TextField,
+    Button,
+    Grid,
+  } from '@material-ui/core'
+const useStyles = makeStyles({
+    root: {
+        // minWidth: 275,
+    },
+    title: {
+        fontSize: 20,
+        height: 50,
+        padding: 10,
+        paddingLeft: 55,
+        color: 'white'
+    },
+    formHeadings: {
+        margin: 20,
+        marginBottom: 0
+    },
+    formControl: {
+        marginTop:'1%'
+    }
+});
+
+const OrderSummary = (props) => {
+    const classes = useStyles();    
+    const [editName,setEditName] = useState(false);
+    const [newName,setNewName] = useState('');
+    const [editEmail,setEditEmail] = useState(false);
+    const [newEmail,setNewEmail] = useState('');
+    const [editContact,setEditContact] = useState(false);
+    const [newContact,setNewContact] = useState('');
+    const [editCompany,setEditCompany] = useState(false);
+    const [newCompany,setNewCompany] = useState('');
+    const [estimatedMoney,setEstimatedMoney] = useState(-1);
+    useEffect(() => {
+        var params =`height=${props.height}&width=${props.width}&length=${props.length}&toPin=${props.destinationPin}&fromPin=${props.pickupPin}&measureable=true`
+        API
+        .get("GoFlexeOrderPlacement", `/pricing?`+params)
+        .then(resp=>{
+            
+            setEstimatedMoney(resp.estimatedPrice);
+            
+        })
+        .catch(err=>{
+            setEstimatedMoney("Error: Try Later")
+            console.log(err);
+        })
+        // const url='https://2n3n7swm8f.execute-api.ap-south-1.amazonaws.com/draft0/pricing'
+        // axios.get(url,{
+        //     params:{
+        //         lenght:props.length,
+        //         breadth:props.height,
+        //         width:props.width,
+        //         toPin:props.destinationPin,
+        //         fromPin:props.pickupPin
+        //     }
+        // })
+        // .then(resp=>{
+        //     console.log(resp.data);
+        //     setEstimatedMoney(resp.data.estimatedPrice);
+            
+        // })
+        // .catch(err=>{
+        //     setEstimatedMoney("Error: Try Later")
+        //     console.log(err);
+        // })
+      },[]);
+      //name change
+     const onNameChangeController = (event) =>{
+        var temp=event.target.value;
+        setNewName(temp);
+     }
+      const editNameClicked = () => {
+          setEditName(true);
+      }
+      const onNameSubmitController = () => {
+        props.setName(newName);
+        setEditName(false);
+      }
+
+      //email change
+      const onEmailChangeController = (event) =>{
+        var temp=event.target.value;
+        setNewEmail(temp);
+     }
+      const editEmailClicked = () => {
+          setEditEmail(true);
+      }
+      const onEmailSubmitController = () => {
+        props.setEmail(newEmail);
+        setEditEmail(false);
+      }
+
+      //contact change
+      const onContactChangeController = (event) =>{
+        var temp=event.target.value;
+        setNewContact(temp);
+     }
+      const editContactClicked = () => {
+          setEditContact(true);
+      }
+      const onContactSubmitController = () => {
+        props.setPhone(newContact);
+        setEditContact(false);
+      }
+      //company name
+      const onCompanyChangeController = (event) =>{
+        var temp=event.target.value;
+        setNewCompany(temp);
+     }
+      const editCompanyClicked = () => {
+          setEditCompany(true);
+      }
+      const onCompanySubmitController = () => {
+        props.setCompany(newCompany);
+        setEditCompany(false);
+      }
+    return (
+        <Card className={classes.paper}>
+            <CardContent style={{ padding: 0,marginTop:10 }}>
+                                <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
+                                    Order Summary
+                                    <tr style={{float:'right',marginRight:'10%'}}> 
+                                                {/* <th scope="row">{constants.estimatedCost+": "}</th> */}
+                                                <td>{constants.estimatedCost+": "}</td>
+                                                <td>Rs {estimatedMoney}</td>
+                                    </tr>
+                                </Typography>
+                                <table>
+                                    <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
+                                        
+                                        <Grid item xs={12} sm={6} >
+                                            <tr>
+                                                <th scope="row">Order Date :</th>
+                                                <td>{(new Date()).toLocaleDateString()}</td>
+                                            </tr>
+                                        </Grid>
+                                        
+                                        
+                                        <Grid item xs={12} sm={6}>
+                                            <tr>
+                                                <th scope="row">{constants.pickupAddress+": "}</th>
+                                                <td>{props.pickupAddress}-{props.pickupPin}</td>
+                                            </tr>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <tr>
+                                                <th scope="row">{constants.destinationAddress+": "}</th>
+                                                <td>{props.destinationAddress}-{props.destinationPin}</td>
+                                            </tr>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <tr>
+                                                <th scope="row">{constants.noOfUnits+": "}</th>
+                                                <td>{props.noOfUnits}</td>
+                                            </tr>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <tr>
+                                                <th scope="row">{constants.weightPerUnit+": "}</th>
+                                                <td>{props.weightPerUnit}</td>
+                                            </tr>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <tr>
+                                                <th scope="row">{constants.DimensionPerUnit+": "}</th>
+                                                <td>{props.height}x{props.length}x{props.width+" "}{props.unit} </td>
+                                            </tr>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <tr>
+                                                <th scope="row">{constants.customerName+": "}</th>
+                                               {editName && <td>
+                                                 <TextField
+                                                    className={classes.textfield}
+                                                    xs={12} sm={6}
+                                                    value={newName}
+                                                    autoComplete="given-name"
+                                                     onChange={(event)=>onNameChangeController(event)}
+                                                    />
+                                                    <Button onClick={onNameSubmitController}  color="secondary">Change</Button>
+                                                </td> }
+                                                {!editName && 
+                                                <td>{props.name} <EditIcon onClick={editNameClicked} /> 
+                                                </td> }
+                                            </tr>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <tr>
+                                                <th scope="row">{constants.customerEmail+": "}</th>
+                                                {editEmail && <td>
+                                                 <TextField
+                                                    className={classes.textfield}
+                                                    xs={12} sm={6}
+                                                    value={newEmail}
+                                                    autoComplete="given-name"
+                                                     onChange={(event)=>onEmailChangeController(event)}
+                                                    />
+                                                    <Button onClick={onEmailSubmitController}  color="secondary">Change</Button>
+                                                </td> }
+                                               {!editEmail && <td>{props.email}  <EditIcon onClick={editEmailClicked} /> 
+                                                </td> }
+                                            </tr>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <tr>
+                                                <th scope="row">{constants.customerPhoneNumber+": "}</th>
+                                                {editContact && <td>
+                                                 <TextField
+                                                    className={classes.textfield}
+                                                    xs={12} sm={6}
+                                                    value={newContact}
+                                                    autoComplete="given-name"
+                                                     onChange={(event)=>onContactChangeController(event)}
+                                                    />
+                                                    <Button onClick={onContactSubmitController}  color="secondary">Change</Button>
+                                                </td> }
+                                                {!editContact &&
+                                                <td>{props.phone} <EditIcon onClick={editContactClicked} />
+                                                </td>   }
+                                            </tr>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            <tr>
+                                                <th scope="row">{constants.companyName+": "}</th>
+                                                {editCompany && <td>
+                                                 <TextField
+                                                    className={classes.textfield}
+                                                    xs={12} sm={6}
+                                                    value={newCompany}
+                                                    autoComplete="given-name"
+                                                     onChange={(event)=>onCompanyChangeController(event)}
+                                                    />
+                                                    <Button onClick={onCompanySubmitController}  color="secondary">Change</Button>
+                                                </td> }
+                                                {!editCompany &&
+                                                <td>{props.companyName} <EditIcon onClick={editCompanyClicked} />
+                                                </td>   }
+                                            </tr>
+                                        </Grid>
+                                        
+
+                                    </Grid>
+                                </table>
+                                </CardContent>
+                            </Card>
+    )
+}
+
+const mapStateToProps=state=>{
+    return{
+        name:state.order.name,
+        pickupAddress:state.order.pickupAddress,
+        pickupPin:state.order.pickupPin,
+        destinationAddress:state.order.destinationAddress,
+        destinationPin:state.order.destinationPin,
+        height:state.order.height,
+        width:state.order.width,
+        length:state.order.length,
+        noOfUnits:state.order.noOfUnits,
+        weightPerUnit:state.order.weightPerUnit,
+        unit:state.order.unit,
+        phone:state.order.phone,
+        email:state.order.email,
+        companyName:state.order.companyName
+    }
+}
+
+const mapDispatchToProps=dispatch=>{
+    return {
+        setName:(name)=>dispatch(actions.setCustomerName(name)),
+        setEmail:(email)=>dispatch(actions.setEmail(email)),
+        setPhone:(phone)=>dispatch(actions.setPhoneNumber(phone)),
+        setCompany:(compName)=>dispatch(actions.setCompanyName(compName))
+    };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(OrderSummary);
