@@ -85,6 +85,9 @@ function App(props) {
 
  
   useEffect(() => {
+    Auth.currentUserInfo()
+    .then(res=>console.log(res))
+    .catch(err=>console.log(err))
     onLoad();
   }, []);
   

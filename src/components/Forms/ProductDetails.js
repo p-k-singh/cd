@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +13,9 @@ import {
     Grid,
     InputAdornment,
     FormControl,
+    FormControlLabel,
+    Checkbox,
+    Switch
 } from '@material-ui/core';
 const useStyles = makeStyles(theme => ({
     root: {
@@ -25,14 +28,14 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: 55,
         color: 'white'
     },
-    form: {
-        paddingLeft: '10%',
-        paddingRight: '10%',
-        [theme.breakpoints.down('sm')]: {
-            padding:'0%',
-        },
+    // form: {
+    //     paddingLeft: '10%',
+    //     paddingRight: '10%',
+    //     [theme.breakpoints.down('sm')]: {
+    //         padding:'0%',
+    //     },
     
-    },
+    // },
     radioButton: {
         marginTop: '5%',
         [theme.breakpoints.down('sm')]: {
@@ -63,6 +66,11 @@ const ProductDimensions = (props) => {
     const [height, setHeight]=useState(0);
     const [width, setWidth]=useState(0);
     const [length, setLength]=useState(0);*/
+   // const [switchToggler,setSwitchToggler] = useState(true)
+
+    // const handleSwitchTogglerChange = (event) => {
+    //     setSwitchToggler(!switchToggler)
+    // }
     
     const onNumberOfUnitsChangeController=(event)=>{
         var noOfUnits=event.target.value;
@@ -97,15 +105,57 @@ const ProductDimensions = (props) => {
         var unitOfProduct=event.target.value;
         props.setUnitDispatcher(unitOfProduct);
     }
+    const onMeasureableChangeController=()=>{
+       // alert(!props.measureable)
+       props.setMeasureable(!props.measureable)
+        // if(props.measureable==='true'){
+        //     props.setMeasureable('false')
+        // }
+        // else{
+        //     props.setMeasureable('true')
+        //     //alert(props.measureable)
+        // }
+    }
+    const onTotalWeightChangeController=(event)=>{
+        var totalWeight = event.target.value
+        props.setTotalWeight(totalWeight)
+    }
+    const onDensityChangeController=(event)=>{
+        var density = event.target.value
+        props.setDensity(density)
+    }
 
-    
-    return (
-        <CardContent style={{ padding: 0 }}>
-            <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
-                Product Details
-        </Typography>
-            <form className={classes.form}>
-                <Typography className={classes.formHeadings}>Product Weight and Unit</Typography>
+    const vases = () => {
+        return(
+          <React.Fragment>
+            <Typography className={classes.formHeadings} >Value Added Services</Typography>
+              <Grid container spacing={3} style={{ padding: 50, paddingTop: 20 ,paddingBottom: 30 }}>   
+                {constants.vas.map((vas)=>{
+                  return(
+                    <Grid item xs={12} sm={4}>
+                    <FormControlLabel
+                    control={
+                      <Checkbox
+                        //checked={state.checkedB}
+                        //onChange={handleChange}
+                        name={vas.name}
+                        color="primary"
+                      />
+                      
+                    }
+                    label={vas.name}
+                  /> 
+                  </Grid>
+                  )
+                })}
+                
+            </Grid>
+          </React.Fragment>
+        )
+      }
+  
+const Measureable = <React.Fragment>
+     <Typography className={classes.formHeadings}>Product Weight and Unit</Typography>
                 <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -139,7 +189,7 @@ const ProductDimensions = (props) => {
                     
                 </Grid>
                 <Typography className={classes.formHeadings}>Dimensions per unit</Typography>
-                <Grid container spacing={3} style={{ padding: 50, paddingTop:10 }}>
+                <Grid container spacing={3} style={{ padding: 30, paddingTop:10 }}>
                     <Grid item xs={12} sm={6}>
                             <FormControl className={classes.formControl}>
                                 <InputLabel htmlFor="age-native-simple">Unit</InputLabel>
@@ -196,7 +246,64 @@ const ProductDimensions = (props) => {
                         />
                     </Grid>
                 </Grid>
-                
+</React.Fragment>
+
+const notMeasureable = <React.Fragment>
+    <Typography className={classes.formHeadings} >Product Details</Typography>
+    {/*test*/}
+    <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
+    <Grid item xs={12} sm={6}>
+    <TextField
+    required
+    type="number"
+    id="totalWeight"
+    name="totalWeight"
+    label="Total Weight(in Tons)"
+    value={props.totalWeight}
+    onChange={(event)=>onTotalWeightChangeController(event)}
+    fullWidth
+    
+    />
+    </Grid>
+    <Grid item xs={12} sm={6}>
+    <TextField
+    type="number"
+    id="density"
+    name="density"
+    label="Weight per cubic meter"
+    fullWidth
+    value={props.density}
+    onChange={(event)=>onDensityChangeController(event)}
+    InputProps={{
+    endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+    }}
+    />
+    </Grid>
+</Grid>
+</React.Fragment>
+    
+    return (
+        <CardContent style={{ padding: 0 }}>
+            <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
+                Product Details
+        </Typography>
+            <form className={classes.form}>
+            <FormControlLabel
+                style={{margin:20}}
+                control={
+                <Switch
+                checked={props.measureable}
+                onChange={()=>onMeasureableChangeController()}
+                name="checkedB"
+                color="primary"
+                    />
+                    }
+                label="(Measureable Dimensions)"
+            />
+
+            {props.measureable===true?Measureable:notMeasureable}
+               
+                {vases()}
             </form>
         </CardContent>
     )
@@ -209,7 +316,10 @@ const mapStateToProps=state=>{
         length:state.order.length,
         unit:state.order.unit,
         noOfUnits:state.order.noOfUnits,
-        weightPerUnit:state.order.weightPerUnit
+        weightPerUnit:state.order.weightPerUnit,
+        measureable:state.order.measureable,
+        totalWeight:state.order.totalWeight,
+        density:state.order.density
     }
   }
   
@@ -221,6 +331,9 @@ const mapStateToProps=state=>{
         setUnitDispatcher:(unitOfMeasurement)=>dispatch(actions.setUnit(unitOfMeasurement)),
         setNoOfUnitsDispatcher:(numberUnits)=>dispatch(actions.setNumberOfUnits(numberUnits)),
         setWeightPerUnitDispatcher:(weightUnit)=>dispatch(actions.setWeightPerUnit(weightUnit)),
+        setMeasureable:(isMeasureable)=>dispatch(actions.setMeasureable(isMeasureable)),
+        setTotalWeight:(totalWeight)=>dispatch(actions.setTotalWeight(totalWeight)),
+        setDensity:(density)=>dispatch(actions.setDensity(density))
     };
   }
 

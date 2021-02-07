@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import ClassTwoToneIcon from '@material-ui/icons/ClassTwoTone';
 import Spinner from '../UI/Spinner';
-import axios from 'axios';
 import {API,Auth} from 'aws-amplify'
 
 const useStyles = makeStyles((theme) => ({

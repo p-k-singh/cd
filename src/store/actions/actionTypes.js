@@ -23,6 +23,10 @@ export const SET_ADDITIONAL_NOTE='SET_ADDITIONAL_NOTE';
 
 export const RESET_STATE='RESET_STATE';
 
+//When order is not measureable example: cotton
+export const SET_MEASUREABLE='SET_MEASUREABLE';
+export const SET_TOTAL_WEIGHT='SET_TOTAL_WEIGHT';
+export const SET_DENSITY='SET_DENSITY';
 
 
 

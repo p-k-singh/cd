@@ -19,6 +19,7 @@ import {
   Switch,
   InputLabel,
   Button,
+  Checkbox,
   InputAdornment
 } from '@material-ui/core'
 
@@ -57,6 +58,8 @@ const PriceCalculator = (props) => {
   const [noOfUnits,setNoOfUnits] = useState();
   const [weightPerUnit,setWeightPerUnit] = useState();
   const [redirect,setRedirect] = useState(false);
+  const [totalWeight,setTotalWeight]  = useState()
+  const [density,setDensity] = useState()
 
   const [pickupZipValidator,setPickupZipValidator] = useState('');
   const [deliverZipValidator,setDeliverZipValidator] = useState('');
@@ -155,6 +158,12 @@ const PriceCalculator = (props) => {
         //     setVolWeight(parseFloat(widthOfProduct)*parseFloat(height)*parseFloat(breadth)/138.4);
 
     }
+    const onTotalWeightChangeController= (event) => {
+      setTotalWeight(event.target.value)
+    }
+    const onDensityChangeController = (event) => {
+      setDensity(event.target.value)
+    }
     // const onBreadthChangeController=(event)=>{
     //     var breadthOfProduct=event.target.value;
     //     setBreadth(breadthOfProduct);
@@ -173,6 +182,9 @@ const PriceCalculator = (props) => {
         props.setPickupPinDispatcher(pickuppin)
         props.setDestinationPinDispatcher(destinationpin)
         props.setHeightDispatcher(height);
+        props.setDensity(density)
+        props.setMeasureable(switchToggler)
+        props.setTotalWeight(totalWeight)
         setRedirect(true);
     }
 
@@ -208,20 +220,28 @@ const PriceCalculator = (props) => {
       //     fromPin:pickuppin,
       //     measureable:switchToggler
       // }
-      var params =`height=${height}&width=${width}&length=${length}&toPin=${destinationpin}&fromPin=${pickuppin}&measureable=${switchToggler}`
-        API
+      var params;
+      if(switchToggler===true){
+           params =`height=${height}&width=${width}&length=${length}&toPin=${destinationpin}&fromPin=${pickuppin}&measureable=${switchToggler}`
+          
+      }
+      else{
+        params =`totalWeight=${totalWeight}&density=${density}&toPin=${destinationpin}&fromPin=${pickuppin}&measureable=${switchToggler}`
+      }
+      API
         .get("GoFlexeOrderPlacement", `/pricing?`+params)
         .then(resp=>{
-          console.log(resp);
-          setShowPrice(true);
-          setEstimatedPrice(resp.estimatedPrice);
-          setLoader(false);
-      })
-      .catch(err=>{
-          setLoader(false);
-          setShowPrice(true)
-          console.log(err);
-      })
+        console.log(resp);
+        setShowPrice(true);
+        setEstimatedPrice(resp.estimatedPrice);
+        setLoader(false);
+        })
+        .catch(err=>{
+            setLoader(false);
+            setShowPrice(true)
+            console.log(err);
+        })
+      
         // const url='https://2n3n7swm8f.execute-api.ap-south-1.amazonaws.com/draft0/pricing'
         // axios.get(url,{
             
@@ -342,23 +362,24 @@ const PriceCalculator = (props) => {
     <TextField
     required
     type="number"
-    id="units"
-    name="units"
+    id="totalWeight"
+    name="totalWeight"
     label="Total Weight(in Tons)"
+    value={totalWeight}
+    onChange={(event)=>onTotalWeightChangeController(event)}
     fullWidth
     
-    autoComplete="units"
     />
     </Grid>
     <Grid item xs={12} sm={6}>
     <TextField
     type="number"
-    id="weight"
-    name="weight"
+    id="density"
+    name="density"
     label="Weight per cubic meter"
     fullWidth
-    
-    autoComplete="Weight"
+    value={density}
+    onChange={(event)=>onDensityChangeController(event)}
     InputProps={{
     endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
     }}
@@ -367,6 +388,37 @@ const PriceCalculator = (props) => {
 </Grid>
 
 </React.Fragment>
+
+    const vases = () => {
+      return(
+        <React.Fragment>
+          <Typography className={classes.formHeadings} >Value Added Services</Typography>
+            <Grid container spacing={3} style={{ padding: 50, paddingTop: 20 ,paddingBottom: 30 }}>   
+              {constants.vas.map((vas)=>{
+                return(
+                  <Grid item xs={12} sm={4}>
+                  <FormControlLabel
+                  control={
+                    <Checkbox
+                      //checked={state.checkedB}
+                      //onChange={handleChange}
+                      name={vas.name}
+                      color="primary"
+                    />
+                    
+                  }
+                  label={vas.name}
+                /> 
+                </Grid>
+                )
+              })}
+              
+          </Grid>
+        </React.Fragment>
+      )
+    }
+
+
     var content= <Card className={classes.root}>
                     <CardContent style={{ padding: 0 }}>
                         <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
@@ -385,6 +437,7 @@ const PriceCalculator = (props) => {
                             }
                             label="(Measureable Dimensions)"
                         />
+                        
                                 
                             {switchToggler===true ? measureablePerUnit : notMeasureable}
                                         <Typography className={classes.formHeadings} >Location Details</Typography>
@@ -422,6 +475,8 @@ const PriceCalculator = (props) => {
                                                 />
                                             </Grid>
                                         </Grid>
+                                        {vases()}
+                                        
                                 </form>
                     </CardContent>
                     <div
@@ -495,8 +550,10 @@ const mapStateToProps=state=>{
         noOfUnits:state.order.noOfUnits,
         weightPerUnit:state.order.weightPerUnit,
         pickupPin:state.order.pickupPin,
-        destinationPin:state.order.destinationPin
-
+        destinationPin:state.order.destinationPin,
+        measureable:state.order.measureable,
+        totalWeight:state.order.totalWeight,
+        density:state.order.density
     }
   }
   
@@ -510,6 +567,9 @@ const mapStateToProps=state=>{
         setWeightPerUnitDispatcher:(weightUnit)=>dispatch(actions.setWeightPerUnit(weightUnit)),
         setPickupPinDispatcher:(pPin)=>dispatch(actions.setPickupPin(pPin)),
         setDestinationPinDispatcher:(dPin)=>dispatch(actions.setDestinationPin(dPin)),
+        setMeasureable:(isMeasureable)=>dispatch(actions.setMeasureable(isMeasureable)),
+        setTotalWeight:(totalWeight)=>dispatch(actions.setTotalWeight(totalWeight)),
+        setDensity:(density)=>dispatch(actions.setDensity(density)),
     };
   }
 

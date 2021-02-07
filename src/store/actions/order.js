@@ -134,3 +134,21 @@ export const setAdditionalNote = (note) => {
         additionalNote:note
     }
 };
+export const setMeasureable = (isMeasureable) => {
+    return{
+        type:actionTypes.SET_MEASUREABLE,
+        isMeasureable:isMeasureable
+    }
+};
+export const setTotalWeight = (totalWeight) => {
+    return{
+        type:actionTypes.SET_TOTAL_WEIGHT,
+        totalWeight:totalWeight
+    }
+};
+export const setDensity = (density) => {
+    return{
+        type:actionTypes.SET_DENSITY,
+        density:density
+    }
+};

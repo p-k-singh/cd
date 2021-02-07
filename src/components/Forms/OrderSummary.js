@@ -45,7 +45,15 @@ const OrderSummary = (props) => {
     const [newCompany,setNewCompany] = useState('');
     const [estimatedMoney,setEstimatedMoney] = useState(-1);
     useEffect(() => {
-        var params =`height=${props.height}&width=${props.width}&length=${props.length}&toPin=${props.destinationPin}&fromPin=${props.pickupPin}&measureable=true`
+       // var params =`height=${props.height}&width=${props.width}&length=${props.length}&toPin=${props.destinationPin}&fromPin=${props.pickupPin}&measureable=true`
+       var params; 
+       if(props.measureable===true){
+            params =`height=${props.height}&width=${props.width}&length=${props.length}&toPin=${props.destinationPin}&fromPin=${props.pickupPin}&measureable=true`
+           
+       }
+       else{
+         params =`totalWeight=${props.totalWeight}&density=${props.density}&toPin=${props.destinationPin}&fromPin=${props.pickupPin}&measureable=false`
+       }
         API
         .get("GoFlexeOrderPlacement", `/pricing?`+params)
         .then(resp=>{
@@ -275,7 +283,10 @@ const mapStateToProps=state=>{
         unit:state.order.unit,
         phone:state.order.phone,
         email:state.order.email,
-        companyName:state.order.companyName
+        companyName:state.order.companyName,
+        measureable:state.order.measureable,
+        totalWeight:state.order.totalWeight,
+        density:state.order.density
     }
 }
 

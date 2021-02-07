@@ -17,7 +17,10 @@ const initialState={
     pickupDate:'',
     deliveryDate:'',
     pickupSlot:'',
-    additionalNote:''
+    additionalNote:'',
+    measureable:true,
+    totalWeight:'',
+    density:''
 }
 
 const reducer=(state=initialState,action)=>{
@@ -118,6 +121,21 @@ const reducer=(state=initialState,action)=>{
             return{
                 ...state,
                 additionalNote:action.additionalNote
+            }
+        case actionTypes.SET_MEASUREABLE:
+                return{
+                    ...state,
+                    measureable:action.isMeasureable
+                }
+        case actionTypes.SET_TOTAL_WEIGHT:
+            return{
+                ...state,
+                totalWeight:action.totalWeight
+            }
+            case actionTypes.SET_DENSITY:
+            return{
+                ...state,
+                density:action.density
             }
     }
 

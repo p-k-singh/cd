@@ -61,6 +61,13 @@ const constants = {
     {name:'12NOON-4PM',value:'12-16'},
     {name:'4PM-8PM',value:'16-20'},
     {name:'8PM-12Midnight',value:'20-00'}
+  ],
+  vas:[
+    {name:'Uploading',value:'uploading',id:1},
+    {name:'Offloading',value:'offloading',id:2},
+    {name:'Pick and Pack',value:'pickAndPack',id:3},
+    {name:'Insurance',value:'insurance',id:4},
+    {name:'Return Logistics',value:'returnLogistics',id:5}
   ]
 
 
