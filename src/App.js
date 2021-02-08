@@ -29,8 +29,8 @@ import EditUser from './components/UserManager/EditUser'
 import ModifyRoleAccesses from './components/UserManager/ModifyRoleAccess'
 
 import KYC from './components/KYC/KYCPage'
-import KYCPanel from './components/KYC/KYCPanel'
-import BasicInfoIndex from './components/KYC/BasicInfoKyc/BasicInfoIndex'
+import KYCPanel from './components/KYC/CompanyKycPanel'
+import AccountInfoIndex from "./components/KYC/AccountDetails/AccountIndex";
 
 
 

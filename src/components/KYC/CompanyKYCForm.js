@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from 'react'
-import Spinner from '../UI/Spinner'
+import Spinner from "../UI/Spinner";
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios'
@@ -64,7 +64,7 @@ const CompanyKYC = (props) => {
              }
         }
         API.post(
-            "GoFlexeOrderPlacement", '/kyc/document?type='+'customer', payload)
+            "GoFlexeOrderPlacement", '/kyc/document?type='+'serviceprovider', payload)
             .then((initiateResult)=>{
                 aadharLink = `uploads/kycdocuments/${initiateResult.fileId}.${aadharProof.type}`
                 axios.put(initiateResult.s3PutObjectUrl,aadharProof,{
@@ -83,7 +83,7 @@ const CompanyKYC = (props) => {
                          }
                     }
                     API.post(
-                        "GoFlexeOrderPlacement", '/kyc/document?type='+'customer', payload)
+                        "GoFlexeOrderPlacement", '/kyc/document?type='+'serviceprovider', payload)
                         .then((initiateResult)=>{
                             panLink = `uploads/kycdocuments/${initiateResult.fileId}.${panProof.type}`
                             axios.put(initiateResult.s3PutObjectUrl,panProof,{
@@ -102,7 +102,7 @@ const CompanyKYC = (props) => {
                                      }
                                 }
                                 API.post(
-                                    "GoFlexeOrderPlacement", '/kyc/document?type='+'customer', payload)
+                                    "GoFlexeOrderPlacement", '/kyc/document?type='+'serviceprovider', payload)
                                     .then((initiateResult)=>{
                                         gstinLink = `uploads/kycdocuments/${initiateResult.fileId}.${gstinProof.type}`
                                         axios.put(initiateResult.s3PutObjectUrl, gstinProof, {
@@ -116,8 +116,8 @@ const CompanyKYC = (props) => {
                                                 const payload={
                                                     body:{
                                                         id:userDetails.username,
-                                                        type:'customer',
-                                                        kycInformation:{
+                                                        type:'serviceprovider',
+                                                        selfInfo:{
                                                         companyInfo:{
                                                             registeredName:myState.registeredName,
                                                             registeredAddress:myState.registeredAddress,
