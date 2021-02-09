@@ -19,7 +19,7 @@ import Login from './components/Auth/Login/loginform'
 import {connect} from 'react-redux';
 import Welcome from './components/Auth/Welcome/welcomePage';
 import ResetPassword from './components/Auth/ResetPassword/ResetPassword'
-
+import PaymentIndex from './components/Payments/PaymentIndex'
 
 
 import UserManager from './components/UserManager/userManager'
@@ -29,8 +29,8 @@ import EditUser from './components/UserManager/EditUser'
 import ModifyRoleAccesses from './components/UserManager/ModifyRoleAccess'
 
 import KYC from './components/KYC/KYCPage'
-import KYCPanel from './components/KYC/KYCPanel'
-import BasicInfoIndex from './components/KYC/BasicInfoKyc/BasicInfoIndex'
+import KYCPanel from './components/KYC/CompanyKycPanel'
+//import BasicInfoIndex from './components/KYC/BasicInfoKyc/BasicInfoIndex'
 
 
 
@@ -162,6 +162,7 @@ function App(props) {
           <Route exact path='/kyc' component={KYC} />
           <Route exact path='/kycPanel' component={KYCPanel} />
           <Route exact path='/preference' component={Preference} />
+          <Route exact path='/payment' component={PaymentIndex} />
           <Route path='/order/:id' render={(props) => {
                     return ( <OrderDetail {...props } /> )
                 }} />

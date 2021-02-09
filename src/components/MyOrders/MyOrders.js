@@ -86,6 +86,14 @@ const MyOrders=()=>{
                     startIcon={<ClassTwoToneIcon />}> 
                     Details
             </Button>
+            <Button
+                    component={Link} to={`/payment`}
+                    variant="contained"
+                    color="default"
+                    className={classes.allocationButton}
+                    startIcon={<ClassTwoToneIcon />}> 
+                    Payments
+            </Button>
         </div>
         <Divider/>
     </div>
