@@ -1,340 +1,281 @@
-import React,{useState} from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import {connect} from 'react-redux';
-import * as actions from '../../store/actions/index';
-import constants from '../../Constants/constants'
-
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import constants from "../../Constants/constants";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Spinner from "../UI/Spinner";
 import {
-    TextField,
-    Grid,
-    InputAdornment,
-    FormControl,
-    FormControlLabel,
-    Checkbox,
-    Switch
-} from '@material-ui/core';
-const useStyles = makeStyles(theme => ({
-    root: {
-        // minWidth: 275,
-    },
-    title: {
-        fontSize: 20,
-        height: 50,
-        padding: 10,
-        paddingLeft: 55,
-        color: 'white'
-    },
-    // form: {
-    //     paddingLeft: '10%',
-    //     paddingRight: '10%',
-    //     [theme.breakpoints.down('sm')]: {
-    //         padding:'0%',
-    //     },
-    
-    // },
-    radioButton: {
-        marginTop: '5%',
-        [theme.breakpoints.down('sm')]: {
-            margin: '10%',
-        },
-    },
-    
-    formHeadings: {
-        margin: 20,
-        marginBottom: 0
-    },
-    formControl: {
-        margin: theme.spacing(0),
-        minWidth: 120,
-      },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-}));
+  TextField,
+  Grid,
+  Card,
+  Button,
+  IconButton,
+  Divider,
+} from "@material-ui/core";
+import { Multiselect } from "multiselect-react-dropdown";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+const useStyles = makeStyles({
+  root: {},
+  title: {
+    fontSize: 20,
+    height: 50,
+    padding: 10,
+    paddingLeft: 55,
+  },
+  formHeadings: {
+    margin: 20,
+    marginBottom: 0,
+  },
+  formControl: {
+    marginTop: "1%",
+    width: "50%",
+  },
+});
 
-const ProductDimensions = (props) => {
-    const classes = useStyles();
+const ProductDetails = (props) => {
+  const classes = useStyles();
+  const [products, setproducts] = useState([]);
 
-    //State Variables for form fields
-    /*const [numberOfUnits, setNumberOfUnits]=useState(0);
-    const [weightPerUnit, setWeightPerUnit]=useState(0);
-    const [unit, setUnit]=useState('');
-    const [height, setHeight]=useState(0);
-    const [width, setWidth]=useState(0);
-    const [length, setLength]=useState(0);*/
-   // const [switchToggler,setSwitchToggler] = useState(true)
+  const [loading, setLoading] = useState("true");
 
-    // const handleSwitchTogglerChange = (event) => {
-    //     setSwitchToggler(!switchToggler)
-    // }
-    
-    const onNumberOfUnitsChangeController=(event)=>{
-        var noOfUnits=event.target.value;
-        noOfUnits = noOfUnits<0?0:noOfUnits
-        props.setNoOfUnitsDispatcher(noOfUnits);
-    }
+  const capabilityOptions = {
+    options: constants.inventoryFeatures,
+  };
+  const [myproducts, setMyproducts] = useState([]);
 
-    const onWeightPerUnitChangeController=(event)=>{
-        var perUnitWeight=event.target.value;
-        perUnitWeight = perUnitWeight<0?0:perUnitWeight
-        props.setWeightPerUnitDispatcher(perUnitWeight);
+  useEffect(() => {}, []);
+  useEffect(() => {
+    var sum = 0;
+    for (var i = 0; i < products.length; i++) {
+      if (products[i].details !== null)
+        sum += Number(products[i].details.capacity);
     }
+  }, [products]);
 
-    const onHeightChangeController=(event)=>{
-        var heightOfProduct=event.target.value;
-        heightOfProduct = heightOfProduct<0?0:heightOfProduct
-        props.setHeightDispatcher(heightOfProduct);
-    }
-
-    const onWidthChangeController=(event)=>{
-        var widthOfProduct=event.target.value;
-        widthOfProduct = widthOfProduct<0?0:widthOfProduct
-        props.setWidthDispatcher(widthOfProduct);
-    }
-    const onLengthChangeController=(event)=>{
-        var lengthOfProduct=event.target.value;
-        lengthOfProduct = lengthOfProduct<0?0:lengthOfProduct
-        props.setLengthDispatcher(lengthOfProduct);
-    }
-
-    const unitChangeController=(event)=>{
-        var unitOfProduct=event.target.value;
-        props.setUnitDispatcher(unitOfProduct);
-    }
-    const onMeasureableChangeController=()=>{
-       // alert(!props.measureable)
-       props.setMeasureable(!props.measureable)
-        // if(props.measureable==='true'){
-        //     props.setMeasureable('false')
-        // }
-        // else{
-        //     props.setMeasureable('true')
-        //     //alert(props.measureable)
-        // }
-    }
-    const onTotalWeightChangeController=(event)=>{
-        var totalWeight = event.target.value
-        props.setTotalWeight(totalWeight)
-    }
-    const onDensityChangeController=(event)=>{
-        var density = event.target.value
-        props.setDensity(density)
-    }
-
-    const vases = () => {
-        return(
-          <React.Fragment>
-            <Typography className={classes.formHeadings} >Value Added Services</Typography>
-              <Grid container spacing={3} style={{ padding: 50, paddingTop: 20 ,paddingBottom: 30 }}>   
-                {constants.vas.map((vas)=>{
-                  return(
-                    <Grid item xs={12} sm={4}>
-                    <FormControlLabel
-                    control={
-                      <Checkbox
-                        //checked={state.checkedB}
-                        //onChange={handleChange}
-                        name={vas.name}
-                        color="primary"
-                      />
-                      
-                    }
-                    label={vas.name}
-                  /> 
-                  </Grid>
-                  )
-                })}
-                
-            </Grid>
-          </React.Fragment>
-        )
+  const submitButtonHandler = () => {};
+  const onproductNumberChanged = (event, value, reason, i) => {
+    var items = products.slice();
+    items[i].details = value;
+    if (value !== null)
+      for (var j = 0; j < myproducts.length; j++) {
+        if (value.productNumber === myproducts[j].productNumber) {
+          items[i].category = myproducts[j].category;
+          break;
+        }
       }
-  
-const Measureable = <React.Fragment>
-     <Typography className={classes.formHeadings}>Product Weight and Unit</Typography>
-                <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            type="number"
-                            id="units"
-                            name="units"
-                            label="No of Units"
-                            fullWidth
-                            value={props.noOfUnits}
-                            autoComplete="units"
-                            onChange={(event)=>onNumberOfUnitsChangeController(event)}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            type="number"
-                            id="weight"
-                            name="weight"
-                            label="Weight per unit"
-                            fullWidth
-                            value={props.weightPerUnit}
-                            autoComplete="Weight"
-                            onChange={(event)=>onWeightPerUnitChangeController(event)}
-                            InputProps={{
-                                endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
-                            }}
-
-                        />
-                    </Grid>
-                    
-                </Grid>
-                <Typography className={classes.formHeadings}>Dimensions per unit</Typography>
-                <Grid container spacing={3} style={{ padding: 30, paddingTop:10 }}>
-                    <Grid item xs={12} sm={6}>
-                            <FormControl className={classes.formControl}>
-                                <InputLabel htmlFor="age-native-simple">Unit</InputLabel>
-                                <Select
-                                    native
-                                    //value="inches"
-                                    onChange={unitChangeController}
-                                    inputProps={{
-                                        name: 'age',
-                                        id: 'age-native-simple',
-                                    }}
-                                >
-                                     {constants.dimensionOptions.map((d) => <option value={d.value}>{d.name}</option>)}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            type="number"
-                            id="height"
-                            name="height"
-                            label="Height"
-                            fullWidth
-                            value={props.height}
-                            autoComplete="Height"
-                            onChange={(event)=>onHeightChangeController(event)}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            type="number"
-                            id="width"
-                            name="width"
-                            label="Width"
-                            fullWidth
-                            value={props.width}
-                            autoComplete="width"
-                            onChange={(event)=>onWidthChangeController(event)}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            type="number"
-                            id="length"
-                            name="length"
-                            label="Length"
-                            value={props.length}
-                            fullWidth
-                            onChange={(event)=>onLengthChangeController(event)}
-                            autoComplete="Length"
-                        />
-                    </Grid>
-                </Grid>
-</React.Fragment>
-
-const notMeasureable = <React.Fragment>
-    <Typography className={classes.formHeadings} >Product Details</Typography>
-    {/*test*/}
-    <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
-    <Grid item xs={12} sm={6}>
-    <TextField
-    required
-    type="number"
-    id="totalWeight"
-    name="totalWeight"
-    label="Total Weight(in Tons)"
-    value={props.totalWeight}
-    onChange={(event)=>onTotalWeightChangeController(event)}
-    fullWidth
-    
-    />
-    </Grid>
-    <Grid item xs={12} sm={6}>
-    <TextField
-    type="number"
-    id="density"
-    name="density"
-    label="Weight per cubic meter"
-    fullWidth
-    value={props.density}
-    onChange={(event)=>onDensityChangeController(event)}
-    InputProps={{
-    endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
-    }}
-    />
-    </Grid>
-</Grid>
-</React.Fragment>
-    
-    return (
-        <CardContent style={{ padding: 0 }}>
-            <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
-                Product Details
-        </Typography>
-            <form className={classes.form}>
-            <FormControlLabel
-                style={{margin:20}}
-                control={
-                <Switch
-                checked={props.measureable}
-                onChange={()=>onMeasureableChangeController()}
-                name="checkedB"
-                color="primary"
-                    />
-                    }
-                label="(Measureable Dimensions)"
-            />
-
-            {props.measureable===true?Measureable:notMeasureable}
-               
-                {vases()}
-            </form>
-        </CardContent>
-    )
-}
-
-const mapStateToProps=state=>{
-    return{
-        height:state.order.height,
-        width:state.order.width,
-        length:state.order.length,
-        unit:state.order.unit,
-        noOfUnits:state.order.noOfUnits,
-        weightPerUnit:state.order.weightPerUnit,
-        measureable:state.order.measureable,
-        totalWeight:state.order.totalWeight,
-        density:state.order.density
+    else {
+      items[i].category = [];
     }
-  }
-  
-  const mapDispatchToProps=dispatch=>{
-    return {
-        setHeightDispatcher:(h)=>dispatch(actions.setHeight(h)),
-        setWidthDispatcher:(w)=>dispatch(actions.setWidth(w)),
-        setLengthDispatcher:(l)=>dispatch(actions.setLength(l)),
-        setUnitDispatcher:(unitOfMeasurement)=>dispatch(actions.setUnit(unitOfMeasurement)),
-        setNoOfUnitsDispatcher:(numberUnits)=>dispatch(actions.setNumberOfUnits(numberUnits)),
-        setWeightPerUnitDispatcher:(weightUnit)=>dispatch(actions.setWeightPerUnit(weightUnit)),
-        setMeasureable:(isMeasureable)=>dispatch(actions.setMeasureable(isMeasureable)),
-        setTotalWeight:(totalWeight)=>dispatch(actions.setTotalWeight(totalWeight)),
-        setDensity:(density)=>dispatch(actions.setDensity(density))
-    };
+    setproducts(items);
+    for (i = 0; i < items.length; i++) {
+      if (items[i].details !== null)
+        console.log(i + items[i].details.productNumber);
+    }
+  };
+  const onDriverChanged = (event, value, reason, i) => {
+    var items = products.slice();
+    items[i].details = value;
+    if (value !== null) {
+      for (var j = 0; j < myproducts.length; j++) {
+        if (value.name === myproducts[j].name) {
+          items[i].quantity = myproducts[j].quantity;
+          break;
+        }
+      }
+    } else {
+      items[i].quantity = "";
+    }
+    setproducts(items);
+  };
+  const onMultiSelect = (selectedList, selectedItem, i) => {
+    var items = products.slice();
+    items[i].category = selectedList;
+    setproducts(items);
+  };
+  const onMultiRemove = (selectedList, removedItem, i) => {
+    var items = products.slice();
+    items[i].category = selectedList;
+    setproducts(items);
+  };
+  const handleItemDeleted = (i) => {
+    var items = products.slice();
+    items.splice(i, 1);
+    setproducts(items);
+    var items1 = products.slice();
+    items1.splice(i, 1);
+    setproducts(items);
+    setproducts(items1);
+  };
+  const addproduct = () => {
+    var items1 = products.slice();
+    var items2 = products.slice();
+    items1.push({
+      details: null,
+      category: [],
+    });
+    items2.push({
+      details: null,
+      quantity: "",
+    });
+    setproducts(items1);
+    setproducts(items2);
+  };
+  const onquantityChangeController = (event, i) => {
+    var items = products.slice();
+    items[i].quantity = event.target.value;
+    setproducts(items);
+  };
+
+  var list = products.map((e, i) => (
+    <div
+      style={
+        i % 2 === 1
+          ? { backgroundColor: "#f9f9fb" }
+          : { backgroundColor: "#fff" }
+      }
+    >
+      <Divider style={{ marginBottom: 30, marginTop: 30 }} />
+
+      <Grid container spacing={4} style={{ paddingLeft: 50 }}>
+        <Grid item xs={12} sm={12}>
+          <Typography gutterBottom>
+            <h5>Product {i + 1}</h5>
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Autocomplete
+            id={`combo-box-demo${i}`}
+            options={myproducts}
+            getOptionLabel={(option) =>
+              option.productNumber + `(${option.capacity}tons)`
+            }
+            value={products[i].details}
+            onChange={(event, value, reason) =>
+              onproductNumberChanged(event, value, reason, i)
+            }
+            getOptionSelected={(option, value) =>
+              option.productNumber === value.productNumber
+            }
+            style={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Product Name" variant="outlined" />
+            )}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Multiselect
+            style={{
+              searchBox: { minHeight: "55px" },
+              multiselectContainer: { height: "80px" },
+            }}
+            selectedValues={products[i].category} // Preselected value to persist in dropdown
+            options={capabilityOptions.options} // Options to display in the dropdown
+            onSelect={(list, item) => onMultiSelect(list, item, i)} // Function will trigger on select event
+            onRemove={(list, item) => onMultiRemove(list, item, i)} // Function will trigger on remove event
+            displayValue="name" // Property name to display in the dropdown options
+            placeholder="Select Category"
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}></Grid>
+        <Grid item xs={12} sm={4}>
+          <Autocomplete
+            id={`productsList${i}`}
+            options={myproducts}
+            getOptionLabel={(option) => option.name}
+            value={products[i].details}
+            onChange={(event, value, reason) =>
+              onDriverChanged(event, value, reason, i)
+            }
+            getOptionSelected={(option, value) => option.name === value.name}
+            style={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Product Type" variant="outlined" />
+            )}
+          />
+        </Grid>
+        
+        <Grid item xs={12} sm={4}>
+          <TextField
+            fullWidth
+            
+            id="outlined-basic"
+            label="Quantity/Weight"
+            value={products[i].quantity}
+            variant="outlined"
+            onChange={(event) => onquantityChangeController(event, i)}
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={1}>
+          <IconButton onClick={() => handleItemDeleted(i)}>
+            <DeleteIcon style={{ fontSize: "30" }} />
+          </IconButton>
+        </Grid>
+      </Grid>
+    </div>
+  ));
+
+  if (loading === true) {
+    return (
+      <React.Fragment>
+        <h1>Loading your product details</h1>
+        <Spinner />
+      </React.Fragment>
+    );
   }
 
-export default connect(mapStateToProps,mapDispatchToProps)(ProductDimensions);
+  return (
+    <div>
+      <Card className={classes.root}>
+        <CardContent style={{ padding: 0 }}>
+          <Typography
+            fullWidth
+            className={classes.title}
+            gutterBottom
+            style={{ backgroundColor: "#66bb6a", color: "white" }}
+          >
+            Product Details
+          </Typography>
+
+          <form>
+            <Grid
+              container
+              spacing={3}
+              style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
+            ></Grid>
+
+            <Button
+              style={{
+                backgroundColor: "#f9a825",
+                marginTop: 10,
+                marginLeft: 50,
+              }}
+              onClick={() => addproduct()}
+            >
+              Add product
+            </Button>
+            {list}
+          </form>
+        </CardContent>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            margin: 20,
+          }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={submitButtonHandler}
+          >
+            Save
+          </Button>
+        </div>
+      </Card>
+    </div>
+  );
+};
+export default ProductDetails;
