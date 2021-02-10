@@ -13,20 +13,15 @@ import {
   IconButton,
   Divider,
 } from "@material-ui/core";
-// import Select from 'react-select'
 import { Multiselect } from "multiselect-react-dropdown";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 const useStyles = makeStyles({
-  root: {
-    // minWidth: 275,
-  },
+  root: {},
   title: {
     fontSize: 20,
     height: 50,
     padding: 10,
     paddingLeft: 55,
-    borderBottomStyle: "solid",
-    borderWidth: "1px",
   },
   formHeadings: {
     margin: 20,
@@ -45,7 +40,7 @@ const ProductDetails = (props) => {
   const [loading, setLoading] = useState("true");
 
   const capabilityOptions = {
-    options: constants.capabilityOptions,
+    options: constants.inventoryFeatures,
   };
   const [myproducts, setMyproducts] = useState([]);
 
@@ -142,7 +137,12 @@ const ProductDetails = (props) => {
     >
       <Divider style={{ marginBottom: 30, marginTop: 30 }} />
 
-      <Grid container spacing={8} style={{ paddingLeft: 50 }}>
+      <Grid container spacing={4} style={{ paddingLeft: 50 }}>
+        <Grid item xs={12} sm={12}>
+          <Typography gutterBottom>
+            <h5>Product {i + 1}</h5>
+          </Typography>
+        </Grid>
         <Grid item xs={12} sm={4}>
           <Autocomplete
             id={`combo-box-demo${i}`}
@@ -174,7 +174,7 @@ const ProductDetails = (props) => {
             onSelect={(list, item) => onMultiSelect(list, item, i)} // Function will trigger on select event
             onRemove={(list, item) => onMultiRemove(list, item, i)} // Function will trigger on remove event
             displayValue="name" // Property name to display in the dropdown options
-            placeholder="category"
+            placeholder="Select Category"
           />
         </Grid>
         <Grid item xs={12} sm={4}></Grid>
@@ -194,9 +194,11 @@ const ProductDetails = (props) => {
             )}
           />
         </Grid>
+        
         <Grid item xs={12} sm={4}>
           <TextField
             fullWidth
+            
             id="outlined-basic"
             label="Quantity/Weight"
             value={products[i].quantity}
@@ -227,7 +229,12 @@ const ProductDetails = (props) => {
     <div>
       <Card className={classes.root}>
         <CardContent style={{ padding: 0 }}>
-          <Typography className={classes.title} gutterBottom>
+          <Typography
+            fullWidth
+            className={classes.title}
+            gutterBottom
+            style={{ backgroundColor: "#66bb6a", color: "white" }}
+          >
             Product Details
           </Typography>
 
