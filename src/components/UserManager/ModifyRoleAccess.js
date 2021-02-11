@@ -14,13 +14,13 @@ const useStyles = makeStyles({
     root: {
        minWidth: 275,
     },
-    title: {
-      fontSize: 20,
-      height: 50,
-      padding: 10,
-      paddingLeft: 55,
-      color: 'white'
-    },
+    // title: {
+    //   fontSize: 20,
+    //   height: 50,
+    //   padding: 10,
+    //   paddingLeft: 55,
+    //   color: 'white'
+    // },
     formHeadings: {
       margin: 20,
       marginBottom: 0
@@ -137,7 +137,7 @@ export default function CheckboxLabels() {
     </Breadcrumbs>
     <Card className={classes.root}>
                     <CardContent style={{ padding: 0 }}>
-                        <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
+                        <Typography className="TypographyTitle" gutterBottom >
                             Modify Role Accesses
                         </Typography>
                         <div className="row">

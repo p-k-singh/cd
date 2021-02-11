@@ -19,13 +19,13 @@ const useStyles = makeStyles({
     root: {
         // minWidth: 275,
     },
-    title: {
-        fontSize: 20,
-        height: 50,
-        padding: 10,
-        paddingLeft: 55,
-        color: 'white'
-    },
+    // title: {
+    //     fontSize: 20,
+    //     height: 50,
+    //     padding: 10,
+    //     paddingLeft: 55,
+    //     color: 'white'
+    // },
     formHeadings: {
         margin: 20,
         marginBottom: 0
@@ -82,7 +82,7 @@ const AddUser = () => {
     </Breadcrumbs>
     <Card className={classes.paper} style={{marginBottom:'30px'}}>
      <CardContent style={{ padding: 0,marginTop:10 }}>
-                         <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
+                         <Typography className="TypographyTitle" gutterBottom >
                              User Details
                          </Typography>
                          <table>

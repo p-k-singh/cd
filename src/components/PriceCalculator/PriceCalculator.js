@@ -10,6 +10,7 @@ import Select from 'react-select'
 import {connect} from 'react-redux';
 import { Redirect,withRouter } from 'react-router-dom'
 import * as actions from '../../store/actions/index'
+import "../../Globalcss/globalcss.css"
 import {
   TextField,
   Grid,
@@ -706,8 +707,9 @@ const PriceCalculator = (props) => {
             ></Grid>
             {list}
             <Button
+            className='AllButtons'
               style={{
-                backgroundColor: "#f9a825",
+               
                 marginTop: 10,
                 marginLeft: 20,  
               }}
@@ -763,8 +765,9 @@ const PriceCalculator = (props) => {
         >
           <Button
             variant="contained"
+            className="AllButtons"
             style={{
-                backgroundColor: "#f9a825",
+                
                 marginTop: 10,
                 marginLeft: 20,  
               }}

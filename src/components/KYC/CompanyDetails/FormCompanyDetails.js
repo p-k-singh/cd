@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
  import {Auth,API} from 'aws-amplify'
  import axios from 'axios'
-import {Link} from 'react-router-dom'
+import "../../../Globalcss/globalcss.css"
 import {
     TextField,
     Grid,
@@ -176,8 +176,8 @@ const CompanyKYC = (props) => {
                 
                 <Button 
                     onClick={submitKYC}
-                    className="row"
-                    variant='contained' style={{float:'right',backgroundColor:'#f9a825', marginBottom:'10px'}}
+                    className="row AllButtons"
+                    variant='contained' style={{float:'right', marginBottom:'10px'}}
             >Submit KYC</Button>
             
             

@@ -138,7 +138,7 @@ const OrderSummary = (props) => {
     return (
         <Card className={classes.paper}>
             <CardContent style={{ padding: 0,marginTop:10 }}>
-                                <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
+                                <Typography className="TypographyTitle" gutterBottom >
                                     Order Summary
                                     <tr style={{float:'right',marginRight:'10%'}}> 
                                                 {/* <th scope="row">{constants.estimatedCost+": "}</th> */}

@@ -12,18 +12,19 @@ import {
   } from '@material-ui/core'
 import AddProductForm from './AddProductForm';
 import ShowProducts from './ShowProducts';
+import "../../Globalcss/globalcss.css"
 const useStyles = makeStyles({
     root: {
         // minWidth: 275,
     },
-    title: {
-        fontSize: 20,
-        height: 50,
-        padding: 10,
-        paddingLeft: 55,
-        borderBottomStyle:'solid',
-    borderWidth:"1px",
-    },
+    // title: {
+    //     fontSize: 20,
+    //     height: 50,
+    //     padding: 10,
+    //     paddingLeft: 55,
+    //     borderBottomStyle:'solid',
+    // borderWidth:"1px",
+    // },
     formHeadings: {
         margin: 20,
         marginBottom: 0
@@ -60,12 +61,12 @@ const InventoryManager = (props) => {
             <div style={{overflow:'hidden'}}>
            {!editForm && <Button 
              onClick={toggleForm}
-            className="row"
-                variant='contained' style={{backgroundColor:'#f9a825', marginBottom:'10px',float:'right'}}
+            className="row AllButtons"
+                variant='contained' style={{ marginBottom:'10px',float:'right'}}
             >{showForm===true?'My Products':'Add new Product'}</Button>}
             </div>
             
-            {!showForm && !editForm && <Typography fullWidth className={classes.title} gutterBottom >
+            {!showForm && !editForm && <Typography fullWidth className="TypographyTitle" gutterBottom >
                        Your Added Products              
             </Typography> }
              <div style={{marginTop:'30px'}}></div>

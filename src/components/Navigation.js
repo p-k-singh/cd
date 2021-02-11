@@ -203,7 +203,7 @@ function Dashboard() {
           <Button
           variant="contained"
             component={Link}
-            className={classes.containedPurple}
+            className={` AllButtons`}
             style={{marginRight:'10px'}}
             to='/orders'
           >NEW ORDER</Button>

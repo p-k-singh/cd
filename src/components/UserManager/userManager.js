@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Link} from 'react-router-dom'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import "../../Globalcss/globalcss.css"
 import {
     Button,
     Divider
@@ -115,14 +116,14 @@ const UserManager = (props) => {
             <Button 
              component={Link}
              to='/addUser'
-            className="row"
-                variant='contained' style={{backgroundColor:'#f9a825', marginBottom:'10px'}}
+            className="row AllButtons"
+                variant='contained' style={{ marginBottom:'10px'}}
             >Add New User</Button>
             <Button 
              component={Link}
              to='/modifyRoleAccesses'
-            className="row"
-                variant='contained' style={{backgroundColor:'#f9a825', marginBottom:'10px',float:'right'}}
+            className="row AllButtons"
+                variant='contained' style={{ marginBottom:'10px',float:'right'}}
             >Modify Role Accesses</Button>
             <Divider />
              <div style={{marginTop:'30px'}}></div>

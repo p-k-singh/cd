@@ -111,7 +111,7 @@ const MyOrders=()=>{
    
     return(
                 <div>
-                    <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
+                    <Typography className="TypographyTitle" gutterBottom >
                                     My Active Orders
                     </Typography>  
 

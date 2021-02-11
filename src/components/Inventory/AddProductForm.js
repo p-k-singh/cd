@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Select  from 'react-select'
+import "../../Globalcss/globalcss.css"
 /// /inventory      get(id,owner,type)
 // /pricing get(length,width,height,toPin,fromPin,weightPerUnit,measureable=true/false,other)
 import {
@@ -23,13 +24,13 @@ const useStyles = makeStyles({
   root: {
     // minWidth: 275,
   },
-  title: {
-    fontSize: 20,
-    height: 50,
-    padding: 10,
-    paddingLeft: 55,
-    color: "white",
-  },
+  // title: {
+  //   fontSize: 20,
+  //   height: 50,
+  //   padding: 10,
+  //   paddingLeft: 55,
+  //   color: "white",
+  // },
   formHeadings: {
     margin: 20,
     marginBottom: 0,
@@ -275,7 +276,7 @@ const AddProductForm = (props) => {
   );
   var notMeasureable = (
     <React.Fragment>
-      <Typography className={classes.formHeadings}>Product Details</Typography>
+      
       {/*test*/}
       <Grid
         container
@@ -318,9 +319,9 @@ const AddProductForm = (props) => {
     <div style={{ overflow: "hidden" }}>
       <Typography
         fullWidth
-        className={classes.title}
+        className="TypographyTitle"
         gutterBottom
-        style={{ backgroundColor: "#66bb6a" }}
+        
       >
         Product Details
       </Typography>
@@ -443,11 +444,11 @@ const AddProductForm = (props) => {
         </Grid>
         <Button
           onClick={submitTruck}
-          className="row"
+          className="row AllButtons"
           variant="contained"
           style={{
             float: "right",
-            backgroundColor: "#f9a825",
+            
             marginBottom: "10px",
           }}
         >

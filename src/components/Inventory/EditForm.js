@@ -17,17 +17,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Multiselect } from 'multiselect-react-dropdown';
 import constants from '../../Constants/constants'
 import {Link} from 'react-router-dom'
+import "../../Globalcss/globalcss.css"
   const useStyles = makeStyles({
     root: {
         // minWidth: 275,
     },
-    title: {
-        fontSize: 20,
-        height: 50,
-        padding: 10,
-        paddingLeft: 55,
-        color: 'white'
-    },
+    // title: {
+    //     fontSize: 20,
+    //     height: 50,
+    //     padding: 10,
+    //     paddingLeft: 55,
+    //     color: 'white'
+    // },
     formHeadings: {
         margin: 20,
         marginBottom: 0
@@ -149,7 +150,7 @@ const AddProductForm = (props) => {
         </Link>
             <Typography color="textPrimary">Edit Product</Typography>
     </Breadcrumbs>
-        <Typography fullWidth className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
+        <Typography fullWidth className="TypographyTitle" gutterBottom >
                     Edit Product              
         </Typography>         
                 <form>

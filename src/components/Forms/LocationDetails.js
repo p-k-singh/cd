@@ -16,13 +16,13 @@ const useStyles = makeStyles({
   root: {
     // minWidth: 275,
   },
-  title: {
-    fontSize: 20,
-    height: 50,
-    padding: 10,
-    paddingLeft: 55,
-    color: 'white'
-  },
+  // title: {
+  //   fontSize: 20,
+  //   height: 50,
+  //   padding: 10,
+  //   paddingLeft: 55,
+  //   color: 'white'
+  // },
   formHeadings: {
     margin: 20,
     marginBottom: 0
@@ -182,7 +182,7 @@ const onDeliveryDateChangeController = (event) => {
   }
   return (
     <CardContent style={{ padding: 0 }}>
-      <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
+      <Typography className="TypographyTitle" gutterBottom >
         Location Details
         </Typography>
       <form>
