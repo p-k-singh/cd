@@ -28,6 +28,8 @@ export const SET_MEASUREABLE='SET_MEASUREABLE';
 export const SET_TOTAL_WEIGHT='SET_TOTAL_WEIGHT';
 export const SET_DENSITY='SET_DENSITY';
 
+//For array of products
+export const SET_CHOSEN_PRODUCTS='SET_CHOSEN_PRODUCTS';
 
 
 //Logged in

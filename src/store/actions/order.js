@@ -152,3 +152,9 @@ export const setDensity = (density) => {
         density:density
     }
 };
+export const setChosenProducts = (chosenProducts) => {
+    return{
+        type:actionTypes.SET_CHOSEN_PRODUCTS,
+        chosenProducts:chosenProducts
+    }
+};

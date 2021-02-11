@@ -20,7 +20,8 @@ const initialState={
     additionalNote:'',
     measureable:true,
     totalWeight:'',
-    density:''
+    density:'',
+    chosenProducts:[]
 }
 
 const reducer=(state=initialState,action)=>{
@@ -132,10 +133,15 @@ const reducer=(state=initialState,action)=>{
                 ...state,
                 totalWeight:action.totalWeight
             }
-            case actionTypes.SET_DENSITY:
+        case actionTypes.SET_DENSITY:
             return{
                 ...state,
                 density:action.density
+            }
+        case actionTypes.SET_CHOSEN_PRODUCTS:
+            return{
+                ...state,
+                chosenProducts:action.chosenProducts
             }
     }
 

@@ -31,6 +31,12 @@ const constants = {
     {name:'Feets',value:'feets'},
   ],
 
+  lengthDimensions:[
+    {label:'Centimeters',value:'centimeters'},
+    {label:'Inches',value:'inches'},
+    {label:'Feets',value:'feets'}
+  ],
+
 
 
   /*Inventory Management */
@@ -42,6 +48,28 @@ const constants = {
     {name:'Glass Items',id:5},
     {name:'Cosmetic Products',id:6},
     {name:'Liquid',id:7}
+  ],
+
+  inventoryCategory:[
+    {label: 'Packed Food Item', value:'packedFoodItem'},
+    {label: 'Frozen', value:'frozen'},
+    {label:'Sharable',value:'sharable'},
+    {label:'Non-Sharable',value:'nonSharable'},
+    {label:'Glass Items',value:'glassItems'},
+    {label:'Cosmetic Products',value:'cosmeticProducts'},
+    {label:'Liquid',value:'liquid'}
+  ],
+
+  /**Types of product */
+  typesOfProducts:[
+    {label:'Auto Parts',value:'autoParts'},
+    {label:'Building Materials',value:'buildingMaterials'},
+    {label:'Fertilizers',value:'fertilizers'},
+    {label:'Fruits And Vegetables',value:'fruitsAndVegetables'},
+    {label:'Furniture And Wood Products',value:'furnitureAndWoodProducts'},
+    {label:'Liquid in Drums',value:'liquidInDrums'},
+    {label:'Liquid/Oil',value:'liquidOrOil'},
+    {label:'Medicals',value:'medicals'}
   ],
 
   /*User Manager */
@@ -69,7 +97,6 @@ const constants = {
     {name:'Insurance',value:'insurance',id:4},
     {name:'Return Logistics',value:'returnLogistics',id:5}
   ]
-
 
 
 

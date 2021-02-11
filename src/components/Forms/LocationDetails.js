@@ -48,6 +48,7 @@ const BuyerDetails = (props) => {
 
     props.setPickupDateDispatcher(today)
     props.setDeliveryDateDispatcher(today)
+    console.log(props.chosenProducts)
   },[])
   const onPickupChangeController=(event)=>{
       var pickupAddress=event.target.value;
@@ -318,7 +319,8 @@ const mapStateToProps=state=>{
     pickupDate:state.order.pickupDate,
     deliveryDate:state.order.deliveryDate,
     pickupSlot:state.order.pickupSlot,
-    additionalNote:state.order.additionalNote
+    additionalNote:state.order.additionalNote,
+    chosenProducts:state.order.chosenProducts
   }
 }
 

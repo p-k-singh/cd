@@ -21,7 +21,8 @@ const useStyles = makeStyles({
         height: 50,
         padding: 10,
         paddingLeft: 55,
-        color: 'white'
+        borderBottomStyle:'solid',
+    borderWidth:"1px",
     },
     formHeadings: {
         margin: 20,
@@ -63,8 +64,8 @@ const InventoryManager = (props) => {
                 variant='contained' style={{backgroundColor:'#f9a825', marginBottom:'10px',float:'right'}}
             >{showForm===true?'My Products':'Add new Product'}</Button>}
             </div>
-            <Divider />
-            {!showForm && !editForm && <Typography fullWidth className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
+            
+            {!showForm && !editForm && <Typography fullWidth className={classes.title} gutterBottom >
                        Your Added Products              
             </Typography> }
              <div style={{marginTop:'30px'}}></div>
