@@ -43,11 +43,8 @@ const OrderDetails = (props) => {
         <Spinner />
     )
     return (
-        <Card className={classes.root}>
-            <CardContent style={{ padding: 0,marginTop:10 }}>
-                                <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
-                                    Order Details
-                                </Typography>
+        
+                               
                                 <table>
                                     <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
                                         
@@ -92,9 +89,7 @@ const OrderDetails = (props) => {
 
                                     </Grid>
                                 </table>
-                </CardContent>
-            </Card>
-                    
+             
     )
 }
 export default OrderDetails

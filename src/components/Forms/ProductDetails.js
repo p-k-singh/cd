@@ -36,7 +36,7 @@
 //     //     [theme.breakpoints.down('sm')]: {
 //     //         padding:'0%',
 //     //     },
-    
+
 //     // },
 //     radioButton: {
 //         marginTop: '5%',
@@ -44,7 +44,7 @@
 //             margin: '10%',
 //         },
 //     },
-    
+
 //     formHeadings: {
 //         margin: 20,
 //         marginBottom: 0
@@ -73,7 +73,7 @@
 //     // const handleSwitchTogglerChange = (event) => {
 //     //     setSwitchToggler(!switchToggler)
 //     // }
-    
+
 //     const onNumberOfUnitsChangeController=(event)=>{
 //         var noOfUnits=event.target.value;
 //         noOfUnits = noOfUnits<0?0:noOfUnits
@@ -131,7 +131,7 @@
 //         return(
 //           <React.Fragment>
 //             <Typography className={classes.formHeadings} >Value Added Services</Typography>
-//               <Grid container spacing={3} style={{ padding: 50, paddingTop: 20 ,paddingBottom: 30 }}>   
+//               <Grid container spacing={3} style={{ padding: 50, paddingTop: 20 ,paddingBottom: 30 }}>
 //                 {constants.vas.map((vas)=>{
 //                   return(
 //                     <Grid item xs={12} sm={4}>
@@ -143,19 +143,19 @@
 //                         name={vas.name}
 //                         color="primary"
 //                       />
-                      
+
 //                     }
 //                     label={vas.name}
-//                   /> 
+//                   />
 //                   </Grid>
 //                   )
 //                 })}
-                
+
 //             </Grid>
 //           </React.Fragment>
 //         )
 //       }
-  
+
 // const Measureable = <React.Fragment>
 //      <Typography className={classes.formHeadings}>Product Weight and Unit</Typography>
 //                 <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
@@ -188,7 +188,7 @@
 
 //                         />
 //                     </Grid>
-                    
+
 //                 </Grid>
 //                 <Typography className={classes.formHeadings}>Dimensions per unit</Typography>
 //                 <Grid container spacing={3} style={{ padding: 30, paddingTop:10 }}>
@@ -264,7 +264,7 @@
 //     value={props.totalWeight}
 //     onChange={(event)=>onTotalWeightChangeController(event)}
 //     fullWidth
-    
+
 //     />
 //     </Grid>
 //     <Grid item xs={12} sm={6}>
@@ -283,7 +283,7 @@
 //     </Grid>
 // </Grid>
 // </React.Fragment>
-    
+
 //     return (
 //         <CardContent style={{ padding: 0 }}>
 //             <Typography className={classes.title} gutterBottom >
@@ -304,7 +304,7 @@
 //             />
 
 //             {props.measureable===true?Measureable:notMeasureable}
-               
+
 //                 {vases()}
 //             </form>
 //         </CardContent>
@@ -324,7 +324,7 @@
 //         density:state.order.density
 //     }
 //   }
-  
+
 //   const mapDispatchToProps=dispatch=>{
 //     return {
 //         setHeightDispatcher:(h)=>dispatch(actions.setHeight(h)),
@@ -340,16 +340,17 @@
 //   }
 
 // export default connect(mapStateToProps,mapDispatchToProps)(ProductDimensions);
-
+import Tooltip from "@material-ui/core/Tooltip";
 import React, { useEffect, useState } from "react";
-import { makeStyles,withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import constants from "../../Constants/constants";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Spinner from "../UI/Spinner";
 import CreatableSelect from "react-select/creatable";
-import Select from 'react-select'
+import Select from "react-select";
+import InfoIcon from "@material-ui/icons/Info";
 import {
   TextField,
   Grid,
@@ -358,23 +359,23 @@ import {
   IconButton,
   Divider,
   FormControlLabel,
-  Switch
+  Switch,
 } from "@material-ui/core";
-import {Auth,API} from 'aws-amplify'
+import { Auth, API } from "aws-amplify";
 import { Multiselect } from "multiselect-react-dropdown";
 // import Autocomplete from "@material-ui/lab/Autocomplete";
 const useStyles = makeStyles({
   root: {
-      elevation:0
-     // minHeight:900
+    elevation: 0,
+    // minHeight:900
   },
   title: {
     fontSize: 20,
     height: 50,
     padding: 10,
     paddingLeft: 55,
-    borderBottomStyle:'solid',
-    borderWidth:"1px",
+    borderBottomStyle: "solid",
+    borderWidth: "1px",
   },
   formHeadings: {
     margin: 20,
@@ -386,100 +387,95 @@ const useStyles = makeStyles({
   },
 });
 const AntSwitch = withStyles((theme) => ({
-    root: {
-      width: 28,
-      height: 16,
-      padding: 0,
-      display: 'flex',
-    },
-    switchBase: {
-      padding: 2,
-      color: theme.palette.grey[500],
-      '&$checked': {
-        transform: 'translateX(12px)',
-        color: theme.palette.common.white,
-        '& + $track': {
-          opacity: 1,
-          backgroundColor: theme.palette.primary.main,
-          borderColor: theme.palette.primary.main,
-        },
+  root: {
+    width: 28,
+    height: 16,
+    padding: 0,
+    display: "flex",
+  },
+  switchBase: {
+    padding: 2,
+    color: theme.palette.grey[500],
+    "&$checked": {
+      transform: "translateX(12px)",
+      color: theme.palette.common.white,
+      "& + $track": {
+        opacity: 1,
+        backgroundColor: theme.palette.primary.main,
+        borderColor: theme.palette.primary.main,
       },
     },
-    thumb: {
-      width: 12,
-      height: 12,
-      boxShadow: 'none',
-    },
-    track: {
-      border: `1px solid ${theme.palette.grey[500]}`,
-      borderRadius: 16 / 2,
-      opacity: 1,
-      backgroundColor: theme.palette.common.white,
-    },
-    checked: {},
-  }))(Switch);
+  },
+  thumb: {
+    width: 12,
+    height: 12,
+    boxShadow: "none",
+  },
+  track: {
+    border: `1px solid ${theme.palette.grey[500]}`,
+    borderRadius: 16 / 2,
+    opacity: 1,
+    backgroundColor: theme.palette.common.white,
+  },
+  checked: {},
+}))(Switch);
 const ProductDetails = (props) => {
   const classes = useStyles();
 
-  const [user,setUser] = useState()
+  const [user, setUser] = useState();
   const [allProducts, setAllProducts] = useState([]);
   const [chosenProducts, setChosenProducts] = useState([null]);
   //const [loading, setLoading] = useState(true);
-  const [calculating,setCalculating] = useState(false)
+  const [calculating, setCalculating] = useState(false);
 
   const capabilityOptions = {
     options: constants.inventoryFeatures,
   };
   const selectStyles = {
-    menu: base => ({
+    menu: (base) => ({
       ...base,
-      zIndex: 100
-    })
+      zIndex: 100,
+    }),
   };
-  
 
-
-  useEffect(()=>{
+  useEffect(() => {
     Auth.currentUserInfo()
-    .then((user)=>{
-        setUser(user)
-        API
-        .get("GoFlexeOrderPlacement", `/inventory?type=owner&ownerId=${user.username}`)
-        .then(response => {
+      .then((user) => {
+        setUser(user);
+        API.get(
+          "GoFlexeOrderPlacement",
+          `/inventory?type=owner&ownerId=${user.username}`
+        )
+          .then((response) => {
             // Add your code here
             //setAllProducts(response)
 
-            var items = allProducts.slice()
+            var items = allProducts.slice();
             //console.log(Array.isArray(response))
-            for(var i=0;i<response.length;i++){
-                items.push({
-                    label:response[i].productName,
-                    value:response[i],
-                    isNew:false
-                })
+            for (var i = 0; i < response.length; i++) {
+              items.push({
+                label: response[i].productName,
+                value: response[i],
+                isNew: false,
+              });
             }
-            setAllProducts(items)
-            console.log(items)
-           // setLoading(false)
-        })
-        .catch(error => {
+            setAllProducts(items);
+            console.log(items);
+            // setLoading(false)
+          })
+          .catch((error) => {
             console.log(error);
-           // setLoading(false)
-        });
-    })
-    .catch(err=>{
+            // setLoading(false)
+          });
+      })
+      .catch((err) => {
         //setLoading(false)
-    })
-  },[])
-
+      });
+  }, []);
 
   useEffect(() => {}, []);
 
-
-
-
   const handleItemDeleted = (i) => {
-    
     var items = chosenProducts.slice();
     items.splice(i, 1);
     setChosenProducts(items);
@@ -489,152 +485,147 @@ const ProductDetails = (props) => {
     items.push(null);
     setChosenProducts(items);
   };
-  const onProductTypeChange = (event,i) => {
-      console.log(event)
-      var items = chosenProducts.slice()
-      items[i].value.productType = event
-      setChosenProducts(items)
-  }
-  const onCategoryChange = (event,i) => {
-      console.log(event)
-      var items = chosenProducts.slice()
-      items[i].value.categories = event
-      setChosenProducts(items)
-  } 
+  const onProductTypeChange = (event, i) => {
+    console.log(event);
+    var items = chosenProducts.slice();
+    items[i].value.productType = event;
+    setChosenProducts(items);
+  };
+  const onCategoryChange = (event, i) => {
+    console.log(event);
+    var items = chosenProducts.slice();
+    items[i].value.categories = event;
+    setChosenProducts(items);
+  };
   const handleMeasurableChange = (i) => {
-    var items = chosenProducts.slice()
-      items[i].value.measurable = !items[i].value.measurable
-      setChosenProducts(items)
-  }
-  const unitChangeController = (event,i)=>{
-      var items = chosenProducts.slice()
-      items[i].value.unit = event
-       setChosenProducts(items)
-  }
-  const onWeightPerUnitChangeController = (event,i) => {
-      var items = chosenProducts.slice()
-      items[i].value.weightPerUnit = event.target.value
-      setChosenProducts(items)
-  }
-  const onHeightChangeController = (event,i) => {
-    var items = chosenProducts.slice()
-    items[i].value.height = event.target.value
-    setChosenProducts(items)
-  }
-  const onWidthChangeController = (event,i) => {
-    var items = chosenProducts.slice()
-    items[i].value.width = event.target.value
-    setChosenProducts(items)
-  }
-  const onLengthChangeController = (event,i) => {
-    var items = chosenProducts.slice()
-    items[i].value.length = event.target.value
-    setChosenProducts(items)
-  }
-  const onDensityChangeController = (event,i) => {
-    var items = chosenProducts.slice()
-    items[i].value.density = event.target.value
-    setChosenProducts(items)
-  }
- 
-  const onNoOfUnitsChange = (event,i) => {
-      var items = chosenProducts.slice()
-      items[i].noOfUnits = event.target.value
-      setChosenProducts(items)
-  }
-  const onTotalWeightChange = (event,i) => {
-    var items = chosenProducts.slice()
-    items[i].totalWeight = event.target.value
-    setChosenProducts(items)
-  }
-  const handlePlaceOrderClick = () => {
+    var items = chosenProducts.slice();
+    items[i].value.measurable = !items[i].value.measurable;
+    setChosenProducts(items);
+  };
+  const unitChangeController = (event, i) => {
+    var items = chosenProducts.slice();
+    items[i].value.unit = event;
+    setChosenProducts(items);
+  };
+  const onWeightPerUnitChangeController = (event, i) => {
+    var items = chosenProducts.slice();
+    items[i].value.weightPerUnit = event.target.value;
+    setChosenProducts(items);
+  };
+  const onHeightChangeController = (event, i) => {
+    var items = chosenProducts.slice();
+    items[i].value.height = event.target.value;
+    setChosenProducts(items);
+  };
+  const onWidthChangeController = (event, i) => {
+    var items = chosenProducts.slice();
+    items[i].value.width = event.target.value;
+    setChosenProducts(items);
+  };
+  const onLengthChangeController = (event, i) => {
+    var items = chosenProducts.slice();
+    items[i].value.length = event.target.value;
+    setChosenProducts(items);
+  };
+  const onDensityChangeController = (event, i) => {
+    var items = chosenProducts.slice();
+    items[i].value.density = event.target.value;
+    setChosenProducts(items);
+  };
 
-  }
-  const handleChange=(newValue,i) => {
-      //console.log(newValue)
-      var items = chosenProducts.slice()
-      if(newValue===null){
-           items[i]=null
+  const onNoOfUnitsChange = (event, i) => {
+    var items = chosenProducts.slice();
+    items[i].noOfUnits = event.target.value;
+    setChosenProducts(items);
+  };
+  const onTotalWeightChange = (event, i) => {
+    var items = chosenProducts.slice();
+    items[i].totalWeight = event.target.value;
+    setChosenProducts(items);
+  };
+  const handlePlaceOrderClick = () => {};
+  const handleChange = (newValue, i) => {
+    //console.log(newValue)
+    var items = chosenProducts.slice();
+    if (newValue === null) {
+      items[i] = null;
+    } else {
+      if (newValue.__isNew__ === true) {
+        var temp = {
+          value: {
+            productName: newValue.value,
+            productType: newValue.label,
+            categories: null,
+            measurable: true,
+            length: null,
+            width: null,
+            height: null,
+            weightPerUnit: null,
+            density: null,
+            unit: null,
+            location: "",
+            pincode: "",
+          },
+          isNew: true,
+          label: newValue.label,
+          noOfUnits: 0,
+          totalWeight: 0,
+        };
+        items[i] = temp;
+      } else {
+        var temp = {
+          value: newValue.value,
+          isNew: false,
+          label: newValue.label,
+          noOfUnits: 0,
+          totalWeight: 0,
+        };
+        items[i] = temp;
       }
-      else{
-        
-        if(newValue.__isNew__===true){
-            var temp = {
-                value:{
-                    productName:newValue.value,
-                    productType:newValue.label,
-                    categories:null,
-                    measurable:true,
-                    length:null,
-                    width:null,
-                    height:null,
-                    weightPerUnit:null,
-                    density:null,
-                    unit:null,
-                    location:'',
-                    pincode:'',
-                },
-                isNew:true,
-                label:newValue.label,
-                noOfUnits:0,
-                totalWeight:0
-            }
-            items[i]=temp
-        }
-        else{
-            var temp = {
-                value:newValue.value,
-                isNew:false,
-                label:newValue.label,
-                noOfUnits:0,
-                totalWeight:0
-            }
-            items[i]=temp
-        }
-      }
-      setChosenProducts(items)
-      console.log(items)
-   // console.log(newValue)
-  }
-//   const onquantityChangeController = (event, i) => {
-//     var items = products.slice();
-//     items[i].quantity = event.target.value;
-//     setproducts(items);
-//   };
- /*IF the product is measureable with length width height */
- var measureablePerUnit = (i) => (
+    }
+    setChosenProducts(items);
+    console.log(items);
+    // console.log(newValue)
+  };
+  //   const onquantityChangeController = (event, i) => {
+  //     var items = products.slice();
+  //     items[i].quantity = event.target.value;
+  //     setproducts(items);
+  //   };
+  /*IF the product is measureable with length width height */
+  var measureablePerUnit = (i) => (
     <React.Fragment>
       <Grid container spacing={3} style={{ padding: 50, paddingTop: 10 }}>
         <Grid item xs={12} sm={2}>
-             <Select
-                styles={selectStyles}
-                className="basic-single"
-                classNamePrefix="Unit"
-                isSearchable
-                name="unit"
-                placeholder="Unit"
-                value={chosenProducts[i].value.unit}
-                onChange={(event)=>unitChangeController(event,i)}
-                options={constants.lengthDimensions}
-        />
+          <Select
+            styles={selectStyles}
+            className="basic-single"
+            classNamePrefix="Unit"
+            isSearchable
+            name="unit"
+            placeholder="Unit"
+            value={chosenProducts[i].value.unit}
+            onChange={(event) => unitChangeController(event, i)}
+            options={constants.lengthDimensions}
+          />
           {/* </FormControl> */}
         </Grid>
         <Grid item xs={12} sm={4}></Grid>
         <Grid item xs={12} sm={6}>
-            <TextField
-              type="number"
-              id="weightPerUnit"
-              name="weightPerUnit"
-              label="Weight Per Unit(in Kg)"
-              fullWidth
-             value={chosenProducts[i].value.weightPerUnit}
-              variant='outlined'
-              size='small'
-              style={{backgroundColor:'#fff'}}
-              autoComplete="weightPerUnit"
-              onChange={(event) => onWeightPerUnitChangeController(event,i)}
-            />
-          </Grid>
+          <TextField
+            type="number"
+            id="weightPerUnit"
+            name="weightPerUnit"
+            label="Weight Per Unit(in Kg)"
+            fullWidth
+            value={chosenProducts[i].value.weightPerUnit}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+            autoComplete="weightPerUnit"
+            onChange={(event) => onWeightPerUnitChangeController(event, i)}
+          />
+        </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
             type="number"
@@ -644,10 +635,10 @@ const ProductDetails = (props) => {
             fullWidth
             value={chosenProducts[i].value.height}
             autoComplete="Height"
-            variant='outlined'
-            size='small'
-            style={{backgroundColor:'#fff'}}
-            onChange={(event) => onHeightChangeController(event,i)}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+            onChange={(event) => onHeightChangeController(event, i)}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -659,10 +650,10 @@ const ProductDetails = (props) => {
             fullWidth
             value={chosenProducts[i].value.width}
             autoComplete="width"
-            variant='outlined'
-            size='small'
-            style={{backgroundColor:'#fff'}}
-            onChange={(event) => onWidthChangeController(event,i)}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+            onChange={(event) => onWidthChangeController(event, i)}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -673,10 +664,10 @@ const ProductDetails = (props) => {
             label="Length"
             value={chosenProducts[i].value.length}
             fullWidth
-            variant='outlined'
-            size='small'
-            style={{backgroundColor:'#fff'}}
-            onChange={(event) => onLengthChangeController(event,i)}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+            onChange={(event) => onLengthChangeController(event, i)}
             autoComplete="Length"
           />
         </Grid>
@@ -684,10 +675,8 @@ const ProductDetails = (props) => {
     </React.Fragment>
   );
 
-
   var notMeasureable = (i) => (
     <React.Fragment>
-     
       {/*test*/}
       <Grid
         container
@@ -695,127 +684,134 @@ const ProductDetails = (props) => {
         style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
       >
         <Grid item xs={12} sm={6}>
+          <Tooltip title="Product mass / Volume">
+            <TextField
+              type="number"
+              id="density"
+              name="density"
+              label="Weight per cubic meter"
+              fullWidth
+              value={chosenProducts[i].value.density}
+              variant="outlined"
+              size="small"
+              style={{ backgroundColor: "#fff" }}
+              onChange={(event) => onDensityChangeController(event, i)}
+              // InputProps={{
+              //   endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+              // }}
+            />
+          </Tooltip>
+        </Grid>
+       
+      </Grid>
+    </React.Fragment>
+  );
+
+  var fixedMeasurable = (i) => (
+    <React.Fragment>
+      <Grid
+        container
+        spacing={4}
+        style={{ paddingTop: 30, paddingLeft: 30, paddingRight: 30 }}
+      >
+        <Grid item xs={12} sm={4}>
           <TextField
-            type="number"
-            id="density"
-            name="density"
-            label="Weight per cubic meter"
+            type="text"
+            id="unit"
+            name="unit"
+            label="Unit"
             fullWidth
-            value={chosenProducts[i].value.density}
-            variant='outlined'
-            size='small'
-            style={{backgroundColor:'#fff'}}
-            onChange={(event) => onDensityChangeController(event,i)}
-            // InputProps={{
-            //   endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
-            // }}
+            disabled
+            value={chosenProducts[i].value.unit.label}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+          />
+        </Grid> 
+        <Grid item xs={12} sm={4}>
+          <TextField
+            type="text"
+            id="weightPerunit"
+            name="weightPerunit"
+            label="Weight Per Unit"
+            fullWidth
+            disabled
+            value={chosenProducts[i].value.weightPerUnit}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <TextField
+            type="text"
+            id="length"
+            name="lenght"
+            label="Length of a unit"
+            fullWidth
+            disabled
+            value={chosenProducts[i].value.length}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <TextField
+            type="text"
+            id="width"
+            name="width"
+            label="Width of a unit"
+            fullWidth
+            disabled
+            value={chosenProducts[i].value.width}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <TextField
+            type="text"
+            id="height"
+            name="height"
+            label="Height of a unit"
+            fullWidth
+            disabled
+            value={chosenProducts[i].value.height}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
           />
         </Grid>
       </Grid>
     </React.Fragment>
   );
 
-  var fixedMeasurable = (i) => (
-      <React.Fragment>
-          <Grid container spacing={4} style={{paddingTop:30, paddingLeft: 30,paddingRight:30 }}>
-              <Grid item xs={12} sm={4}>
-              <TextField
-                type="text"
-                id="unit"
-                name="unit"
-                label="Unit"
-                fullWidth
-                disabled
-                value={chosenProducts[i].value.unit.label}
-                variant='outlined'
-                size='small'
-                style={{backgroundColor:'#fff'}}
-          />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-              <TextField
-                type="text"
-                id="weightPerunit"
-                name="weightPerunit"
-                label="Weight Per Unit"
-                fullWidth
-                disabled
-                value={chosenProducts[i].value.weightPerUnit}
-                variant='outlined'
-                size='small'
-                style={{backgroundColor:'#fff'}}
-          />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-              <TextField
-                type="text"
-                id="length"
-                name="lenght"
-                label="Length of a unit"
-                fullWidth
-                disabled
-                value={chosenProducts[i].value.length}
-                variant='outlined'
-                size='small'
-                style={{backgroundColor:'#fff'}}
-          />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-              <TextField
-                type="text"
-                id="width"
-                name="width"
-                label="Width of a unit"
-                fullWidth
-                disabled
-                value={chosenProducts[i].value.width}
-                variant='outlined'
-                size='small'
-                style={{backgroundColor:'#fff'}}
-          />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-              <TextField
-                type="text"
-                id="height"
-                name="height"
-                label="Height of a unit"
-                fullWidth
-                disabled
-                value={chosenProducts[i].value.height}
-                variant='outlined'
-                size='small'
-                style={{backgroundColor:'#fff'}}
-          />
-              </Grid>
-          </Grid>
-      </React.Fragment>
-  );
-
   var fixedNotMeasurable = (i) => (
-      <React.Fragment>
-              <Grid container spacing={4} style={{paddingTop:30, paddingLeft: 30,paddingRight:30 }}>
-              <Grid item xs={12} sm={4}>
-              <TextField
-                type="text"
-                id="density"
-                name="density"
-                label="Density"
-                fullWidth
-                disabled
-                value={`${chosenProducts[i].value.density} kg per cubic meter`}
-                variant='outlined'
-                size='small'
-                style={{backgroundColor:'#fff'}}
+    <React.Fragment>
+      <Grid
+        container
+        spacing={4}
+        style={{ paddingTop: 30, paddingLeft: 30, paddingRight: 30 }}
+      >
+        <Grid item xs={12} sm={4}>
+          <TextField
+            type="text"
+            id="density"
+            name="density"
+            label="Density"
+            fullWidth
+            disabled
+            value={`${chosenProducts[i].value.density} kg per cubic meter`}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
           />
-              </Grid>
         </Grid>
-      </React.Fragment>
+      </Grid>
+    </React.Fragment>
   );
-
-
-
-
 
   var list = chosenProducts.map((e, i) => (
     <div
@@ -825,88 +821,104 @@ const ProductDetails = (props) => {
     //       : { backgroundColor: "#fff" }
     //   }
     >
-      {i!==0 && <Divider style={{ marginBottom: 30, marginTop: 30 }} /> }
+      {i !== 0 && <Divider style={{ marginBottom: 30, marginTop: 30 }} />}
       {/* <Typography gutterBottom style={{marginLeft:30,marginBottom:30,marginTop:30}}>
             <h5>Product {i + 1}</h5> <IconButton onClick={() => handleItemDeleted(i)}>
             <DeleteIcon style={{ fontSize: "30" }} />
           </IconButton>
           </Typography> */}
-          <Grid container direction="row" alignItems="center" style={{padding:30}} >
-            <Grid item>
-            <h5>Product {i + 1}</h5>
-            </Grid>
-            <Grid item>
-            <IconButton onClick={() => handleItemDeleted(i)}>
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        style={{ padding: 30 }}
+      >
+        <Grid item>
+          <h5>Product {i + 1}</h5>
+        </Grid>
+        <Grid item>
+          <IconButton onClick={() => handleItemDeleted(i)}>
             <DeleteIcon style={{ fontSize: "30" }} />
           </IconButton>
-            </Grid>
-            </Grid>
-      <Grid container spacing={4} style={{ paddingLeft: 30,paddingRight:30 }}>
-          <Grid item xs={12} sm={4}>
-            <CreatableSelect
+        </Grid>
+      </Grid>
+      <Grid container spacing={4} style={{ paddingLeft: 30, paddingRight: 30 }}>
+        <Grid item xs={12} sm={4}>
+          <CreatableSelect
             isClearable
             value={chosenProducts[i]}
-            onChange = {(newValue)=>handleChange(newValue,i)}
+            onChange={(newValue) => handleChange(newValue, i)}
             options={allProducts}
             placeholder="Product Name"
             styles={selectStyles}
+          />
+        </Grid>
+        {/* Type of the product */}
+        <Grid item xs={12} sm={4}>
+          <Select
+            styles={selectStyles}
+            value={
+              chosenProducts[i] === null ||
+              chosenProducts[i].value.productType === null
+                ? null
+                : chosenProducts[i].value.productType
+            }
+            isDisabled={chosenProducts[i] === null || !chosenProducts[i].isNew}
+            onChange={(event) => onProductTypeChange(event, i)}
+            isSearchable
+            placeholder="Product Type"
+            name="color"
+            options={constants.typesOfProducts}
+          />
+        </Grid>
+        {chosenProducts[i] === null || chosenProducts[i].value.measurable ? (
+          <Grid item xs={12} sm={4}>
+            <TextField
+              fullWidth
+              type="number"
+              size="small"
+              id="outlined-basic"
+              label="No. of units"
+              variant="outlined"
+              value={
+                chosenProducts[i] === null ? 0 : chosenProducts[i].noOfUnits
+              }
+              onChange={(event) => onNoOfUnitsChange(event, i)}
             />
           </Grid>
-          {/* Type of the product */}
+        ) : (
           <Grid item xs={12} sm={4}>
-          <Select
-          styles={selectStyles}
-          value={(chosenProducts[i]===null || chosenProducts[i].value.productType===null)?null:chosenProducts[i].value.productType}
-          isDisabled={chosenProducts[i]===null || !chosenProducts[i].isNew}
-          onChange={(event)=>onProductTypeChange(event,i)}
-          isSearchable
-          placeholder="Product Type"
-          name="color"
-          options={constants.typesOfProducts}
-        />
-           
+            <TextField
+              fullWidth
+              type="number"
+              size="small"
+              id="outlined-basic"
+              label="Total Weight"
+              variant="outlined"
+              value={chosenProducts[i].totalWeight}
+              onChange={(event) => onTotalWeightChange(event, i)}
+            />
           </Grid>
-          {(chosenProducts[i]===null || chosenProducts[i].value.measurable)?
-                <Grid item xs={12} sm={4}>
-                <TextField
-                  fullWidth
-                  type='number'
-                  size="small"
-                  id="outlined-basic"
-                  label="No. of units"
-                  variant="outlined"
-                  value={chosenProducts[i]===null?0:chosenProducts[i].noOfUnits}
-                  onChange={(event) => onNoOfUnitsChange(event, i)}
-                />
-              </Grid>
-              :
-              <Grid item xs={12} sm={4}>
-                <TextField
-                    fullWidth
-                    type='number'
-                    size="small"
-                    id="outlined-basic"
-                    label="Total Weight"
-                    variant="outlined"
-                    value={chosenProducts[i].totalWeight}
-                    onChange={(event) => onTotalWeightChange(event, i)}
-                />
-                </Grid>
-          }
+        )}
         <Grid item xs={12} sm={11}>
           <Select
-              //defaultValue={[colourOptions[2], colourOptions[3]]}
-              isMulti
-              styles={selectStyles}
-              name="categories"
-              value={(chosenProducts[i]===null || chosenProducts[i].value.categories===null)?null:chosenProducts[i].value.categories}
-              options={constants.inventoryCategory}
-              placeholder="Category(Select Multiple)"
-              isDisabled={chosenProducts[i]===null || !chosenProducts[i].isNew}
-              className="basic-multi-select"
-              onChange={(event)=>onCategoryChange(event,i)}
-              classNamePrefix="select"
-            />
+            //defaultValue={[colourOptions[2], colourOptions[3]]}
+            isMulti
+            styles={selectStyles}
+            name="categories"
+            value={
+              chosenProducts[i] === null ||
+              chosenProducts[i].value.categories === null
+                ? null
+                : chosenProducts[i].value.categories
+            }
+            options={constants.inventoryCategory}
+            placeholder="Category(Select Multiple)"
+            isDisabled={chosenProducts[i] === null || !chosenProducts[i].isNew}
+            className="basic-multi-select"
+            onChange={(event) => onCategoryChange(event, i)}
+            classNamePrefix="select"
+          />
         </Grid>
 
         {/* <Grid item xs={12} sm={1}>
@@ -914,14 +926,10 @@ const ProductDetails = (props) => {
             <DeleteIcon style={{ fontSize: "30" }} />
           </IconButton>
         </Grid> */}
-      {
-          chosenProducts[i]===null ? 
+        {chosenProducts[i] === null ? (
+          <React.Fragment></React.Fragment>
+        ) : chosenProducts[i].isNew === true ? (
           <React.Fragment>
-
-          </React.Fragment>
-          :
-          ( chosenProducts[i].isNew===true ) ? 
-            <React.Fragment>
             {/* <FormControlLabel
                 style={{ margin: 20 }}
                 control={
@@ -934,92 +942,95 @@ const ProductDetails = (props) => {
                 }
                 label="(Measureable Dimensions)"
                 /> */}
-                <Grid component="label" container style={{fontSize:18,marginTop:20,marginBottom:20}} alignItems="center" spacing={1}>
-                <Grid item>Total Weight</Grid>
-                <Grid item>
-                    <AntSwitch checked={chosenProducts[i].value.measurable} onChange={()=>handleMeasurableChange(i)} name="checkedC" />
-                </Grid>
-                <Grid item>No. Of Units</Grid>
-                </Grid>
-                {chosenProducts[i].value.measurable === true ? measureablePerUnit(i) : notMeasureable(i)}
-            </React.Fragment>
-                :
-
-            chosenProducts[i].value.measurable===true ? fixedMeasurable(i) : fixedNotMeasurable(i)
-            
-            }
+            <Grid
+              component="label"
+              container
+              style={{ fontSize: 18, marginTop: 20, marginBottom: 20 }}
+              alignItems="center"
+              spacing={1}
+            >
+              <Grid item>Total Weight</Grid>
+              <Grid item>
+                <AntSwitch
+                  checked={chosenProducts[i].value.measurable}
+                  onChange={() => handleMeasurableChange(i)}
+                  name="checkedC"
+                />
+              </Grid>
+              <Grid item>No. Of Units</Grid>
+            </Grid>
+            {chosenProducts[i].value.measurable === true
+              ? measureablePerUnit(i)
+              : notMeasureable(i)}
+          </React.Fragment>
+        ) : chosenProducts[i].value.measurable === true ? (
+          fixedMeasurable(i)
+        ) : (
+          fixedNotMeasurable(i)
+        )}
         <Grid item xs={12} sm={4}></Grid>
-        
-    
       </Grid>
     </div>
   ));
 
-//   if (loading === true) {
-//     return (
-//       <React.Fragment>
-//         <h1>Loading your product details</h1>
-//         <Spinner />
-//       </React.Fragment>
-//     );
-//   }
+  //   if (loading === true) {
+  //     return (
+  //       <React.Fragment>
+  //         <h1>Loading your product details</h1>
+  //         <Spinner />
+  //       </React.Fragment>
+  //     );
+  //   }
 
-  if(calculating===true){
-      return(
-        <div class="jumbotron text-center">
-        <p class="lead"><strong>Calculating estimated cost</strong></p>
-        <Spinner/>
-        </div>
-      )
+  if (calculating === true) {
+    return (
+      <div class="jumbotron text-center">
+        <p class="lead">
+          <strong>Calculating estimated cost</strong>
+        </p>
+        <Spinner />
+      </div>
+    );
   }
-
-
 
   return (
     <div>
       {/* <Card  className={classes.root}> */}
-        <CardContent style={{ padding: 0 }}>
-          <Typography
-            fullWidth
-            className={classes.title}
-            gutterBottom
+      <CardContent style={{ padding: 0 }}>
+        <Typography fullWidth className={classes.title} gutterBottom>
+          Product Details
+        </Typography>
+        <form>
+          <Grid
+            container
+            spacing={3}
+            style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
+          ></Grid>
+          {list}
+          <Button
+            style={{
+              backgroundColor: "#f9a825",
+              marginTop: 10,
+              marginLeft: 20,
+            }}
+            onClick={() => addproduct()}
           >
-            Product Details
-          </Typography>
-          <form>
-            <Grid
-              container
-              spacing={3}
-              style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
-            ></Grid>
-            {list}
-            <Button
-              style={{
-                backgroundColor: "#f9a825",
-                marginTop: 10,
-                marginLeft: 20,  
-              }}
-              onClick={() => addproduct()}
-            >
-              Add product
-            </Button>
-            <Divider style={{margin:20}} />
-          </form>
-        </CardContent>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            margin: 20,
-          }}
-        >
-         
-        </div>
-        
+            Add product
+          </Button>
+          <Divider style={{ margin: 20 }} />
+        </form>
+      </CardContent>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          margin: 20,
+        }}
+      ></div>
+
       {/* </Card> */}
       {/* //if(showPrice===true) */}
-                
     </div>
   );
 };
