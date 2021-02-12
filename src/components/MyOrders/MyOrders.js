@@ -191,16 +191,31 @@ const MyOrders = () => {
     );
   }
 
-  return (
-    <div>
-      <Typography className={classes.title} gutterBottom>
-        My Active Orders
-      </Typography>
+  if (activeOrders == "") {
+    return (
+      <div>
+        <Typography className={classes.title} gutterBottom>
+          My Active Orders
+        </Typography>
 
-      {orderList}
-    </div>
-  );
+        <Typography
+          style={{ fontSize: 20, height: 50, padding: 10, paddingLeft: 55 }}
+        >
+          No Orders to Show, Try Placing a New order
+        </Typography>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Typography className={classes.title} gutterBottom>
+          My Active Orders
+        </Typography>
+
+        {orderList}
+      </div>
+    ); //  block of code to be executed if the condition is false
+  }
 };
 
 export default MyOrders;
-
