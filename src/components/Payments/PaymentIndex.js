@@ -61,7 +61,7 @@ const PaymentIndex = () => {
 
   const fullPayToAccountDashboard = (
     <React.Fragment>
-      <Card >
+      <Card>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
           Total Amount to be paid: 10,000 INR
         </Typography>
@@ -198,7 +198,7 @@ const PaymentIndex = () => {
     </React.Fragment>
   );
 
-  const chequePayment = (
+  const OthersPayment = (
     <React.Fragment>
       <Card>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
@@ -209,8 +209,8 @@ const PaymentIndex = () => {
 
         <Divider style={{ marginBottom: 20, marginTop: 20 }} />
         <p>
-          Note:Please sign a cheque in the name of <b>GoFlexe Ltd.</b> and
-          upload the screenshot here.
+          Note:Please upload a picture / screenshot of payment via UPI or
+          Cheque.
         </p>
       </Card>
     </React.Fragment>
@@ -237,28 +237,35 @@ const PaymentIndex = () => {
               </FormLabel>
               <Grid
                 container
-                spacing={10}
+                spacing={0}
                 style={{ padding: 20, paddingBottom: 30 }}
               >
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={3}>
                   <FormControlLabel
                     value="fullPayment"
                     control={<Radio color="primary" />}
                     label="Full Payment"
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={3}>
                   <FormControlLabel
                     value="partialPayment"
                     control={<Radio color="primary" />}
                     label="Partial Payment"
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={3}>
                   <FormControlLabel
-                    value="creditBased"
+                    value="CreditBased"
                     control={<Radio color="primary" />}
                     label="Credit Based"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <FormControlLabel
+                    value="Subscription"
+                    control={<Radio color="primary" />}
+                    label="Subscription"
                   />
                 </Grid>
               </Grid>
@@ -275,6 +282,64 @@ const PaymentIndex = () => {
                 </Grid>
             </Grid> */}
           <Divider style={{ marginBottom: 20 }} />
+          {paymentOption === "CreditBased" && (
+            <FormControl
+              style={{ marginLeft: 50 }}
+              className={classes.formControl}
+            >
+              <InputLabel id="demo-simple-select-label">
+                Payment Delay
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={paymentRatio}
+                onChange={handleRatioChange}
+                //   value={age}
+                //   onChange={handleChange}
+              >
+                <MenuItem value="7 Days">7 Days</MenuItem>
+                <MenuItem value="30 Days">30 Days</MenuItem>
+                <MenuItem value="45 Days">45 Days</MenuItem>
+              </Select>
+              {paymentRatio === "45 Days" && (
+                <FormHelperText>Pay the total amount in 45 Days</FormHelperText>
+              )}
+              {paymentRatio === "30 Days" && (
+                <FormHelperText>Pay the total amount in 30 Days</FormHelperText>
+              )}
+              {paymentRatio === "7 Days" && (
+                <FormHelperText>Pay the total amount in 7 Days</FormHelperText>
+              )}
+            </FormControl>
+          )}
+          {paymentOption === "Subscription" && (
+            <FormControl
+              style={{ marginLeft: 50 }}
+              className={classes.formControl}
+            >
+              <InputLabel id="demo-simple-select-label">
+                Payment Cycle
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={paymentRatio}
+                onChange={handleRatioChange}
+                //   value={age}
+                //   onChange={handleChange}
+              >
+                <MenuItem value="Monthly">Monthly</MenuItem>
+                <MenuItem value="Weekly">Weekly</MenuItem>
+              </Select>
+              {paymentRatio === "Monthly" && (
+                <FormHelperText>Pay each Month</FormHelperText>
+              )}
+              {paymentRatio === "Weekly" && (
+                <FormHelperText>Pay each Week</FormHelperText>
+              )}
+            </FormControl>
+          )}
           {paymentOption === "partialPayment" && (
             <FormControl
               style={{ marginLeft: 50 }}
@@ -291,23 +356,23 @@ const PaymentIndex = () => {
                 //   value={age}
                 //   onChange={handleChange}
               >
-                <MenuItem value="50-50">50:50</MenuItem>
-                <MenuItem value="30-70">30:70</MenuItem>
-                <MenuItem value="10-90">10:90</MenuItem>
+                <MenuItem value="10%">10%</MenuItem>
+                <MenuItem value="30%">30%</MenuItem>
+                <MenuItem value="50%">50%</MenuItem>
               </Select>
-              {paymentRatio === "50-50" && (
+              {paymentRatio === "50%" && (
                 <FormHelperText>
                   Pay 50% now and 50%
                   <br /> at time of delivery
                 </FormHelperText>
               )}
-              {paymentRatio === "30-70" && (
+              {paymentRatio === "30%" && (
                 <FormHelperText>
                   Pay 30% now and 70%
                   <br /> at time of delivery
                 </FormHelperText>
               )}
-              {paymentRatio === "10-90" && (
+              {paymentRatio === "10%" && (
                 <FormHelperText>
                   Pay 10% now and 90%
                   <br /> at time of delivery
@@ -342,9 +407,9 @@ const PaymentIndex = () => {
                     label="Cash"
                   />
                   <FormControlLabel
-                    value="cheque"
+                    value="Others"
                     control={<Radio color="primary" />}
-                    label="Cheque"
+                    label="Others"
                   />
                 </RadioGroup>
               </FormControl>
@@ -352,7 +417,7 @@ const PaymentIndex = () => {
             <Grid item xs={12} sm={8}>
               {paymentMode === "accountTransfer" && fullPayToAccountDashboard}
               {paymentMode === "cash" && cashPayment}
-              {paymentMode === "cheque" && chequePayment}
+              {paymentMode === "Others" && OthersPayment}
             </Grid>
           </Grid>
         </form>

@@ -129,7 +129,7 @@ class Upload extends Component {
   render() {
     return (
       <div className="Upload">
-        <span className="Title">Upload a picture of the cheque</span>
+        <span className="Title">Upload a picture of the payment proof</span>
         <div className="Content">
           <div>
             <Dropzone

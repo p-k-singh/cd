@@ -130,7 +130,7 @@ const MyOrders = () => {
                       marginBottom: 25,
                     }}
                   >
-                    Order Date : <span>{today}</span>
+                    Order Date : <span>{eachOrder.pickupdate}</span>
                   </h6>
                   <h6>Total Amount : {Math.floor(Math.random() * 100000)}</h6>
                 </Grid>
@@ -203,3 +203,4 @@ const MyOrders = () => {
 };
 
 export default MyOrders;
+
