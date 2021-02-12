@@ -7,6 +7,8 @@ import * as actions from '../../store/actions/index';
 import constants from '../../Constants/constants';
 import {API} from 'aws-amplify';
 import EditIcon from '@material-ui/icons/Edit';
+import PaymentIndex from '../Payments/PaymentIndex'
+
 import {
     Card,
     TextField,
@@ -136,136 +138,186 @@ const OrderSummary = (props) => {
         setEditCompany(false);
       }
     return (
-        <Card className={classes.paper}>
-            <CardContent style={{ padding: 0,marginTop:10 }}>
-                                <Typography className="TypographyTitle" gutterBottom >
-                                    Order Summary
-                                    <tr style={{float:'right',marginRight:'10%'}}> 
-                                                {/* <th scope="row">{constants.estimatedCost+": "}</th> */}
-                                                <td>{constants.estimatedCost+": "}</td>
-                                                <td>Rs {estimatedMoney}</td>
-                                    </tr>
-                                </Typography>
-                                <table>
-                                    <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
-                                        
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row">Order Date :</th>
-                                                <td>{(new Date()).toLocaleDateString()}</td>
-                                            </tr>
-                                        </Grid>
-                                        
-                                        
-                                        <Grid item xs={12} sm={6}>
-                                            <tr>
-                                                <th scope="row">{constants.pickupAddress+": "}</th>
-                                                <td>{props.pickupAddress}-{props.pickupPin}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <tr>
-                                                <th scope="row">{constants.destinationAddress+": "}</th>
-                                                <td>{props.destinationAddress}-{props.destinationPin}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <tr>
-                                                <th scope="row">{constants.noOfUnits+": "}</th>
-                                                <td>{props.noOfUnits}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <tr>
-                                                <th scope="row">{constants.weightPerUnit+": "}</th>
-                                                <td>{props.weightPerUnit}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <tr>
-                                                <th scope="row">{constants.DimensionPerUnit+": "}</th>
-                                                <td>{props.height}x{props.length}x{props.width+" "}{props.unit} </td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <tr>
-                                                <th scope="row">{constants.customerName+": "}</th>
-                                               {editName && <td>
-                                                 <TextField
-                                                    className={classes.textfield}
-                                                    xs={12} sm={6}
-                                                    value={newName}
-                                                    autoComplete="given-name"
-                                                     onChange={(event)=>onNameChangeController(event)}
-                                                    />
-                                                    <Button onClick={onNameSubmitController}  color="secondary">Change</Button>
-                                                </td> }
-                                                {!editName && 
-                                                <td>{props.name} <EditIcon onClick={editNameClicked} /> 
-                                                </td> }
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <tr>
-                                                <th scope="row">{constants.customerEmail+": "}</th>
-                                                {editEmail && <td>
-                                                 <TextField
-                                                    className={classes.textfield}
-                                                    xs={12} sm={6}
-                                                    value={newEmail}
-                                                    autoComplete="given-name"
-                                                     onChange={(event)=>onEmailChangeController(event)}
-                                                    />
-                                                    <Button onClick={onEmailSubmitController}  color="secondary">Change</Button>
-                                                </td> }
-                                               {!editEmail && <td>{props.email}  <EditIcon onClick={editEmailClicked} /> 
-                                                </td> }
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <tr>
-                                                <th scope="row">{constants.customerPhoneNumber+": "}</th>
-                                                {editContact && <td>
-                                                 <TextField
-                                                    className={classes.textfield}
-                                                    xs={12} sm={6}
-                                                    value={newContact}
-                                                    autoComplete="given-name"
-                                                     onChange={(event)=>onContactChangeController(event)}
-                                                    />
-                                                    <Button onClick={onContactSubmitController}  color="secondary">Change</Button>
-                                                </td> }
-                                                {!editContact &&
-                                                <td>{props.phone} <EditIcon onClick={editContactClicked} />
-                                                </td>   }
-                                            </tr>
-                                        </Grid>
+      <Card className={classes.paper}>
+        <CardContent style={{ padding: 0, marginTop: 10 }}>
+          <Typography className="TypographyTitle" gutterBottom>
+            Order Summary
+            <tr style={{ float: "right", marginRight: "10%" }}>
+              {/* <th scope="row">{constants.estimatedCost+": "}</th> */}
+              <td>{constants.estimatedCost + ": "}</td>
+              <td>Rs {estimatedMoney}</td>
+            </tr>
+          </Typography>
+          <table>
+            <Grid
+              container
+              spacing={3}
+              style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
+            >
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">Order Date :</th>
+                  <td>{new Date().toLocaleDateString()}</td>
+                </tr>
+              </Grid>
 
-                                        <Grid item xs={12} sm={6}>
-                                            <tr>
-                                                <th scope="row">{constants.companyName+": "}</th>
-                                                {editCompany && <td>
-                                                 <TextField
-                                                    className={classes.textfield}
-                                                    xs={12} sm={6}
-                                                    value={newCompany}
-                                                    autoComplete="given-name"
-                                                     onChange={(event)=>onCompanyChangeController(event)}
-                                                    />
-                                                    <Button onClick={onCompanySubmitController}  color="secondary">Change</Button>
-                                                </td> }
-                                                {!editCompany &&
-                                                <td>{props.companyName} <EditIcon onClick={editCompanyClicked} />
-                                                </td>   }
-                                            </tr>
-                                        </Grid>
-                                        
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">{constants.pickupAddress + ": "}</th>
+                  <td>
+                    {props.pickupAddress}-{props.pickupPin}
+                  </td>
+                </tr>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">{constants.destinationAddress + ": "}</th>
+                  <td>
+                    {props.destinationAddress}-{props.destinationPin}
+                  </td>
+                </tr>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">{constants.noOfUnits + ": "}</th>
+                  <td>{props.noOfUnits}</td>
+                </tr>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">{constants.weightPerUnit + ": "}</th>
+                  <td>{props.weightPerUnit}</td>
+                </tr>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">{constants.DimensionPerUnit + ": "}</th>
+                  <td>
+                    {props.height}x{props.length}x{props.width + " "}
+                    {props.unit}{" "}
+                  </td>
+                </tr>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">{constants.customerName + ": "}</th>
+                  {editName && (
+                    <td>
+                      <TextField
+                        className={classes.textfield}
+                        xs={12}
+                        sm={6}
+                        value={newName}
+                        autoComplete="given-name"
+                        onChange={(event) => onNameChangeController(event)}
+                      />
+                      <Button
+                        onClick={onNameSubmitController}
+                        color="secondary"
+                      >
+                        Change
+                      </Button>
+                    </td>
+                  )}
+                  {!editName && (
+                    <td>
+                      {props.name} <EditIcon onClick={editNameClicked} />
+                    </td>
+                  )}
+                </tr>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">{constants.customerEmail + ": "}</th>
+                  {editEmail && (
+                    <td>
+                      <TextField
+                        className={classes.textfield}
+                        xs={12}
+                        sm={6}
+                        value={newEmail}
+                        autoComplete="given-name"
+                        onChange={(event) => onEmailChangeController(event)}
+                      />
+                      <Button
+                        onClick={onEmailSubmitController}
+                        color="secondary"
+                      >
+                        Change
+                      </Button>
+                    </td>
+                  )}
+                  {!editEmail && (
+                    <td>
+                      {props.email} <EditIcon onClick={editEmailClicked} />
+                    </td>
+                  )}
+                </tr>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">{constants.customerPhoneNumber + ": "}</th>
+                  {editContact && (
+                    <td>
+                      <TextField
+                        className={classes.textfield}
+                        xs={12}
+                        sm={6}
+                        value={newContact}
+                        autoComplete="given-name"
+                        onChange={(event) => onContactChangeController(event)}
+                      />
+                      <Button
+                        onClick={onContactSubmitController}
+                        color="secondary"
+                      >
+                        Change
+                      </Button>
+                    </td>
+                  )}
+                  {!editContact && (
+                    <td>
+                      {props.phone} <EditIcon onClick={editContactClicked} />
+                    </td>
+                  )}
+                </tr>
+              </Grid>
 
-                                    </Grid>
-                                </table>
-                                </CardContent>
-                            </Card>
-    )
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">{constants.companyName + ": "}</th>
+                  {editCompany && (
+                    <td>
+                      <TextField
+                        className={classes.textfield}
+                        xs={12}
+                        sm={6}
+                        value={newCompany}
+                        autoComplete="given-name"
+                        onChange={(event) => onCompanyChangeController(event)}
+                      />
+                      <Button
+                        onClick={onCompanySubmitController}
+                        color="secondary"
+                      >
+                        Change
+                      </Button>
+                    </td>
+                  )}
+                  {!editCompany && (
+                    <td>
+                      {props.companyName}{" "}
+                      <EditIcon onClick={editCompanyClicked} />
+                    </td>
+                  )}
+                </tr>
+              </Grid>
+            </Grid>
+          </table>
+        </CardContent>
+        <PaymentIndex />
+      </Card>
+    );
 }
 
 const mapStateToProps=state=>{
