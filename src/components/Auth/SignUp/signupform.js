@@ -70,7 +70,13 @@ const SignUp = (props) => {
               }
             
         } catch (error) {
-            alert('error signing up:'+ JSON.stringify(error));
+            if(error.code==='UsernameExistsException'){
+                alert('Username already exists')
+            }
+            else{
+                alert('Password must be of 8 characters');
+            }
+            
         }
         setIsDisable(false)
     }

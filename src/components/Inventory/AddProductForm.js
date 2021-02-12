@@ -96,9 +96,16 @@ const AddProductForm = (props) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pinCode,setPinCode] = useState()
-  const [totalWeight, setTotalWeight] = useState();
   const [density, setDensity] = useState();
   const [switchToggler, setSwitchToggler] = useState(true);
+
+
+  /**Errors Validator */
+  const [pinValidator, setPinValidator] = useState("");
+  const [lengthValidator,setLengthValidator] = useState("");
+  const [widthValidator,setWidthValidator] = useState("")
+  const [heightValidator,setHeightValidator] = useState("")
+  const [weightPerUnitValidator,setWeightPerUnitValidator] = useState("")
 
   const selectStyles = {
     menu: base => ({
@@ -114,15 +121,49 @@ const AddProductForm = (props) => {
     setSwitchToggler(!switchToggler);
   };
   const onPinChangeController = (event) => {
+    var pickupPinCode = parseInt(event.target.value, 10);
+    var greater = 999999,
+      smaller = 100000;
+    var check = 1;
+    if (pickupPinCode < smaller || pickupPinCode > greater) {
+      setPinValidator("Must be of 6 digits");
+      check = 0;
+    }
+    if (pickupPinCode < 0) {
+      setPinValidator("Cannot be negative");
+      check = 0;
+    }
+    if (check === 1) {
+      setPinValidator("");
+    }
     setPinCode(event.target.value)
   }
   const onHeightChangeController = (event) => {
+    if(event.target.value<0){
+      setHeightValidator("Height cannot be negative")
+    }
+    else{
+      setHeightValidator("")
+    }
     setHeight(event.target.value);
   };
   const onWidthChangeController = (event) => {
+    if(event.target.value<0)
+    {
+      setWidthValidator("Width cannot be negative")
+    }
+    else{
+      setWidthValidator("")
+    }
     setWidth(event.target.value);
   };
   const onLengthChangeController = (event) => {
+    if(event.target.value<0){
+      setLengthValidator("Length cannot be negative")
+    }
+    else{
+      setLengthValidator("")
+    }
     setLength(event.target.value);
   };
   const onCategoryChange = (event) => {
@@ -136,6 +177,12 @@ const AddProductForm = (props) => {
   };
  
   const onWeightPerUnitChangeController = (event) => {
+    if(event.target.value<0){
+      setWeightPerUnitValidator("Weight Per unit cannot be negative")
+    }
+    else{
+      setWeightPerUnitValidator("")
+    }
     setWeightPerunit(event.target.value);
   };
   const onLocationChangeController = (event) => {
@@ -214,6 +261,10 @@ const AddProductForm = (props) => {
         <Grid item xs={12} sm={6}>
             <TextField
               type="number"
+              error={weightPerUnitValidator !== ""}
+              helperText={
+              weightPerUnitValidator === "" ? " " : weightPerUnitValidator
+              }
               id="weightPerUnit"
               name="weightPerUnit"
               label="Weight Per Unit(in Kg)"
@@ -221,7 +272,7 @@ const AddProductForm = (props) => {
               value={weightPerUnit}
               variant='outlined'
               size='small'
-              style={{backgroundColor:'#fff'}}
+              // style={{backgroundColor:'#fff'}}
               autoComplete="weightPerUnit"
               onChange={(event) => onWeightPerUnitChangeController(event)}
             />
@@ -229,6 +280,10 @@ const AddProductForm = (props) => {
         <Grid item xs={12} sm={4}>
           <TextField
             type="number"
+            error={heightValidator !== ""}
+              helperText={
+              heightValidator === "" ? " " : heightValidator
+            }
             id="height"
             name="height"
             label="Height"
@@ -237,13 +292,17 @@ const AddProductForm = (props) => {
             autoComplete="Height"
             variant='outlined'
             size='small'
-            style={{backgroundColor:'#fff'}}
+            // style={{backgroundColor:'#fff'}}
             onChange={(event) => onHeightChangeController(event)}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
             type="number"
+            error={widthValidator !== ""}
+              helperText={
+              widthValidator === "" ? " " : widthValidator
+            }
             id="width"
             name="width"
             label="Width"
@@ -252,13 +311,17 @@ const AddProductForm = (props) => {
             autoComplete="width"
             variant='outlined'
             size='small'
-            style={{backgroundColor:'#fff'}}
+            // style={{backgroundColor:'#fff'}}
             onChange={(event) => onWidthChangeController(event)}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
             type="number"
+            error={lengthValidator !== ""}
+              helperText={
+              lengthValidator === "" ? " " : lengthValidator
+            }
             id="length"
             name="length"
             label="Length"
@@ -266,7 +329,7 @@ const AddProductForm = (props) => {
             fullWidth
             variant='outlined'
             size='small'
-            style={{backgroundColor:'#fff'}}
+            // style={{backgroundColor:'#fff'}}
             onChange={(event) => onLengthChangeController(event)}
             autoComplete="Length"
           />
@@ -305,7 +368,7 @@ const AddProductForm = (props) => {
             value={density}
             variant='outlined'
             size='small'
-            style={{backgroundColor:'#fff'}}
+            // style={{backgroundColor:'#fff'}}
             onChange={(event) => onDensityChangeController(event)}
             InputProps={{
               endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
@@ -341,7 +404,7 @@ const AddProductForm = (props) => {
               value={newProductName}
               variant='outlined'
               size='small'
-              style={{backgroundColor:'#fff'}}
+              // style={{backgroundColor:'#fff'}}
               onChange={(event) => onProductNameChange(event)}
               fullWidth
             />
@@ -354,6 +417,7 @@ const AddProductForm = (props) => {
           onChange={(event)=>handleTypeChange(event)}
           isSearchable
           name="productType"
+          placeholder="Product Type"
           options={constants.typesOfProducts}
         />
           </Grid>
@@ -413,6 +477,10 @@ const AddProductForm = (props) => {
             <TextField
               required
               type="number"
+              error={pinValidator !== ""}
+                helperText={
+                  pinValidator === "" ? " " : pinValidator
+              }
               id="pinCode"
               name="pinCode"
               label="Pin"
@@ -421,7 +489,7 @@ const AddProductForm = (props) => {
               onChange={(event) => onPinChangeController(event)}
               variant='outlined'
               size='small'
-              style={{backgroundColor:'#fff'}}
+              // style={{backgroundColor:'#fff'}}
               autoComplete="pinCode"
             />
           </Grid>
@@ -437,7 +505,7 @@ const AddProductForm = (props) => {
               onChange={(event) => onLocationChangeController(event)}
               variant='outlined'
               size='small'
-              style={{backgroundColor:'#fff'}}
+              // style={{backgroundColor:'#fff'}}
               autoComplete="Location"
             />
           </Grid>

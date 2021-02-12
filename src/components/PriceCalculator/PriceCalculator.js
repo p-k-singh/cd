@@ -245,6 +245,8 @@ const PriceCalculator = (props) => {
   };
   const onNoOfUnitsChange = (event, i) => {
     var items = chosenProducts.slice();
+    if(chosenProducts[i]===null)
+    return
     items[i].noOfUnits = event.target.value;
     setChosenProducts(items);
   };
