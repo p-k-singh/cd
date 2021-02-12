@@ -72,30 +72,41 @@ const Complete = (props) => {
             <Spinner />
         )
     }
-    return(
-        <React.Fragment>
-            {allDetails.broadcastOrderData.length>0 && <Card className={classes.root}>
-            <CardContent style={{ padding: 0,marginTop:10 }}>
-                                <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
-                                    Broadcast Details
-                                </Typography>
-                                <table>
-                                    <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
-                                        
-                                        
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row"> Broadcast Order Id :</th>
-                                                <td>{allDetails.broadcastOrderData[0].broadcastOrderId}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row">Customer OrderId :</th>
-                                                <td>{allDetails.broadcastOrderData[0].customerOrderId}</td>
-                                            </tr>
-                                        </Grid>
-                                        {/* <Grid item xs={12} sm={6} >
+    return (
+      <React.Fragment>
+        {allDetails.broadcastOrderData.length > 0 && (
+          <Card className={classes.root}>
+            <CardContent style={{ padding: 0, marginTop: 10 }}>
+              <Typography
+                className={classes.title}
+                gutterBottom
+                style={{ color: "black", backgroundColor: "lightgrey" }}
+              >
+                Broadcast Details
+              </Typography>
+              <table>
+                <Grid
+                  container
+                  spacing={3}
+                  style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
+                >
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row"> Broadcast Order Id :</th>
+                      <td>
+                        {allDetails.broadcastOrderData[0].broadcastOrderId}
+                      </td>
+                    </tr>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">Customer OrderId :</th>
+                      <td>
+                        {allDetails.broadcastOrderData[0].customerOrderId}
+                      </td>
+                    </tr>
+                  </Grid>
+                  {/* <Grid item xs={12} sm={6} >
                                             <tr>
                                                 <th scope="row">Receipients:</th>
                                                 <td>{
@@ -105,119 +116,135 @@ const Complete = (props) => {
                                                     }</td>
                                             </tr>
                                         </Grid> */}
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row">Status :</th>
-                                                <td>{allDetails.broadcastOrderData[0].status}</td>
-                                            </tr>
-                                        </Grid>
-                                        
-                                        <Grid item xs={12} sm={6}>
-                                        <List className={classes.proot} subheader={<li />}>
-                                            {
-                                                <li key='receipients' className={classes.listSection}>
-                                                <ul className={classes.ul}>
-                                                    <ListSubheader>{`Broadcast Reciepients`}</ListSubheader>
-                                                    {allDetails.broadcastOrderData[0].receipients.map((item,idx) => (
-                                                    <ListItem key={`item--${idx}`}>
-                                                        <ListItemText primary={`${idx+1})${item.userName}`} />
-                                                    </ListItem>
-                                                    ))}
-                                                </ul>
-                                                </li>
-                                            }
-                                            </List>
-                                        </Grid>
-                                        
-                                        
-                                        
-                                    </Grid>
-                                </table>
-                </CardContent>
-            </Card>}
-            {allDetails.serviceOrderData.length>0 && <Card className={classes.root}>
-            <CardContent style={{ padding: 0,marginTop:10 }}>
-                                <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
-                                    Service Provider Details
-                                </Typography>
-                                <table>
-                                    <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
-                                        
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row"> Service Order Id :</th>
-                                                <td>{allDetails.serviceOrderData[0].ServiceOrderId}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row">Customer OrderId :</th>
-                                                <td>{allDetails.serviceOrderData[0].customerOrderId}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row">Display Id:</th>
-                                                <td>{allDetails.serviceOrderData[0].displayId}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row">Service Provider Id :</th>
-                                                <td>{allDetails.serviceOrderData[0].serviceProviderId}</td>
-                                            </tr>
-                                        </Grid>
-                                     
-                                    </Grid>
-                                </table>
-                </CardContent>
-            </Card>}
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">Status :</th>
+                      <td>{allDetails.broadcastOrderData[0].status}</td>
+                    </tr>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <List className={classes.proot} subheader={<li />}>
+                      {
+                        <li key="receipients" className={classes.listSection}>
+                          <ul className={classes.ul}>
+                            <ListSubheader>{`Broadcast Reciepients`}</ListSubheader>
+                            {allDetails.broadcastOrderData[0].receipients.map(
+                              (item, idx) => (
+                                <ListItem key={`item--${idx}`}>
+                                  <ListItemText
+                                    primary={`${idx + 1})${item.userName}`}
+                                  />
+                                </ListItem>
+                              )
+                            )}
+                          </ul>
+                        </li>
+                      }
+                    </List>
+                  </Grid>
+                </Grid>
+              </table>
+            </CardContent>
+          </Card>
+        )}
+        {allDetails.serviceOrderData.length > 0 && (
+          <Card className={classes.root}>
+            <CardContent style={{ padding: 0, marginTop: 10 }}>
+              <Typography
+                className={classes.title}
+                gutterBottom
+                style={{ color: "black", backgroundColor: "lightgrey" }}
+              >
+                Service Provider Details
+              </Typography>
+              <table>
+                <Grid
+                  container
+                  spacing={3}
+                  style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
+                >
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row"> Service Order Id :</th>
+                      <td>{allDetails.serviceOrderData[0].ServiceOrderId}</td>
+                    </tr>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">Customer OrderId :</th>
+                      <td>{allDetails.serviceOrderData[0].customerOrderId}</td>
+                    </tr>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">Display Id:</th>
+                      <td>{allDetails.serviceOrderData[0].displayId}</td>
+                    </tr>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">Service Provider Id :</th>
+                      <td>
+                        {allDetails.serviceOrderData[0].serviceProviderId}
+                      </td>
+                    </tr>
+                  </Grid>
+                </Grid>
+              </table>
+            </CardContent>
+          </Card>
+        )}
         <Card className={classes.root}>
-            <CardContent style={{ padding: 0,marginTop:10 }}>
-                                <Typography className={classes.title} gutterBottom style={{ backgroundColor: '#66bb6a' }}>
-                                    Order Details
-                                </Typography>
-                                <table>
-                                    <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
-                                        
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row">Order Id :</th>
-                                                <td>{allDetails.customerOrderData[0].OrderId}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row">Customer Email :</th>
-                                                <td>{allDetails.customerOrderData[0].customerEmail}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row">Expected Delivery date :</th>
-                                                <td>{allDetails.customerOrderData[0].deliveryDate}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                            <tr>
-                                                <th scope="row">Order date:</th>
-                                                <td>{allDetails.customerOrderData[0].orderDate}</td>
-                                            </tr>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <tr>
-                                                <th scope="row"></th>
-                                                <td></td>
-                                            </tr>
-                                        </Grid>
-                                        
-                                        
-                                        
-                                    </Grid>
-                                </table>
-                </CardContent>
-            </Card>
-            </React.Fragment>
-    )
+          <CardContent style={{ padding: 0, marginTop: 10 }}>
+            <Typography
+              className={classes.title}
+              gutterBottom
+              style={{ color: "black", backgroundColor: "lightgrey" }}
+            >
+              Order Details
+            </Typography>
+            <table>
+              <Grid
+                container
+                spacing={3}
+                style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
+              >
+                <Grid item xs={12} sm={6}>
+                  <tr>
+                    <th scope="row">Order Id :</th>
+                    <td>{allDetails.customerOrderData[0].OrderId}</td>
+                  </tr>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <tr>
+                    <th scope="row">Customer Email :</th>
+                    <td>{allDetails.customerOrderData[0].customerEmail}</td>
+                  </tr>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <tr>
+                    <th scope="row">Expected Delivery date :</th>
+                    <td>{allDetails.customerOrderData[0].deliveryDate}</td>
+                  </tr>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <tr>
+                    <th scope="row">Order date:</th>
+                    <td>{allDetails.customerOrderData[0].orderDate}</td>
+                  </tr>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                  </tr>
+                </Grid>
+              </Grid>
+            </table>
+          </CardContent>
+        </Card>
+      </React.Fragment>
+    );
 }
 export default Complete;
