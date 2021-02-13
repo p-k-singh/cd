@@ -424,7 +424,7 @@ const ProductDetails = (props) => {
 
   const [user, setUser] = useState();
   const [allProducts, setAllProducts] = useState([]);
-  const [chosenProducts, setChosenProducts] = useState([null]);
+  //const [props.chosenProducts, props.setChosenProducts] = useState([null]);
   //const [loading, setLoading] = useState(true);
   const [calculating, setCalculating] = useState(false);
 
@@ -476,77 +476,77 @@ const ProductDetails = (props) => {
   useEffect(() => {}, []);
 
   const handleItemDeleted = (i) => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items.splice(i, 1);
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const addproduct = () => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items.push(null);
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const onProductTypeChange = (event, i) => {
     console.log(event);
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].value.productType = event;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const onCategoryChange = (event, i) => {
     console.log(event);
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].value.categories = event;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const handleMeasurableChange = (i) => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].value.measurable = !items[i].value.measurable;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const unitChangeController = (event, i) => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].value.unit = event;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const onWeightPerUnitChangeController = (event, i) => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].value.weightPerUnit = event.target.value;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const onHeightChangeController = (event, i) => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].value.height = event.target.value;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const onWidthChangeController = (event, i) => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].value.width = event.target.value;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const onLengthChangeController = (event, i) => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].value.length = event.target.value;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const onDensityChangeController = (event, i) => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].value.density = event.target.value;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
 
   const onNoOfUnitsChange = (event, i) => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].noOfUnits = event.target.value;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const onTotalWeightChange = (event, i) => {
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     items[i].totalWeight = event.target.value;
-    setChosenProducts(items);
+    props.setChosenProducts(items);
   };
   const handlePlaceOrderClick = () => {};
   const handleChange = (newValue, i) => {
     //console.log(newValue)
-    var items = chosenProducts.slice();
+    var items = props.chosenProducts.slice();
     if (newValue === null) {
       items[i] = null;
     } else {
@@ -583,7 +583,7 @@ const ProductDetails = (props) => {
         items[i] = temp;
       }
     }
-    setChosenProducts(items);
+    props.setChosenProducts(items);
     console.log(items);
     // console.log(newValue)
   };
@@ -604,7 +604,7 @@ const ProductDetails = (props) => {
             isSearchable
             name="unit"
             placeholder="Unit"
-            value={chosenProducts[i].value.unit}
+            value={props.chosenProducts[i].value.unit}
             onChange={(event) => unitChangeController(event, i)}
             options={constants.lengthDimensions}
           />
@@ -618,7 +618,7 @@ const ProductDetails = (props) => {
             name="weightPerUnit"
             label="Weight Per Unit(in Kg)"
             fullWidth
-            value={chosenProducts[i].value.weightPerUnit}
+            value={props.chosenProducts[i].value.weightPerUnit}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
@@ -633,7 +633,7 @@ const ProductDetails = (props) => {
             name="height"
             label="Height"
             fullWidth
-            value={chosenProducts[i].value.height}
+            value={props.chosenProducts[i].value.height}
             autoComplete="Height"
             variant="outlined"
             size="small"
@@ -648,7 +648,7 @@ const ProductDetails = (props) => {
             name="width"
             label="Width"
             fullWidth
-            value={chosenProducts[i].value.width}
+            value={props.chosenProducts[i].value.width}
             autoComplete="width"
             variant="outlined"
             size="small"
@@ -662,7 +662,7 @@ const ProductDetails = (props) => {
             id="length"
             name="length"
             label="Length"
-            value={chosenProducts[i].value.length}
+            value={props.chosenProducts[i].value.length}
             fullWidth
             variant="outlined"
             size="small"
@@ -691,7 +691,7 @@ const ProductDetails = (props) => {
               name="density"
               label="Weight per cubic meter"
               fullWidth
-              value={chosenProducts[i].value.density}
+              value={props.chosenProducts[i].value.density}
               variant="outlined"
               size="small"
               style={{ backgroundColor: "#fff" }}
@@ -722,7 +722,7 @@ const ProductDetails = (props) => {
             label="Unit"
             fullWidth
             disabled
-            value={chosenProducts[i].value.unit.label}
+            value={props.chosenProducts[i].value.unit.label}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
@@ -736,7 +736,7 @@ const ProductDetails = (props) => {
             label="Weight Per Unit"
             fullWidth
             disabled
-            value={chosenProducts[i].value.weightPerUnit}
+            value={props.chosenProducts[i].value.weightPerUnit}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
@@ -750,7 +750,7 @@ const ProductDetails = (props) => {
             label="Length of a unit"
             fullWidth
             disabled
-            value={chosenProducts[i].value.length}
+            value={props.chosenProducts[i].value.length}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
@@ -764,7 +764,7 @@ const ProductDetails = (props) => {
             label="Width of a unit"
             fullWidth
             disabled
-            value={chosenProducts[i].value.width}
+            value={props.chosenProducts[i].value.width}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
@@ -778,7 +778,7 @@ const ProductDetails = (props) => {
             label="Height of a unit"
             fullWidth
             disabled
-            value={chosenProducts[i].value.height}
+            value={props.chosenProducts[i].value.height}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
@@ -803,7 +803,7 @@ const ProductDetails = (props) => {
             label="Density"
             fullWidth
             disabled
-            value={`${chosenProducts[i].value.density} kg per cubic meter`}
+            value={`${props.chosenProducts[i].value.density} kg per cubic meter`}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
@@ -813,7 +813,7 @@ const ProductDetails = (props) => {
     </React.Fragment>
   );
 
-  var list = chosenProducts.map((e, i) => (
+  var list = props.chosenProducts.map((e, i) => (
     <div
     //   style={
     //     i % 2 === 1
@@ -846,7 +846,7 @@ const ProductDetails = (props) => {
         <Grid item xs={12} sm={4}>
           <CreatableSelect
             isClearable
-            value={chosenProducts[i]}
+            value={props.chosenProducts[i]}
             onChange={(newValue) => handleChange(newValue, i)}
             options={allProducts}
             placeholder="Product Name"
@@ -858,12 +858,12 @@ const ProductDetails = (props) => {
           <Select
             styles={selectStyles}
             value={
-              chosenProducts[i] === null ||
-              chosenProducts[i].value.productType === null
+              props.chosenProducts[i] === null ||
+              props.chosenProducts[i].value.productType === null
                 ? null
-                : chosenProducts[i].value.productType
+                : props.chosenProducts[i].value.productType
             }
-            isDisabled={chosenProducts[i] === null || !chosenProducts[i].isNew}
+            isDisabled={props.chosenProducts[i] === null || !props.chosenProducts[i].isNew}
             onChange={(event) => onProductTypeChange(event, i)}
             isSearchable
             placeholder="Product Type"
@@ -871,7 +871,7 @@ const ProductDetails = (props) => {
             options={constants.typesOfProducts}
           />
         </Grid>
-        {chosenProducts[i] === null || chosenProducts[i].value.measurable ? (
+        {props.chosenProducts[i] === null || props.chosenProducts[i].value.measurable ? (
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
@@ -881,7 +881,7 @@ const ProductDetails = (props) => {
               label="No. of units"
               variant="outlined"
               value={
-                chosenProducts[i] === null ? 0 : chosenProducts[i].noOfUnits
+                props.chosenProducts[i] === null ? 0 : props.chosenProducts[i].noOfUnits
               }
               onChange={(event) => onNoOfUnitsChange(event, i)}
             />
@@ -895,7 +895,7 @@ const ProductDetails = (props) => {
               id="outlined-basic"
               label="Total Weight"
               variant="outlined"
-              value={chosenProducts[i].totalWeight}
+              value={props.chosenProducts[i].totalWeight}
               onChange={(event) => onTotalWeightChange(event, i)}
             />
           </Grid>
@@ -907,14 +907,14 @@ const ProductDetails = (props) => {
             styles={selectStyles}
             name="categories"
             value={
-              chosenProducts[i] === null ||
-              chosenProducts[i].value.categories === null
+              props.chosenProducts[i] === null ||
+              props.chosenProducts[i].value.categories === null
                 ? null
-                : chosenProducts[i].value.categories
+                : props.chosenProducts[i].value.categories
             }
             options={constants.inventoryCategory}
             placeholder="Category(Select Multiple)"
-            isDisabled={chosenProducts[i] === null || !chosenProducts[i].isNew}
+            isDisabled={props.chosenProducts[i] === null || !props.chosenProducts[i].isNew}
             className="basic-multi-select"
             onChange={(event) => onCategoryChange(event, i)}
             classNamePrefix="select"
@@ -926,15 +926,15 @@ const ProductDetails = (props) => {
             <DeleteIcon style={{ fontSize: "30" }} />
           </IconButton>
         </Grid> */}
-        {chosenProducts[i] === null ? (
+        {props.chosenProducts[i] === null ? (
           <React.Fragment></React.Fragment>
-        ) : chosenProducts[i].isNew === true ? (
+        ) : props.chosenProducts[i].isNew === true ? (
           <React.Fragment>
             {/* <FormControlLabel
                 style={{ margin: 20 }}
                 control={
                 <Switch
-                    checked={chosenProducts[i].value.measurable}
+                    checked={props.chosenProducts[i].value.measurable}
                     onChange={()=>handleMeasurableChange(i)}
                     name="checkedB"
                     color="primary"
@@ -952,18 +952,18 @@ const ProductDetails = (props) => {
               <Grid item>Total Weight</Grid>
               <Grid item>
                 <AntSwitch
-                  checked={chosenProducts[i].value.measurable}
+                  checked={props.chosenProducts[i].value.measurable}
                   onChange={() => handleMeasurableChange(i)}
                   name="checkedC"
                 />
               </Grid>
               <Grid item>No. Of Units</Grid>
             </Grid>
-            {chosenProducts[i].value.measurable === true
+            {props.chosenProducts[i].value.measurable === true
               ? measureablePerUnit(i)
               : notMeasureable(i)}
           </React.Fragment>
-        ) : chosenProducts[i].value.measurable === true ? (
+        ) : props.chosenProducts[i].value.measurable === true ? (
           fixedMeasurable(i)
         ) : (
           fixedNotMeasurable(i)
