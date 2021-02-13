@@ -198,7 +198,6 @@ const MyOrders = () => {
           <Typography className={classes.title} gutterBottom>
             My Active Orders
           </Typography>
-          
           <Spinner />
         </div>
       );

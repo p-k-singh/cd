@@ -154,7 +154,7 @@ const CompanyKYC = (props) => {
                             name="pan"
                             value={myState.pan}
                             onChange={(event)=>fieldsChange(event)}
-                            label="Enter PAN"
+                            label="Enter PAN No."
                             fullWidth                            
                         />
                     </Grid>
@@ -166,7 +166,7 @@ const CompanyKYC = (props) => {
                             name="gstin"
                             value={myState.gstin}
                             onChange={(event)=>fieldsChange(event)}
-                            label="GST Number"
+                            label="GSTIN"
                             fullWidth                            
                         />
                     </Grid>
@@ -175,11 +175,11 @@ const CompanyKYC = (props) => {
                     <Typography className={classes.formHeadings} >Documents Upload</Typography>
                         <Grid container spacing={3} style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}>
                          <Grid item xs={12} >
-                        <label>Pan Proof: </label>
+                        <label>Pan Card: </label>
                         <input   style={{marginLeft:'15px'}} type="file" onChange={(event) => onPanProofChange(event)}  /> 
                         </Grid>
                         <Grid item xs={12} >
-                        <label>GSTIN Proof: </label>
+                        <label>GSTIN: </label>
                         <input   style={{marginLeft:'15px'}} type="file" onChange={(event) => onGSTINProofChange(event)}  /> 
                         </Grid>
                         </Grid>
