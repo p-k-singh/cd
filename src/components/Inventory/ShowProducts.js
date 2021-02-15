@@ -221,7 +221,7 @@ export default function CollapsibleTable(props) {
                             </TableRow>
                             <TableRow>
                               <th>Unit Of Measurement: </th>
-                              <td> {row.unit.label} </td>
+                              <td> {row.unit===null?'-':row.unit.label} </td>
                             </TableRow>
                           </React.Fragment>
                         ) : (

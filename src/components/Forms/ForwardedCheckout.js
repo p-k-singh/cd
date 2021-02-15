@@ -130,12 +130,68 @@ function ForwardedCheckout(props) {
     
     const handlePlaceOrderClick=async ()=>{
         setLoading(true);
+        var currentUser = await Auth.currentUserInfo();
+        var owner = currentUser.username;
+        var data;
         
-        var currentUser = await Auth.currentUserInfo()
-        console.log('checking user details: '+JSON.stringify(currentUser))
-        var currentUsername=currentUser.username
+        //console.log(props.chosenProducts)
+        //var newProductIds;
+        /**Place New products in Inventory */
+        var item = props.chosenProducts.slice()
+        for(var i=0;i<item.length;i++){
+            if(item[i].isNew===true){
+                data = {
+                    owner: owner,
+                    productName: item[i].value.productName,
+                    productType: item[i].value.productType,
+                    unit: item[i].value.unit,
+                    height: item[i].value.height,
+                    width: item[i].value.width,
+                    length: item[i].value.length,
+                    weightPerUnit: item[i].value.weightPerUnit,
+                    location: '-',
+                    categories: item[i].value.categories,
+                    measurable:item[i].value.measurable,
+                    density:item[i].value.density,
+                    pincode:'-'
+                  };
+
+                  const payload = {
+                    body: data,
+                  };
+                  API.post("GoFlexeOrderPlacement", `/inventory`, payload)
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                    
+            }
+        }
+        
+        var items=[]
+        for(var i=0;i<item.length;i++){
+            var temp={
+            productName:item[i].value.productName,
+            productType:item[i].value.productType,
+            unit:item[i].value.unit,
+            height:item[i].value.height,
+            width:item[i].value.width,
+            length:item[i].value.length,
+            weightPerUnit:item[i].value.weightPerUnit,
+            measurable:item[i].value.measurable,
+            categories:item[i].value.categories,
+            density:item[i].value.density,
+            noOfUnits:item[i].noOfUnits,
+            totalWeight:item[i].totalWeight
+            }
+            items.push(temp)
+        }
+
+        //var currentUser = await Auth.currentUserInfo()
+       // console.log('checking user details: '+JSON.stringify(currentUser))
+        //var currentUsername=currentUser.username
+
         var today = new Date()
-        const data={
+         data={
             customerOrders:[
                 {   
                     orderDate:today,
@@ -143,17 +199,12 @@ function ForwardedCheckout(props) {
                     fromAddress:props.pickupAddress,
                     toPin:props.destinationPin,
                     fromPin:props.pickupPin,
-                    customerEmail:currentUsername,
-                    noOfUnits:parseInt(props.noOfUnits),
-                    weightPerUnit:parseFloat(props.weightPerUnit),
-                    height:parseFloat(props.height),
-                    width:parseFloat(props.width),
-                    breadth:parseFloat(props.length),
-                    unit:props.unit,
+                    customerEmail:owner,
                     pickupdate:props.pickupDate,
                     deliveryDate:props.deliveryDate,
                     pickupSlot:props.pickupSlot,
-                    additionalNote:props.additionalNote
+                    additionalNote:props.additionalNote,
+                    items:items
                 }]
         }
         const payload = {
@@ -266,7 +317,8 @@ const mapStateToProps=state=>{
         pickupDate:state.order.pickupDate,
         deliveryDate:state.order.deliveryDate,
         pickupSlot:state.order.pickupSlot,
-        additionalNote:state.order.additionalNote
+        additionalNote:state.order.additionalNote,
+        chosenProducts:state.order.chosenProducts
     }
 }
 const mapDispatchToProps=dispatch=>{

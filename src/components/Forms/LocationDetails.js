@@ -48,7 +48,7 @@ const BuyerDetails = (props) => {
 
     props.setPickupDateDispatcher(today)
     props.setDeliveryDateDispatcher(today)
-    console.log(props.chosenProducts)
+    //console.log(props.chosenProducts)
   },[])
   const onPickupChangeController=(event)=>{
       var pickupAddress=event.target.value;

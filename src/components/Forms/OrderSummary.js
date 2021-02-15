@@ -48,16 +48,38 @@ const OrderSummary = (props) => {
     const [estimatedMoney,setEstimatedMoney] = useState(-1);
     useEffect(() => {
        // var params =`height=${props.height}&width=${props.width}&length=${props.length}&toPin=${props.destinationPin}&fromPin=${props.pickupPin}&measureable=true`
-       var params; 
-       if(props.measureable===true){
-            params =`height=${props.height}&width=${props.width}&length=${props.length}&toPin=${props.destinationPin}&fromPin=${props.pickupPin}&measureable=true`
-           
+       
+       var items=[]
+    
+    
+       for(var i=0;i<props.chosenProducts.length;i++){
+         //var temp=''
+         items.push({
+           toPin:props.pickupPin,
+             fromPin:props.destinationPin,
+             // productName:props.chosenProducts[i].value.productName,
+             // productType:props.chosenProducts[i].value.productType,
+             length:props.chosenProducts[i].value.length,
+             width:props.chosenProducts[i].value.width,
+             height:props.chosenProducts[i].value.height,
+             weightPerUnit:props.chosenProducts[i].value.weightPerUnit,
+             noOfUnits:props.chosenProducts[i].noOfUnits,
+             measurable:props.chosenProducts[i].value.measurable,
+             density:props.chosenProducts[i].value.density,
+             totalWeight:props.chosenProducts[i].totalWeight,
+             
+         })
        }
-       else{
-         params =`totalWeight=${props.totalWeight}&density=${props.density}&toPin=${props.destinationPin}&fromPin=${props.pickupPin}&measureable=false`
-       }
-        API
-        .get("GoFlexeOrderPlacement", `/pricing?`+params)
+   
+   
+       // const payload = {
+       //   body:{
+       //     items:items
+       //   }
+       // }
+       var params = JSON.stringify(items)
+       API
+       .get("GoFlexeOrderPlacement", `/pricing?items=`+params)
         .then(resp=>{
             
             setEstimatedMoney(resp.estimatedPrice);
@@ -67,25 +89,7 @@ const OrderSummary = (props) => {
             setEstimatedMoney("Error: Try Later")
             console.log(err);
         })
-        // const url='https://2n3n7swm8f.execute-api.ap-south-1.amazonaws.com/draft0/pricing'
-        // axios.get(url,{
-        //     params:{
-        //         lenght:props.length,
-        //         breadth:props.height,
-        //         width:props.width,
-        //         toPin:props.destinationPin,
-        //         fromPin:props.pickupPin
-        //     }
-        // })
-        // .then(resp=>{
-        //     console.log(resp.data);
-        //     setEstimatedMoney(resp.data.estimatedPrice);
-            
-        // })
-        // .catch(err=>{
-        //     setEstimatedMoney("Error: Try Later")
-        //     console.log(err);
-        // })
+    
       },[]);
       //name change
      const onNameChangeController = (event) =>{
@@ -338,7 +342,8 @@ const mapStateToProps=state=>{
         companyName:state.order.companyName,
         measureable:state.order.measureable,
         totalWeight:state.order.totalWeight,
-        density:state.order.density
+        density:state.order.density,
+        chosenProducts:state.order.chosenProducts
     }
 }
 

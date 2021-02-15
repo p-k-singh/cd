@@ -41,12 +41,12 @@ const useStyles = makeStyles((theme) => ({
         marginTop:'1%'
     }
 }));
-function getStepContent(step) {
+function getStepContent(step,chosenProducts,setChosenProducts) {
     switch (step) {
         case 0:
             return <LocationDetails />;
         case 1:
-             return <ProductDetails/>
+             return <ProductDetails chosenProducts={chosenProducts} setChosenProducts={setChosenProducts } />
         // case 2:
         //      return <CustomerDetails/>
         case 2: 
@@ -63,6 +63,7 @@ function SimpleCard(props) {
     const [success,setSuccess]=useState(false);
     const [failure,setFailure] = useState(false);
     const [loading,setLoading]=useState(false);
+    const [chosenProducts,setChosenProducts] = useState([null])
 
     const handleNextClick = () => {
         setactiveStep(activeStep + 1);
@@ -134,15 +135,123 @@ function SimpleCard(props) {
             
             return
         }
+        props.setGlobalChosenProducts(chosenProducts)
         setactiveStep(activeStep + 1);
     }
-    const handlePlaceOrderClick= async ()=>{
+    // const handlePlaceOrderClick= async ()=>{
+    //     setLoading(true);
+    //     // const url='https://2n3n7swm8f.execute-api.ap-south-1.amazonaws.com/draft0/customerorder'
+    //     var currentUser = await Auth.currentUserInfo()
+    //     var currentUsername=currentUser.username
+    //     var today = new Date()
+    //     const data={
+    //         customerOrders:[
+    //             {   
+    //                 orderDate:today,
+    //                 toAddress:props.destinationAddress,
+    //                 fromAddress:props.pickupAddress,
+    //                 toPin:props.destinationPin,
+    //                 fromPin:props.pickupPin,
+    //                 customerEmail:currentUsername,
+    //                 noOfUnits:parseInt(props.noOfUnits),
+    //                 weightPerUnit:parseFloat(props.weightPerUnit),
+    //                 height:parseFloat(props.height),
+    //                 width:parseFloat(props.width),
+    //                 breadth:parseFloat(props.length),
+    //                 unit:props.unit,
+    //                 pickupdate:props.pickupDate,
+    //                 deliveryDate:props.deliveryDate,
+    //                 pickupSlot:props.pickupSlot,
+    //                 additionalNote:props.additionalNote
+    //             }]
+    //     }
+
+    //     // const customerEmail = "prashantkumarsingh9423@gmail.com"
+    //     const payload = {
+    //         body: data
+    //     }
+    //     // /serviceorder/acceptance?orderId=""&providerId=""
+    //     API
+    //     .post("GoFlexeOrderPlacement", `/customerorder`, payload)
+    //     .then(response => {
+    //         // Add your code here
+    //         console.log(response);
+    //         setLoading(false)
+    //         setSuccess(true)
+    //         props.onresetState();
+    //     })
+    //     .catch(error => {
+    //         console.log(error.response);
+    //         setLoading(false)
+    //         setFailure(true)
+    //     });
+        
+    // }
+
+    const handlePlaceOrderClick=async ()=>{
         setLoading(true);
-        // const url='https://2n3n7swm8f.execute-api.ap-south-1.amazonaws.com/draft0/customerorder'
-        var currentUser = await Auth.currentUserInfo()
-        var currentUsername=currentUser.username
+        var currentUser = await Auth.currentUserInfo();
+        var owner = currentUser.username;
+        var data;
+        
+        console.log(chosenProducts)
+        //var newProductIds;
+        /**Place New products in Inventory */
+        var item = chosenProducts.slice()
+        for(var i=0;i<item.length;i++){
+            if(item[i].isNew===true){
+                data = {
+                    owner: owner,
+                    productName: item[i].value.productName,
+                    productType: item[i].value.productType,
+                    unit: item[i].value.unit,
+                    height: item[i].value.height,
+                    width: item[i].value.width,
+                    length: item[i].value.length,
+                    weightPerUnit: item[i].value.weightPerUnit,
+                    location: '-',
+                    categories: item[i].value.categories,
+                    measurable:item[i].value.measurable,
+                    density:item[i].value.density,
+                    pincode:'-'
+                  };
+
+                  const payload = {
+                    body: data,
+                  };
+                  API.post("GoFlexeOrderPlacement", `/inventory`, payload)
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                    
+            }
+        }
+        
+        var items = []
+        for(var i=0;i<item.length;i++){
+            var temp={
+            productName:item[i].value.productName,
+            productType:item[i].value.productType,
+            unit:item[i].value.unit,
+            height:item[i].value.height,
+            width:item[i].value.width,
+            length:item[i].value.length,
+            weightPerUnit:item[i].value.weightPerUnit,
+            measurable:item[i].value.measurable,
+            categories:item[i].value.categories,
+            density:item[i].value.density,
+            noOfUnits:item[i].noOfUnits,
+            totalWeight:item[i].totalWeight
+            }
+            items.push(temp)
+        }
+
+        //var currentUser = await Auth.currentUserInfo()
+       // console.log('checking user details: '+JSON.stringify(currentUser))
+        //var currentUsername=currentUser.username
+
         var today = new Date()
-        const data={
+         data={
             customerOrders:[
                 {   
                     orderDate:today,
@@ -150,25 +259,17 @@ function SimpleCard(props) {
                     fromAddress:props.pickupAddress,
                     toPin:props.destinationPin,
                     fromPin:props.pickupPin,
-                    customerEmail:currentUsername,
-                    noOfUnits:parseInt(props.noOfUnits),
-                    weightPerUnit:parseFloat(props.weightPerUnit),
-                    height:parseFloat(props.height),
-                    width:parseFloat(props.width),
-                    breadth:parseFloat(props.length),
-                    unit:props.unit,
+                    customerEmail:owner,
                     pickupdate:props.pickupDate,
                     deliveryDate:props.deliveryDate,
                     pickupSlot:props.pickupSlot,
-                    additionalNote:props.additionalNote
+                    additionalNote:props.additionalNote,
+                    items:items
                 }]
         }
-
-        // const customerEmail = "prashantkumarsingh9423@gmail.com"
         const payload = {
             body: data
         }
-        // /serviceorder/acceptance?orderId=""&providerId=""
         API
         .post("GoFlexeOrderPlacement", `/customerorder`, payload)
         .then(response => {
@@ -183,8 +284,9 @@ function SimpleCard(props) {
             setLoading(false)
             setFailure(true)
         });
-        
     }
+
+    
 
     let redirect=null;
     if(success===true)
@@ -198,7 +300,7 @@ function SimpleCard(props) {
     let content=
     <Card className={classes.root}>
             {redirect}
-            {getStepContent(activeStep)}
+            {getStepContent(activeStep,chosenProducts,setChosenProducts)}
             <div
                 style={{
                     display: 'flex',
@@ -286,12 +388,15 @@ const mapStateToProps=state=>{
         pickupDate:state.order.pickupDate,
         deliveryDate:state.order.deliveryDate,
         pickupSlot:state.order.pickupSlot,
-        additionalNote:state.order.additionalNote
+        additionalNote:state.order.additionalNote,
+        chosenProducts:state.order.chosenProducts
     }
 }
 const mapDispatchToProps=dispatch=>{
     return {
         onresetState:()=>dispatch(actions.resetState()),
+        setGlobalChosenProducts: (chosenProducts) =>
+      dispatch(actions.setChosenProducts(chosenProducts)),
         
     };
 }

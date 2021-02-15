@@ -95,6 +95,7 @@ const PriceCalculator = (props) => {
   const [deliverZipValidator, setDeliverZipValidator] = useState("");
   const [redirect, setRedirect] = useState(false);
 
+
   const capabilityOptions = {
     options: constants.inventoryFeatures,
   };
@@ -240,6 +241,53 @@ const PriceCalculator = (props) => {
   const calculatePrice = () => {
     setCalculating(true);
     //do something
+
+    var items=[]
+    
+    
+    for(var i=0;i<chosenProducts.length;i++){
+      //var temp=''
+      items.push({
+        toPin:pickuppin,
+          fromPin:destinationpin,
+          // productName:chosenProducts[i].value.productName,
+          // productType:chosenProducts[i].value.productType,
+          length:chosenProducts[i].value.length,
+          width:chosenProducts[i].value.width,
+          height:chosenProducts[i].value.height,
+          weightPerUnit:chosenProducts[i].value.weightPerUnit,
+          noOfUnits:chosenProducts[i].noOfUnits,
+          measurable:chosenProducts[i].value.measurable,
+          density:chosenProducts[i].value.density,
+          totalWeight:chosenProducts[i].totalWeight,
+          
+      })
+    }
+
+
+    // const payload = {
+    //   body:{
+    //     items:items
+    //   }
+    // }
+    var params = JSON.stringify(items)
+   // alert(`/pricing?items=`+params)
+   // return
+    API
+    .get("GoFlexeOrderPlacement", `/pricing?items=`+params)
+    .then(resp=>{
+    console.log(resp);
+    setShowPrice(true);
+    setEstimatedPrice(resp.estimatedPrice);
+    setCalculating(false);
+    })
+    .catch(err=>{
+        setCalculating(false);
+        setShowPrice(true)
+        console.log(err);
+    })
+
+
     setShowPrice(true);
     setCalculating(false);
   };
@@ -282,6 +330,7 @@ const PriceCalculator = (props) => {
             unit: null,
             location: "",
             pincode: "",
+            productId:""
           },
           isNew: true,
           label: newValue.label,
