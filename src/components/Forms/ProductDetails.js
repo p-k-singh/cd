@@ -510,38 +510,66 @@ const ProductDetails = (props) => {
   };
   const onWeightPerUnitChangeController = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].value.weightPerUnit = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.weightPerUnit = 0;
+    } else {
+      items[i].value.weightPerUnit = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const onHeightChangeController = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].value.height = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.height = 0;
+    } else {
+      items[i].value.height = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const onWidthChangeController = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].value.width = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.width = 0;
+    } else {
+      items[i].value.width = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const onLengthChangeController = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].value.length = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.length = 0;
+    } else {
+      items[i].value.length = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const onDensityChangeController = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].value.density = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.density = 0;
+    } else {
+      items[i].value.density = event.target.value;
+    }
     props.setChosenProducts(items);
   };
 
   const onNoOfUnitsChange = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].noOfUnits = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.noOfUnits = 0;
+    } else {
+      items[i].value.noOfUnits = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const onTotalWeightChange = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].totalWeight = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.totalWeight = 0;
+    } else {
+      items[i].value.totalWeight = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const handlePlaceOrderClick = () => {};

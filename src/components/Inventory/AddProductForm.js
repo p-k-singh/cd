@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Select  from 'react-select'
-import "../../Globalcss/globalcss.css"
+import Select from "react-select";
+import "../../Globalcss/globalcss.css";
 /// /inventory      get(id,owner,type)
 // /pricing get(length,width,height,toPin,fromPin,weightPerUnit,measureable=true/false,other)
 import {
@@ -10,7 +10,6 @@ import {
   FormControl,
   InputLabel,
   Button,
-  
   Switch,
   InputAdornment,
 } from "@material-ui/core";
@@ -18,7 +17,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { Auth, API } from "aws-amplify";
 import Spinner from "../UI/Spinner";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles,withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Multiselect } from "multiselect-react-dropdown";
 import constants from "../../Constants/constants";
 const useStyles = makeStyles({
@@ -56,15 +55,15 @@ const AntSwitch = withStyles((theme) => ({
     width: 28,
     height: 16,
     padding: 0,
-    display: 'flex',
+    display: "flex",
   },
   switchBase: {
     padding: 2,
     color: theme.palette.grey[500],
-    '&$checked': {
-      transform: 'translateX(12px)',
+    "&$checked": {
+      transform: "translateX(12px)",
       color: theme.palette.common.white,
-      '& + $track': {
+      "& + $track": {
         opacity: 1,
         backgroundColor: theme.palette.primary.main,
         borderColor: theme.palette.primary.main,
@@ -74,7 +73,7 @@ const AntSwitch = withStyles((theme) => ({
   thumb: {
     width: 12,
     height: 12,
-    boxShadow: 'none',
+    boxShadow: "none",
   },
   track: {
     border: `1px solid ${theme.palette.grey[500]}`,
@@ -96,28 +95,27 @@ const AddProductForm = (props) => {
   const [location, setLocation] = useState();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [pinCode,setPinCode] = useState()
+  const [pinCode, setPinCode] = useState();
   const [density, setDensity] = useState();
   const [switchToggler, setSwitchToggler] = useState(true);
 
-
   /**Errors Validator */
   const [pinValidator, setPinValidator] = useState("");
-  const [lengthValidator,setLengthValidator] = useState("");
-  const [widthValidator,setWidthValidator] = useState("")
-  const [heightValidator,setHeightValidator] = useState("")
-  const [weightPerUnitValidator,setWeightPerUnitValidator] = useState("")
+  const [lengthValidator, setLengthValidator] = useState("");
+  const [widthValidator, setWidthValidator] = useState("");
+  const [heightValidator, setHeightValidator] = useState("");
+  const [weightPerUnitValidator, setWeightPerUnitValidator] = useState("");
 
   const selectStyles = {
-    menu: base => ({
+    menu: (base) => ({
       ...base,
-      zIndex: 100
-    })
+      zIndex: 100,
+    }),
   };
 
   const handleTypeChange = (event) => {
-    setNewProductType(event)
-  }
+    setNewProductType(event);
+  };
   const handleSwitchTogglerChange = (event) => {
     setSwitchToggler(!switchToggler);
   };
@@ -137,52 +135,47 @@ const AddProductForm = (props) => {
     if (check === 1) {
       setPinValidator("");
     }
-    setPinCode(event.target.value)
-  }
+    setPinCode(event.target.value);
+  };
   const onHeightChangeController = (event) => {
-    if(event.target.value<0){
-      setHeightValidator("Height cannot be negative")
-    }
-    else{
-      setHeightValidator("")
+    if (event.target.value < 0) {
+      setHeightValidator("Height cannot be negative");
+    } else {
+      setHeightValidator("");
     }
     setHeight(event.target.value);
   };
   const onWidthChangeController = (event) => {
-    if(event.target.value<0)
-    {
-      setWidthValidator("Width cannot be negative")
-    }
-    else{
-      setWidthValidator("")
+    if (event.target.value < 0) {
+      setWidthValidator("Width cannot be negative");
+    } else {
+      setWidthValidator("");
     }
     setWidth(event.target.value);
   };
   const onLengthChangeController = (event) => {
-    if(event.target.value<0){
-      setLengthValidator("Length cannot be negative")
-    }
-    else{
-      setLengthValidator("")
+    if (event.target.value < 0) {
+      setLengthValidator("Length cannot be negative");
+    } else {
+      setLengthValidator("");
     }
     setLength(event.target.value);
   };
   const onCategoryChange = (event) => {
-    setCategories(event)
-  }
+    setCategories(event);
+  };
   const unitChangeController = (event) => {
-    setUnit(event)
+    setUnit(event);
   };
   const onProductNameChange = (event) => {
     setNewProductName(event.target.value);
   };
- 
+
   const onWeightPerUnitChangeController = (event) => {
-    if(event.target.value<0){
-      setWeightPerUnitValidator("Weight Per unit cannot be negative")
-    }
-    else{
-      setWeightPerUnitValidator("")
+    if (event.target.value < 0) {
+      setWeightPerUnitValidator("Weight Per unit cannot be negative");
+    } else {
+      setWeightPerUnitValidator("");
     }
     setWeightPerunit(event.target.value);
   };
@@ -190,7 +183,11 @@ const AddProductForm = (props) => {
     setLocation(event.target.value);
   };
   const onDensityChangeController = (event) => {
-    setDensity(event.target.value);
+    if (event.target.value < 0) {
+      setDensity(0);
+    } else {
+      setDensity(event.target.value);
+    }
   };
 
   const submitTruck = async () => {
@@ -198,23 +195,22 @@ const AddProductForm = (props) => {
     var currentUser = await Auth.currentUserInfo();
     var owner = currentUser.username;
     var data;
-   
-      data = {
-        owner: owner,
-        productName: newProductName,
-        productType: newProductType,
-        unit: unit,
-        height: height,
-        width: width,
-        length: length,
-        weightPerUnit: weightPerUnit,
-        location: location,
-        categories: categories,
-        measurable:switchToggler,
-        density:density,
-        pincode:pinCode
-      };
-    
+
+    data = {
+      owner: owner,
+      productName: newProductName,
+      productType: newProductType,
+      unit: unit,
+      height: height,
+      width: width,
+      length: length,
+      weightPerUnit: weightPerUnit,
+      location: location,
+      categories: categories,
+      measurable: switchToggler,
+      density: density,
+      pincode: pinCode,
+    };
 
     const payload = {
       body: data,
@@ -238,61 +234,56 @@ const AddProductForm = (props) => {
     return <Spinner />;
   }
 
-
-
-
   /*IF the product is measureable with length width height */
   var measureablePerUnit = (
     <React.Fragment>
       <Grid container spacing={3} style={{ padding: 50, paddingTop: 10 }}>
         <Grid item xs={12} sm={2}>
-             <Select
-                styles={selectStyles}
-                className="basic-single"
-                classNamePrefix="Unit"
-                isSearchable
-                name="unit"
-                placeholder="Unit"
-                onChange={(event)=>unitChangeController(event)}
-                options={constants.lengthDimensions}
-        />
+          <Select
+            styles={selectStyles}
+            className="basic-single"
+            classNamePrefix="Unit"
+            isSearchable
+            name="unit"
+            placeholder="Unit"
+            onChange={(event) => unitChangeController(event)}
+            options={constants.lengthDimensions}
+          />
           {/* </FormControl> */}
         </Grid>
         <Grid item xs={12} sm={4}></Grid>
         <Grid item xs={12} sm={6}>
-            <TextField
-              type="number"
-              error={weightPerUnitValidator !== ""}
-              helperText={
+          <TextField
+            type="number"
+            error={weightPerUnitValidator !== ""}
+            helperText={
               weightPerUnitValidator === "" ? " " : weightPerUnitValidator
-              }
-              id="weightPerUnit"
-              name="weightPerUnit"
-              label="Weight Per Unit(in Kg)"
-              fullWidth
-              value={weightPerUnit}
-              variant='outlined'
-              size='small'
-              // style={{backgroundColor:'#fff'}}
-              autoComplete="weightPerUnit"
-              onChange={(event) => onWeightPerUnitChangeController(event)}
-            />
-          </Grid>
+            }
+            id="weightPerUnit"
+            name="weightPerUnit"
+            label="Weight Per Unit(in Kg)"
+            fullWidth
+            value={weightPerUnit}
+            variant="outlined"
+            size="small"
+            // style={{backgroundColor:'#fff'}}
+            autoComplete="weightPerUnit"
+            onChange={(event) => onWeightPerUnitChangeController(event)}
+          />
+        </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
             type="number"
             error={heightValidator !== ""}
-              helperText={
-              heightValidator === "" ? " " : heightValidator
-            }
+            helperText={heightValidator === "" ? " " : heightValidator}
             id="height"
             name="height"
             label="Height"
             fullWidth
             value={height}
             autoComplete="Height"
-            variant='outlined'
-            size='small'
+            variant="outlined"
+            size="small"
             // style={{backgroundColor:'#fff'}}
             onChange={(event) => onHeightChangeController(event)}
           />
@@ -301,17 +292,15 @@ const AddProductForm = (props) => {
           <TextField
             type="number"
             error={widthValidator !== ""}
-              helperText={
-              widthValidator === "" ? " " : widthValidator
-            }
+            helperText={widthValidator === "" ? " " : widthValidator}
             id="width"
             name="width"
             label="Width"
             fullWidth
             value={width}
             autoComplete="width"
-            variant='outlined'
-            size='small'
+            variant="outlined"
+            size="small"
             // style={{backgroundColor:'#fff'}}
             onChange={(event) => onWidthChangeController(event)}
           />
@@ -320,16 +309,14 @@ const AddProductForm = (props) => {
           <TextField
             type="number"
             error={lengthValidator !== ""}
-              helperText={
-              lengthValidator === "" ? " " : lengthValidator
-            }
+            helperText={lengthValidator === "" ? " " : lengthValidator}
             id="length"
             name="length"
             label="Length"
             value={length}
             fullWidth
-            variant='outlined'
-            size='small'
+            variant="outlined"
+            size="small"
             // style={{backgroundColor:'#fff'}}
             onChange={(event) => onLengthChangeController(event)}
             autoComplete="Length"
@@ -340,7 +327,6 @@ const AddProductForm = (props) => {
   );
   var notMeasureable = (
     <React.Fragment>
-      
       {/*test*/}
       <Grid
         container
@@ -367,8 +353,8 @@ const AddProductForm = (props) => {
             label="Weight per cubic meter"
             fullWidth
             value={density}
-            variant='outlined'
-            size='small'
+            variant="outlined"
+            size="small"
             // style={{backgroundColor:'#fff'}}
             onChange={(event) => onDensityChangeController(event)}
             InputProps={{
@@ -381,12 +367,7 @@ const AddProductForm = (props) => {
   );
   return (
     <div style={{ overflow: "hidden" }}>
-      <Typography
-        fullWidth
-        className="TypographyTitle"
-        gutterBottom
-        
-      >
+      <Typography fullWidth className="TypographyTitle" gutterBottom>
         Product Details
       </Typography>
       <form>
@@ -403,24 +384,24 @@ const AddProductForm = (props) => {
               name="productName"
               label="Enter Product Name"
               value={newProductName}
-              variant='outlined'
-              size='small'
+              variant="outlined"
+              size="small"
               // style={{backgroundColor:'#fff'}}
               onChange={(event) => onProductNameChange(event)}
               fullWidth
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-          <Select
-          styles={selectStyles}
-          className="basic-single"
-          classNamePrefix="select"
-          onChange={(event)=>handleTypeChange(event)}
-          isSearchable
-          name="productType"
-          placeholder="Product Type"
-          options={constants.typesOfProducts}
-        />
+            <Select
+              styles={selectStyles}
+              className="basic-single"
+              classNamePrefix="select"
+              onChange={(event) => handleTypeChange(event)}
+              isSearchable
+              name="productType"
+              placeholder="Product Type"
+              options={constants.typesOfProducts}
+            />
           </Grid>
           {/* <Grid item xs={12} sm={8}>
             <Multiselect
@@ -437,7 +418,7 @@ const AddProductForm = (props) => {
             />
           </Grid> */}
           <Grid item xs={12} sm={6}>
-          <Select
+            <Select
               //defaultValue={[colourOptions[2], colourOptions[3]]}
               isMulti
               styles={selectStyles}
@@ -445,7 +426,7 @@ const AddProductForm = (props) => {
               options={constants.inventoryCategory}
               placeholder="Category(Select Multiple)"
               className="basic-multi-select"
-              onChange={(event)=>onCategoryChange(event)}
+              onChange={(event) => onCategoryChange(event)}
               classNamePrefix="select"
             />
           </Grid>
@@ -463,33 +444,41 @@ const AddProductForm = (props) => {
           }
           label="(Measureable Dimensions)"
         /> */}
-        <Grid component="label" container style={{fontSize:18,marginTop:20,marginBottom:20}} alignItems="center" spacing={1}>
-                <Grid item>Total Weight</Grid>
-                <Grid item>
-                    <AntSwitch checked={switchToggler} onChange={()=>handleSwitchTogglerChange()} name="checkedC" />
-                </Grid>
-                <Grid item>No. Of Units</Grid>
-                </Grid>
+        <Grid
+          component="label"
+          container
+          style={{ fontSize: 18, marginTop: 20, marginBottom: 20 }}
+          alignItems="center"
+          spacing={1}
+        >
+          <Grid item>Total Weight</Grid>
+          <Grid item>
+            <AntSwitch
+              checked={switchToggler}
+              onChange={() => handleSwitchTogglerChange()}
+              name="checkedC"
+            />
+          </Grid>
+          <Grid item>No. Of Units</Grid>
+        </Grid>
         {switchToggler === true ? measureablePerUnit : notMeasureable}
 
         <Typography className={classes.formHeadings}>Other Details</Typography>
         <Grid container spacing={3} style={{ padding: 50, paddingTop: 10 }}>
-        <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6}>
             <TextField
               required
               type="number"
               error={pinValidator !== ""}
-                helperText={
-                  pinValidator === "" ? " " : pinValidator
-              }
+              helperText={pinValidator === "" ? " " : pinValidator}
               id="pinCode"
               name="pinCode"
               label="Pin"
               value={pinCode}
               fullWidth
               onChange={(event) => onPinChangeController(event)}
-              variant='outlined'
-              size='small'
+              variant="outlined"
+              size="small"
               // style={{backgroundColor:'#fff'}}
               autoComplete="pinCode"
             />
@@ -504,8 +493,8 @@ const AddProductForm = (props) => {
               value={location}
               fullWidth
               onChange={(event) => onLocationChangeController(event)}
-              variant='outlined'
-              size='small'
+              variant="outlined"
+              size="small"
               // style={{backgroundColor:'#fff'}}
               autoComplete="Location"
             />
@@ -517,7 +506,7 @@ const AddProductForm = (props) => {
           variant="contained"
           style={{
             float: "right",
-            
+
             marginBottom: "10px",
           }}
         >

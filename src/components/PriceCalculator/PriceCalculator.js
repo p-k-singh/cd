@@ -94,6 +94,7 @@ const PriceCalculator = (props) => {
   const [destinationpin, setdestinationpin] = useState();
   const [pickupZipValidator, setPickupZipValidator] = useState("");
   const [deliverZipValidator, setDeliverZipValidator] = useState("");
+  const [negativeValueValidator, setnegativeValueValidator] = useState("");
   const [redirect, setRedirect] = useState(false);
 
   const capabilityOptions = {
@@ -215,27 +216,49 @@ const PriceCalculator = (props) => {
   };
   const onWeightPerUnitChangeController = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].value.weightPerUnit = event.target.value;
+
+    if (event.target.value < 0) {
+      items[i].value.weightPerUnit = 0;
+    } else {
+      items[i].value.weightPerUnit = event.target.value;
+    }
     setChosenProducts(items);
   };
   const onHeightChangeController = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].value.height = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.height = 0;
+    } else {
+      items[i].value.height = event.target.value;
+    }
+
     setChosenProducts(items);
   };
   const onWidthChangeController = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].value.width = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.width = 0;
+    } else {
+      items[i].value.width = event.target.value;
+    }
     setChosenProducts(items);
   };
   const onLengthChangeController = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].value.length = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.length = 0;
+    } else {
+      items[i].value.length = event.target.value;
+    }
     setChosenProducts(items);
   };
   const onDensityChangeController = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].value.density = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.density = 0;
+    } else {
+      items[i].value.density = event.target.value;
+    }
     setChosenProducts(items);
   };
   const calculatePrice = () => {
@@ -289,12 +312,28 @@ const PriceCalculator = (props) => {
   const onNoOfUnitsChange = (event, i) => {
     var items = chosenProducts.slice();
     if (chosenProducts[i] === null) return;
-    items[i].noOfUnits = event.target.value;
+    // var check = 1;
+    // if (event.target.value < 0) {
+    //   setnegativeValueValidator("Cannot be negative");
+    //   check = 0;
+    // }
+    // if (check === 1) {
+    //   setnegativeValueValidator("");
+    // }
+    if (event.target.value < 0) {
+      items[i].noOfUnits = 0;
+    } else {
+      items[i].noOfUnits = event.target.value;
+    }
     setChosenProducts(items);
   };
   const onTotalWeightChange = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].totalWeight = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.totalWeight = 0;
+    } else {
+      items[i].value.totalWeight = event.target.value;
+    }
     setChosenProducts(items);
   };
   const handlePlaceOrderClick = () => {
@@ -633,6 +672,10 @@ const PriceCalculator = (props) => {
         {chosenProducts[i] === null || chosenProducts[i].value.measurable ? (
           <Grid item xs={12} sm={4}>
             <TextField
+              error={negativeValueValidator !== ""}
+              helperText={
+                negativeValueValidator === "" ? " " : negativeValueValidator
+              }
               fullWidth
               type="number"
               size="small"
