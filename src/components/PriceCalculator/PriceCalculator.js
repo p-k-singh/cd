@@ -14,6 +14,7 @@ import * as actions from "../../store/actions/index";
 import "../../Globalcss/globalcss.css";
 import {
   TextField,
+  Checkbox,
   Grid,
   Card,
   Button,
@@ -93,8 +94,8 @@ const PriceCalculator = (props) => {
   const [destinationpin, setdestinationpin] = useState();
   const [pickupZipValidator, setPickupZipValidator] = useState("");
   const [deliverZipValidator, setDeliverZipValidator] = useState("");
+  const [negativeValueValidator, setnegativeValueValidator] = useState("");
   const [redirect, setRedirect] = useState(false);
-
 
   const capabilityOptions = {
     options: constants.inventoryFeatures,
@@ -215,92 +216,124 @@ const PriceCalculator = (props) => {
   };
   const onWeightPerUnitChangeController = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].value.weightPerUnit = event.target.value;
+
+    if (event.target.value < 0) {
+      items[i].value.weightPerUnit = 0;
+    } else {
+      items[i].value.weightPerUnit = event.target.value;
+    }
     setChosenProducts(items);
   };
   const onHeightChangeController = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].value.height = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.height = 0;
+    } else {
+      items[i].value.height = event.target.value;
+    }
+
     setChosenProducts(items);
   };
   const onWidthChangeController = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].value.width = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.width = 0;
+    } else {
+      items[i].value.width = event.target.value;
+    }
     setChosenProducts(items);
   };
   const onLengthChangeController = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].value.length = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.length = 0;
+    } else {
+      items[i].value.length = event.target.value;
+    }
     setChosenProducts(items);
   };
   const onDensityChangeController = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].value.density = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.density = 0;
+    } else {
+      items[i].value.density = event.target.value;
+    }
     setChosenProducts(items);
   };
   const calculatePrice = () => {
     setCalculating(true);
     //do something
 
-    var items=[]
-    
-    
-    for(var i=0;i<chosenProducts.length;i++){
+    var items = [];
+
+    for (var i = 0; i < chosenProducts.length; i++) {
       //var temp=''
       items.push({
-        toPin:pickuppin,
-          fromPin:destinationpin,
-          // productName:chosenProducts[i].value.productName,
-          // productType:chosenProducts[i].value.productType,
-          length:chosenProducts[i].value.length,
-          width:chosenProducts[i].value.width,
-          height:chosenProducts[i].value.height,
-          weightPerUnit:chosenProducts[i].value.weightPerUnit,
-          noOfUnits:chosenProducts[i].noOfUnits,
-          measurable:chosenProducts[i].value.measurable,
-          density:chosenProducts[i].value.density,
-          totalWeight:chosenProducts[i].totalWeight,
-          
-      })
+        toPin: pickuppin,
+        fromPin: destinationpin,
+        // productName:chosenProducts[i].value.productName,
+        // productType:chosenProducts[i].value.productType,
+        length: chosenProducts[i].value.length,
+        width: chosenProducts[i].value.width,
+        height: chosenProducts[i].value.height,
+        weightPerUnit: chosenProducts[i].value.weightPerUnit,
+        noOfUnits: chosenProducts[i].noOfUnits,
+        measurable: chosenProducts[i].value.measurable,
+        density: chosenProducts[i].value.density,
+        totalWeight: chosenProducts[i].totalWeight,
+      });
     }
-
 
     // const payload = {
     //   body:{
     //     items:items
     //   }
     // }
-    var params = JSON.stringify(items)
-   // alert(`/pricing?items=`+params)
-   // return
-    API
-    .get("GoFlexeOrderPlacement", `/pricing?items=`+params)
-    .then(resp=>{
-    console.log(resp);
-    setShowPrice(true);
-    setEstimatedPrice(resp.estimatedPrice);
-    setCalculating(false);
-    })
-    .catch(err=>{
+    var params = JSON.stringify(items);
+    // alert(`/pricing?items=`+params)
+    // return
+    API.get("GoFlexeOrderPlacement", `/pricing?items=` + params)
+      .then((resp) => {
+        console.log(resp);
+        setShowPrice(true);
+        setEstimatedPrice(resp.estimatedPrice);
         setCalculating(false);
-        setShowPrice(true)
+      })
+      .catch((err) => {
+        setCalculating(false);
+        setShowPrice(true);
         console.log(err);
-    })
-
+      });
 
     setShowPrice(true);
     setCalculating(false);
   };
   const onNoOfUnitsChange = (event, i) => {
     var items = chosenProducts.slice();
-    if(chosenProducts[i]===null)
-    return
-    items[i].noOfUnits = event.target.value;
+    if (chosenProducts[i] === null) return;
+    // var check = 1;
+    // if (event.target.value < 0) {
+    //   setnegativeValueValidator("Cannot be negative");
+    //   check = 0;
+    // }
+    // if (check === 1) {
+    //   setnegativeValueValidator("");
+    // }
+    if (event.target.value < 0) {
+      items[i].noOfUnits = 0;
+    } else {
+      items[i].noOfUnits = event.target.value;
+    }
     setChosenProducts(items);
   };
   const onTotalWeightChange = (event, i) => {
     var items = chosenProducts.slice();
-    items[i].totalWeight = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.totalWeight = 0;
+    } else {
+      items[i].value.totalWeight = event.target.value;
+    }
     setChosenProducts(items);
   };
   const handlePlaceOrderClick = () => {
@@ -330,7 +363,7 @@ const PriceCalculator = (props) => {
             unit: null,
             location: "",
             pincode: "",
-            productId:""
+            productId: "",
           },
           isNew: true,
           label: newValue.label,
@@ -639,6 +672,10 @@ const PriceCalculator = (props) => {
         {chosenProducts[i] === null || chosenProducts[i].value.measurable ? (
           <Grid item xs={12} sm={4}>
             <TextField
+              error={negativeValueValidator !== ""}
+              helperText={
+                negativeValueValidator === "" ? " " : negativeValueValidator
+              }
               fullWidth
               type="number"
               size="small"
@@ -830,6 +867,32 @@ const PriceCalculator = (props) => {
               </Grid>
             </Grid>
           </form>
+          <Typography className={classes.formHeadings}>
+            Value Added Services
+          </Typography>
+          <Grid
+            container
+            spacing={3}
+            style={{ padding: 50, paddingTop: 20, paddingBottom: 30 }}
+          >
+            {constants.vas.map((vas) => {
+              return (
+                <Grid item xs={12} sm={4}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        //checked={state.checkedB}
+                        //onChange={handleChange}
+                        name={vas.name}
+                        color="primary"
+                      />
+                    }
+                    label={vas.name}
+                  />
+                </Grid>
+              );
+            })}
+          </Grid>
         </CardContent>
         <div
           style={{

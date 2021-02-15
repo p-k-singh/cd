@@ -355,6 +355,7 @@ import {
   TextField,
   Grid,
   Card,
+  Checkbox,
   Button,
   IconButton,
   Divider,
@@ -509,38 +510,66 @@ const ProductDetails = (props) => {
   };
   const onWeightPerUnitChangeController = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].value.weightPerUnit = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.weightPerUnit = 0;
+    } else {
+      items[i].value.weightPerUnit = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const onHeightChangeController = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].value.height = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.height = 0;
+    } else {
+      items[i].value.height = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const onWidthChangeController = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].value.width = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.width = 0;
+    } else {
+      items[i].value.width = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const onLengthChangeController = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].value.length = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.length = 0;
+    } else {
+      items[i].value.length = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const onDensityChangeController = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].value.density = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.density = 0;
+    } else {
+      items[i].value.density = event.target.value;
+    }
     props.setChosenProducts(items);
   };
 
   const onNoOfUnitsChange = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].noOfUnits = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.noOfUnits = 0;
+    } else {
+      items[i].value.noOfUnits = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const onTotalWeightChange = (event, i) => {
     var items = props.chosenProducts.slice();
-    items[i].totalWeight = event.target.value;
+    if (event.target.value < 0) {
+      items[i].value.totalWeight = 0;
+    } else {
+      items[i].value.totalWeight = event.target.value;
+    }
     props.setChosenProducts(items);
   };
   const handlePlaceOrderClick = () => {};
@@ -702,7 +731,6 @@ const ProductDetails = (props) => {
             />
           </Tooltip>
         </Grid>
-       
       </Grid>
     </React.Fragment>
   );
@@ -727,7 +755,7 @@ const ProductDetails = (props) => {
             size="small"
             style={{ backgroundColor: "#fff" }}
           />
-        </Grid> 
+        </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
             type="text"
@@ -863,7 +891,9 @@ const ProductDetails = (props) => {
                 ? null
                 : props.chosenProducts[i].value.productType
             }
-            isDisabled={props.chosenProducts[i] === null || !props.chosenProducts[i].isNew}
+            isDisabled={
+              props.chosenProducts[i] === null || !props.chosenProducts[i].isNew
+            }
             onChange={(event) => onProductTypeChange(event, i)}
             isSearchable
             placeholder="Product Type"
@@ -871,7 +901,8 @@ const ProductDetails = (props) => {
             options={constants.typesOfProducts}
           />
         </Grid>
-        {props.chosenProducts[i] === null || props.chosenProducts[i].value.measurable ? (
+        {props.chosenProducts[i] === null ||
+        props.chosenProducts[i].value.measurable ? (
           <Grid item xs={12} sm={4}>
             <TextField
               fullWidth
@@ -881,7 +912,9 @@ const ProductDetails = (props) => {
               label="No. of units"
               variant="outlined"
               value={
-                props.chosenProducts[i] === null ? 0 : props.chosenProducts[i].noOfUnits
+                props.chosenProducts[i] === null
+                  ? 0
+                  : props.chosenProducts[i].noOfUnits
               }
               onChange={(event) => onNoOfUnitsChange(event, i)}
             />
@@ -914,7 +947,9 @@ const ProductDetails = (props) => {
             }
             options={constants.inventoryCategory}
             placeholder="Category(Select Multiple)"
-            isDisabled={props.chosenProducts[i] === null || !props.chosenProducts[i].isNew}
+            isDisabled={
+              props.chosenProducts[i] === null || !props.chosenProducts[i].isNew
+            }
             className="basic-multi-select"
             onChange={(event) => onCategoryChange(event, i)}
             classNamePrefix="select"
@@ -1019,6 +1054,32 @@ const ProductDetails = (props) => {
           </Button>
           <Divider style={{ margin: 20 }} />
         </form>
+        <Typography className={classes.formHeadings}>
+          Value Added Services
+        </Typography>
+        <Grid
+          container
+          spacing={3}
+          style={{ padding: 50, paddingTop: 20, paddingBottom: 30 }}
+        >
+          {constants.vas.map((vas) => {
+            return (
+              <Grid item xs={12} sm={4}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      //checked={state.checkedB}
+                      //onChange={handleChange}
+                      name={vas.name}
+                      color="primary"
+                    />
+                  }
+                  label={vas.name}
+                />
+              </Grid>
+            );
+          })}
+        </Grid>
       </CardContent>
       <div
         style={{

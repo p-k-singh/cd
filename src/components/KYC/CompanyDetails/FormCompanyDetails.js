@@ -35,6 +35,9 @@ const CompanyKYC = (props) => {
     registeredContactNo: "",
   });
   const fieldsChange = (event) => {
+    if (event.target.name == "phone" || event.target.value < 0) {
+      event.target.value = 0;
+    }
     setMyState({ ...myState, [event.target.name]: event.target.value });
   };
   const submitKYC = () => {

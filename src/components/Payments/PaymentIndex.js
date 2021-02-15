@@ -4,11 +4,12 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Upload from "./Upload/Upload";
+import InfoIcon from "@material-ui/icons/Info";
 import {
   Select,
   InputLabel,
@@ -61,7 +62,7 @@ const PaymentIndex = () => {
 
   const fullPayToAccountDashboard = (
     <React.Fragment>
-      <Card>
+      <Card style={{ padding: 10 }}>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
           Total Amount to be paid: 10,000 INR
         </Typography>
@@ -71,12 +72,34 @@ const PaymentIndex = () => {
         </Typography>
         <div className="row" style={{ fontSize: 16, marginBottom: 20 }}>
           <div className="col col-xs-12 col-sm-6" style={{ marginBottom: 6 }}>
-            Account Number: 7814289632
+            Account No: 7814289632{" "}
+            <Tooltip
+              title="Beneficiary’s account number, make the payment to this account."
+              placement="top-start"
+            >
+              <InfoIcon style={{ color: "lightgrey" }} fontSize="small" />
+            </Tooltip>
           </div>
+          <div className="col col-xs-12 col-sm-8" style={{ paddingBottom: 10 }}>
+            Account Holder's Name: GoFlexe Ltd.{" "}
+            <Tooltip
+              title="Beneficiary’s account name, make the payment to this account."
+              placement="top-start"
+            >
+              <InfoIcon style={{ color: "lightgrey" }} fontSize="small" />
+            </Tooltip>
+          </div>
+
+          <div className="col col-xs-12 col-sm-6">Bank Name: Yes Bank</div>
           <div className="col col-xs-12 col-sm-6">
-            Account Holder Name: GoFlexe Ltd.
+            IFSC: BNK0123456{" "}
+            <Tooltip
+              title="IFSC is short for Indian Financial System Code, represented by an 11 digit character."
+              placement="top-start"
+            >
+              <InfoIcon style={{ color: "lightgrey" }} fontSize="small" />
+            </Tooltip>
           </div>
-          <div className="col col-xs-12 col-sm-6">IFSC Code: BNK0123456</div>
         </div>
         <div className="row">
           <div>
@@ -126,7 +149,7 @@ const PaymentIndex = () => {
 
   const cashPayment = (
     <React.Fragment>
-      <Card>
+      <Card style={{ padding: 10 }}>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
           Total Amount to be paid: 10,000 INR
         </Typography>
@@ -200,7 +223,7 @@ const PaymentIndex = () => {
 
   const OthersPayment = (
     <React.Fragment>
-      <Card>
+      <Card style={{ padding: 10 }}>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
           Total Amount to be paid: 10,000 INR
         </Typography>
@@ -222,7 +245,7 @@ const PaymentIndex = () => {
         <Typography className={classes.title} gutterBottom>
           Payment
         </Typography>
-        <form>
+        <form style={{ padding: 10 }}>
           <FormControl component="fieldset">
             <RadioGroup
               row
@@ -268,7 +291,51 @@ const PaymentIndex = () => {
                     label="Subscription"
                   />
                 </Grid>
+                <Grid item xs={12} sm={6}>
+                  {paymentOption === "fullPayment" && (
+                    <FormHelperText>
+                      Make the full payment of your order.
+                      <br />
+                      Choose the most suitable payment mode.
+                    </FormHelperText>
+                  )}
+                  {paymentOption === "partialPayment" && (
+                    <FormHelperText>
+                      Make some of the payment now and the dues at time of
+                      delivery.
+                      <br />
+                      Choose the most suitable payment method.
+                    </FormHelperText>
+                  )}
+                  {paymentOption === "CreditBased" && (
+                    <FormHelperText>
+                      Make your payment after a few days.
+                      <br />
+                      Choose the most suitable payment method.
+                    </FormHelperText>
+                  )}
+                  {paymentOption === "Subscription" && (
+                    <FormHelperText>
+                      Take a subscription plan and pay weekly or monthly.
+                      <br />
+                      Choose the most suitable payment method.
+                    </FormHelperText>
+                  )}
+                </Grid>
               </Grid>
+              {/* {
+                (paymentOption = "Subscription" && (
+                  <FormHelperText>
+                    Pay the total amount in 45 Days
+                  </FormHelperText>
+                ))
+              }
+              {paymentOption === "CreditBased" && (
+                <FormHelperText>Pay the total amount in 30 Days</FormHelperText>
+              )}
+              {paymentOption === "partialPayment" && (
+                <FormHelperText>Pay the total amount in 7 Days</FormHelperText>
+              )} */}
             </RadioGroup>
           </FormControl>
 
@@ -281,6 +348,7 @@ const PaymentIndex = () => {
                 
                 </Grid>
             </Grid> */}
+
           <Divider style={{ marginBottom: 20 }} />
           {paymentOption === "CreditBased" && (
             <FormControl
@@ -396,21 +464,36 @@ const PaymentIndex = () => {
                   value={paymentMode}
                   onChange={handlePaymentMode}
                 >
-                  <FormControlLabel
-                    value="accountTransfer"
-                    control={<Radio color="primary" />}
-                    label="Account Transfer"
-                  />
-                  <FormControlLabel
-                    value="cash"
-                    control={<Radio color="primary" />}
-                    label="Cash"
-                  />
-                  <FormControlLabel
-                    value="Others"
-                    control={<Radio color="primary" />}
-                    label="Others"
-                  />
+                  <Tooltip
+                    title="Through electronic funds transfer, you can now transfer the required amount in our bank via RTGS/NEFT or net banking."
+                    placement="left"
+                  >
+                    <FormControlLabel
+                      value="accountTransfer"
+                      control={<Radio color="primary" />}
+                      label="Account Transfer"
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    title="Pay in cash at the time of delivery."
+                    placement="left"
+                  >
+                    <FormControlLabel
+                      value="cash"
+                      control={<Radio color="primary" />}
+                      label="Cash"
+                    />
+                  </Tooltip>
+                  <Tooltip
+                    title="Make payment through your desired method (eg. UPI, cheque, etc.) and provide us with a proof of transaction. "
+                    placement="left"
+                  >
+                    <FormControlLabel
+                      value="Others"
+                      control={<Radio color="primary" />}
+                      label="Others"
+                    />
+                  </Tooltip>
                 </RadioGroup>
               </FormControl>
             </Grid>

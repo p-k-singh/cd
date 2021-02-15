@@ -115,7 +115,7 @@ const MyOrders = () => {
                   >
                     Order No. <span>{eachOrder.OrderId.substring(0, 8)}</span>
                   </h6>
-                  <h6>Quantity : {eachOrder.noOfUnits}</h6>
+                  <h6></h6>
                 </Grid>
                 <Grid
                   item
