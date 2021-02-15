@@ -157,13 +157,13 @@ const OrderDetails = (props) => {
             spacing={3}
             style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
           >
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12}>
               <tr>
                 <th scope="row">Order Date :</th>
                 <td>{today}</td>
               </tr>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12}>
               <tr>
                 <th scope="row">{constants.pickupAddress + " : "}</th>
                 <td>
@@ -171,8 +171,8 @@ const OrderDetails = (props) => {
                 </td>
               </tr>
             </Grid>
-            <Grid item xs={12} sm={6}></Grid>
-            <Grid item xs={12} sm={6}>
+
+            <Grid item xs={12} sm={12}>
               <tr>
                 <th scope="row">{constants.destinationAddress + " : "}</th>
                 <td>
