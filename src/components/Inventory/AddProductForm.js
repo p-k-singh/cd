@@ -367,14 +367,18 @@ const AddProductForm = (props) => {
   );
   return (
     <div style={{ overflow: "hidden" }}>
-      <Typography fullWidth className="TypographyTitle" gutterBottom>
+      <Typography
+        fullWidth
+        style={{ fontSize: 18, paddingLeft: 30 }}
+        gutterBottom
+      >
         Product Details
       </Typography>
       <form>
         <Grid
           container
           spacing={3}
-          style={{ paddingLeft: 50, paddingRight: 50, paddingTop: 10 }}
+          style={{ paddingLeft: 50, paddingRight: 50, paddingTop: 20 }}
         >
           <Grid item xs={12} sm={6}>
             <TextField
@@ -444,10 +448,22 @@ const AddProductForm = (props) => {
           }
           label="(Measureable Dimensions)"
         /> */}
+        <Typography
+          fullWidth
+          style={{ paddingTop: 30, fontSize: 17, paddingLeft: 30 }}
+          gutterBottom
+        >
+          Dimensions
+        </Typography>
         <Grid
           component="label"
           container
-          style={{ fontSize: 18, marginTop: 20, marginBottom: 20 }}
+          style={{
+            fontSize: 14,
+            marginTop: 20,
+            marginBottom: 20,
+            paddingLeft: 30,
+          }}
           alignItems="center"
           spacing={1}
         >
@@ -463,7 +479,12 @@ const AddProductForm = (props) => {
         </Grid>
         {switchToggler === true ? measureablePerUnit : notMeasureable}
 
-        <Typography className={classes.formHeadings}>Other Details</Typography>
+        <Typography
+          className={classes.formHeadings}
+          style={{ paddingLeft: 20 }}
+        >
+          Other Details{" "}
+        </Typography>
         <Grid container spacing={3} style={{ padding: 50, paddingTop: 10 }}>
           <Grid item xs={12} sm={6}>
             <TextField

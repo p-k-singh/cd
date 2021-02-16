@@ -556,19 +556,22 @@ const ProductDetails = (props) => {
 
   const onNoOfUnitsChange = (event, i) => {
     var items = props.chosenProducts.slice();
+    if (items[i] === null) return;
     if (event.target.value < 0) {
-      items[i].value.noOfUnits = 0;
+      items[i].noOfUnits = 0;
     } else {
-      items[i].value.noOfUnits = event.target.value;
+      items[i].noOfUnits = event.target.value;
     }
+
     props.setChosenProducts(items);
   };
   const onTotalWeightChange = (event, i) => {
     var items = props.chosenProducts.slice();
+    if (items[i] === null) return;
     if (event.target.value < 0) {
-      items[i].value.totalWeight = 0;
+      items[i].totalWeight = 0;
     } else {
-      items[i].value.totalWeight = event.target.value;
+      items[i].totalWeight = event.target.value;
     }
     props.setChosenProducts(items);
   };
@@ -740,7 +743,9 @@ const ProductDetails = (props) => {
       <Grid
         container
         spacing={4}
-        style={{ paddingTop: 30, paddingLeft: 30, paddingRight: 30 }}
+        style={{
+          paddingTop: 30,
+        }}
       >
         <Grid item xs={12} sm={4}>
           <TextField
@@ -865,9 +870,13 @@ const ProductDetails = (props) => {
           <h5>Product {i + 1}</h5>
         </Grid>
         <Grid item>
-          <IconButton onClick={() => handleItemDeleted(i)}>
-            <DeleteIcon style={{ fontSize: "30" }} />
-          </IconButton>
+          {i == 0 ? (
+            ""
+          ) : (
+            <IconButton onClick={() => handleItemDeleted(i)}>
+              <DeleteIcon style={{ fontSize: "30" }} />
+            </IconButton>
+          )}
         </Grid>
       </Grid>
       <Grid container spacing={4} style={{ paddingLeft: 30, paddingRight: 30 }}>
@@ -933,8 +942,9 @@ const ProductDetails = (props) => {
             />
           </Grid>
         )}
-        <Grid item xs={12} sm={11}>
+        <Grid item xs={12} sm={12}>
           <Select
+            fullWidth
             //defaultValue={[colourOptions[2], colourOptions[3]]}
             isMulti
             styles={selectStyles}
@@ -977,10 +987,25 @@ const ProductDetails = (props) => {
                 }
                 label="(Measureable Dimensions)"
                 /> */}
+            <Typography
+              style={{
+                fontSize: 18,
+                marginTop: 20,
+                marginBottom: 10,
+                marginLeft: 20,
+              }}
+            >
+              Product Dimensions
+            </Typography>
             <Grid
               component="label"
               container
-              style={{ fontSize: 18, marginTop: 20, marginBottom: 20 }}
+              style={{
+                fontSize: 14,
+                marginTop: 20,
+                marginBottom: 20,
+                marginLeft: 20,
+              }}
               alignItems="center"
               spacing={1}
             >
@@ -1046,7 +1071,7 @@ const ProductDetails = (props) => {
             style={{
               backgroundColor: "#f9a825",
               marginTop: 10,
-              marginLeft: 20,
+              marginLeft: 30,
             }}
             onClick={() => addproduct()}
           >

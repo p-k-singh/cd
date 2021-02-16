@@ -115,11 +115,13 @@ const PaymentIndex = () => {
             </p>
           </div>
           <div>
-            <TextField
-              variant="outlined"
-              id="standard-size-small"
-              size="small"
-            />
+            <Tooltip title="Transaction Id for the payment you have done">
+              <TextField
+                variant="outlined"
+                id="standard-size-small"
+                size="small"
+              />
+            </Tooltip>
           </div>
         </div>
         <div
