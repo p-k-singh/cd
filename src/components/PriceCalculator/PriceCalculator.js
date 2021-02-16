@@ -312,14 +312,6 @@ const PriceCalculator = (props) => {
   const onNoOfUnitsChange = (event, i) => {
     var items = chosenProducts.slice();
     if (chosenProducts[i] === null) return;
-    // var check = 1;
-    // if (event.target.value < 0) {
-    //   setnegativeValueValidator("Cannot be negative");
-    //   check = 0;
-    // }
-    // if (check === 1) {
-    //   setnegativeValueValidator("");
-    // }
     if (event.target.value < 0) {
       items[i].noOfUnits = 0;
     } else {
@@ -330,9 +322,9 @@ const PriceCalculator = (props) => {
   const onTotalWeightChange = (event, i) => {
     var items = chosenProducts.slice();
     if (event.target.value < 0) {
-      items[i].value.totalWeight = 0;
+      items[i].totalWeight = 0;
     } else {
-      items[i].value.totalWeight = event.target.value;
+      items[i].totalWeight = event.target.value;
     }
     setChosenProducts(items);
   };
@@ -635,9 +627,13 @@ const PriceCalculator = (props) => {
           <h5>Product {i + 1}</h5>
         </Grid>
         <Grid item>
-          <IconButton onClick={() => handleItemDeleted(i)}>
-            <DeleteIcon style={{ fontSize: "30" }} />
-          </IconButton>
+          {i == 0 ? (
+            ""
+          ) : (
+            <IconButton onClick={() => handleItemDeleted(i)}>
+              <DeleteIcon style={{ fontSize: "30" }} />
+            </IconButton>
+          )}
         </Grid>
       </Grid>
       <Grid container spacing={4} style={{ paddingLeft: 30, paddingRight: 30 }}>

@@ -3,7 +3,9 @@ import Spinner from "../../UI/Spinner";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Auth, API } from "aws-amplify";
+import InfoIcon from "@material-ui/icons/Info";
 import axios from "axios";
+import Tooltip from "@material-ui/core/Tooltip";
 import "../../../Globalcss/globalcss.css";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { TextField, Grid, Button, Breadcrumbs } from "@material-ui/core";
@@ -184,6 +186,9 @@ const CompanyKYC = (props) => {
             style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
           >
             <Grid item xs={12}>
+              <Tooltip title="Upload registeration certificate">
+                <InfoIcon style={{ color: "lightgrey" }} fontSize="small" />
+              </Tooltip>{" "}
               <label>Registration Proof: </label>
               <input
                 style={{ marginLeft: "15px" }}
@@ -200,7 +205,7 @@ const CompanyKYC = (props) => {
           variant="contained"
           style={{ float: "right", marginBottom: "10px" }}
         >
-          Submit KYC
+          Next
         </Button>
       </form>
     </div>

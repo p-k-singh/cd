@@ -83,7 +83,7 @@ const constants = {
   timeSlots: [
     { name: "", value: "" },
     { name: "8AM-12Noon", value: "08-12" },
-    { name: "12NOON-4PM", value: "12-16" },
+    { name: "12Noon-4PM", value: "12-16" },
     { name: "4PM-8PM", value: "16-20" },
     { name: "8PM-12Midnight", value: "20-00" },
   ],
