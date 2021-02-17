@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import { API } from "aws-amplify";
 import "./Home.css";
 import CardContent from "@material-ui/core/CardContent";
-
-import { Chart } from "chart.js";
-
 import {
   TextField,
   Checkbox,
@@ -16,8 +13,47 @@ import {
   FormControlLabel,
   Switch,
 } from "@material-ui/core";
+import { PureComponent } from "react";
+import { Sector, Cell } from "recharts";
+import { PieChart, Pie, Legend, Tooltip } from "recharts";
+
+const data = [
+  { name: "product A", value: 4 },
+  { name: "product B", value: 3 },
+  { name: "product C", value: 3 },
+  { name: "product D", value: 1 },
+];
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
+const RADIAN = Math.PI / 180;
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  index,
+}) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
 
 class Home extends Component {
+  static jsfiddleUrl = "https://jsfiddle.net/alidingling/c9pL8k61/";
   render() {
     return (
       <div>
@@ -30,7 +66,7 @@ class Home extends Component {
         </div>
         <div>
           <Grid container spacing={3} style={{ paddingTop: 10 }}>
-            <Grid item sm={0.3}></Grid>
+            <Grid item sm={0.4}></Grid>{" "}
             <Grid item sm={2}>
               <Card>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
@@ -50,8 +86,8 @@ class Home extends Component {
                   </div>
                 </CardContent>
               </Card>
-            </Grid>
-            <Grid item sm={0.3}></Grid>
+            </Grid>{" "}
+            <Grid item sm={0.4}></Grid>
             <Grid item sm={2}>
               <Card>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
@@ -71,8 +107,8 @@ class Home extends Component {
                   </div>
                 </CardContent>
               </Card>
-            </Grid>
-            <Grid item sm={0.3}></Grid>
+            </Grid>{" "}
+            <Grid item sm={0.4}></Grid>
             <Grid item sm={2}>
               <Card>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
@@ -92,8 +128,8 @@ class Home extends Component {
                   </div>
                 </CardContent>
               </Card>
-            </Grid>
-            <Grid item sm={0.3}></Grid>
+            </Grid>{" "}
+            <Grid item sm={0.4}></Grid>
             <Grid item sm={2}>
               <Card>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
@@ -114,7 +150,7 @@ class Home extends Component {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item sm={0.3}></Grid>
+            <Grid item sm={0.4}></Grid>
             <Grid item sm={2}>
               <Card>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
@@ -135,7 +171,7 @@ class Home extends Component {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item sm={0.3}></Grid>
+            <Grid item sm={0.4}></Grid>
           </Grid>
         </div>
         <div>
@@ -167,7 +203,32 @@ class Home extends Component {
             </Grid>
             <Grid item xs={12} sm={4}>
               <Card>
-                <CardContent></CardContent>
+                <CardContent>
+                  <div style={{ textAlign: "center" }}>
+                    <h2> Product Types</h2>
+                  </div>
+                  <div>
+                    <PieChart width={300} height={200}>
+                      <Pie
+                        isAnimationActive={false}
+                        data={data}
+                        cx={135}
+                        cy={100}
+                        labelLine={false}
+                        label={renderCustomizedLabel}
+                        outerRadius={80}
+                      >
+                        {data.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={COLORS[index % COLORS.length]}
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </div>
+                </CardContent>
               </Card>
             </Grid>
           </Grid>

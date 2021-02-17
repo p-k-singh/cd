@@ -30,6 +30,40 @@ const useStyles = makeStyles({
   },
 });
 
+//   constructor(props) {
+//         super(props);
+//         this.state = {
+//             pickupAddress : "",
+//             destinationAddress : "",
+//             pickupPinCode :"",
+//             destinationPinCode : "",
+//             error: ''
+//         };
+//     }
+
+//  handleValidation = () => {
+//                 const {
+//                     pickupAddress ,
+//             destinationAddress ,
+//             pickupPinCode,
+//             destinationPinCode
+//                 } = this.state;
+//                 let error = '';
+//                 let formIsValid = true;
+//                     if(!pickupAddress ||
+//                         !destinationAddress ||
+//                         !pickupPinCode ||
+//                         !destinationPinCode){
+//                         formIsValid = false;
+//                         error = "Input fields cannot be empty";
+//                     }
+
+//        this.setState({error: error});
+//         return formIsValid;
+
+//     }
+//<span style={{ color: "red" }}>{this.state.error}</span>;
+
 const BuyerDetails = (props) => {
   const classes = useStyles();
   const [pickupZipValidator, setPickupZipValidator] = useState("");
@@ -54,6 +88,7 @@ const BuyerDetails = (props) => {
     var pickupAddress = event.target.value;
     props.setPickupAddressDispatcher(pickupAddress);
   };
+
   const onPickupDateChangeController = (event) => {
     var pickupDate = event.target.value;
     var today = new Date();
@@ -172,6 +207,7 @@ const BuyerDetails = (props) => {
   const onAdditionalNoteChangeController = (event) => {
     props.setAdditionalNoteDispatcher(event.target.value);
   };
+
   return (
     <CardContent style={{ padding: 0 }}>
       <Typography className="TypographyTitle" gutterBottom>
