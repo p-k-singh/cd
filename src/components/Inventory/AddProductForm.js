@@ -87,7 +87,7 @@ const AddProductForm = (props) => {
   const classes = useStyles();
   const [newProductName, setNewProductName] = useState("");
   const [newProductType, setNewProductType] = useState("");
-  const [unit, setUnit] = useState("centimeters");
+  const [unit, setUnit] = useState("");
   const [height, setHeight] = useState();
   const [width, setWidth] = useState();
   const [length, setLength] = useState();
@@ -191,6 +191,38 @@ const AddProductForm = (props) => {
   };
 
   const submitTruck = async () => {
+    if (newProductName == "") {
+      alert("Product Name can't be empty");
+      return;
+    }
+    if (newProductType == "") {
+      alert("Product Type can't be empty");
+      return;
+    }
+    if (categories == null || categories == "") {
+
+      alert("Product Category can't be empty");
+      return;
+    }
+    if (
+      (switchToggler === true && weightPerUnit == null) ||
+      (switchToggler === true && height == null) ||
+      (switchToggler === true && length == null) ||
+      (switchToggler === true && width == null)
+    ) {
+      alert("Product Dimensions can't be empty");
+      return;
+    }
+    if (switchToggler === true && unit === "") {
+      alert("Select measurement Unit for your Product");
+      return;
+    }
+    if (switchToggler === false && density == null) {
+      alert("Density cannot be empty");
+      return;
+    }
+
+
     setLoading(true);
     var currentUser = await Auth.currentUserInfo();
     var owner = currentUser.username;
@@ -205,11 +237,11 @@ const AddProductForm = (props) => {
       width: width,
       length: length,
       weightPerUnit: weightPerUnit,
-      location: location,
+      //location: location,
       categories: categories,
       measurable: switchToggler,
       density: density,
-      pincode: pinCode,
+      //pincode: pinCode,
     };
 
     const payload = {
@@ -479,7 +511,7 @@ const AddProductForm = (props) => {
         </Grid>
         {switchToggler === true ? measureablePerUnit : notMeasureable}
 
-        <Typography
+        {/* <Typography
           className={classes.formHeadings}
           style={{ paddingLeft: 20 }}
         >
@@ -520,7 +552,7 @@ const AddProductForm = (props) => {
               autoComplete="Location"
             />
           </Grid>
-        </Grid>
+        </Grid> */}
         <Button
           onClick={submitTruck}
           className="row AllButtons"

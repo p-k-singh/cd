@@ -586,7 +586,7 @@ const ProductDetails = (props) => {
         var temp = {
           value: {
             productName: newValue.value,
-            productType: newValue.label,
+            productType: null,
             categories: null,
             measurable: true,
             length: null,

@@ -30,40 +30,6 @@ const useStyles = makeStyles({
   },
 });
 
-//   constructor(props) {
-//         super(props);
-//         this.state = {
-//             pickupAddress : "",
-//             destinationAddress : "",
-//             pickupPinCode :"",
-//             destinationPinCode : "",
-//             error: ''
-//         };
-//     }
-
-//  handleValidation = () => {
-//                 const {
-//                     pickupAddress ,
-//             destinationAddress ,
-//             pickupPinCode,
-//             destinationPinCode
-//                 } = this.state;
-//                 let error = '';
-//                 let formIsValid = true;
-//                     if(!pickupAddress ||
-//                         !destinationAddress ||
-//                         !pickupPinCode ||
-//                         !destinationPinCode){
-//                         formIsValid = false;
-//                         error = "Input fields cannot be empty";
-//                     }
-
-//        this.setState({error: error});
-//         return formIsValid;
-
-//     }
-//<span style={{ color: "red" }}>{this.state.error}</span>;
-
 const BuyerDetails = (props) => {
   const classes = useStyles();
   const [pickupZipValidator, setPickupZipValidator] = useState("");
@@ -295,7 +261,7 @@ const BuyerDetails = (props) => {
             <TextField
               id="destinationaddress"
               name="destinationaddress"
-              label="Destination address"
+              label="Destination address*"
               fullWidth
               value={props.destinationAddress}
               onChange={(event) => onDestinationChangeController(event)}
@@ -338,23 +304,25 @@ const BuyerDetails = (props) => {
           </Grid>
         </Grid>
         <Typography className={classes.formHeadings}>
-          Additional Note
+          Additional Note 
         </Typography>
 
         <Grid
           container
           spacing={3}
-          style={{ padding: 50, paddingTop: 20, paddingBottom: 30 }}
+          style={{ padding: 20, paddingTop: 20, paddingBottom: 30 }}
         >
-          <TextareaAutosize
-            style={{ minWidth: 400 }}
-            aria-label="minimum height"
-            value={props.additionalNote}
-            onChange={(event) => onAdditionalNoteChangeController(event)}
-            rowsMin={6}
-            rowsMax={12}
-            placeholder="Share if Any..."
-          />
+          <Grid item xs={12} sm={5}>
+            <TextareaAutosize
+              style={{ minWidth: 375 }}
+              aria-label="minimum height"
+              value={props.additionalNote}
+              onChange={(event) => onAdditionalNoteChangeController(event)}
+              rowsMin={6}
+              rowsMax={12}
+              placeholder="Share if Any..."
+            />
+          </Grid>
         </Grid>
       </form>
     </CardContent>

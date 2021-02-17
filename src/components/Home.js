@@ -94,7 +94,7 @@ class Home extends Component {
               <Grid item sm={0.4}></Grid>{" "}
               <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                  <div class="circle">
+                  <div class="circle" style={{ background: "#062B79" }}>
                     <h3 style={{ padding: 20, fontSize: 50 }}>20</h3>
                   </div>
                   <div
@@ -113,7 +113,7 @@ class Home extends Component {
               <Grid item sm={0.4}></Grid>
               <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                  <div class="circle">
+                  <div class="circle" style={{ background: "green" }}>
                     <h3 style={{ padding: 20, fontSize: 50 }}>12</h3>
                   </div>
                   <div
@@ -132,7 +132,7 @@ class Home extends Component {
               <Grid item sm={0.4}></Grid>
               <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                  <div class="circle">
+                  <div class="circle" style={{ background: "orange" }}>
                     <h3 style={{ padding: 20, fontSize: 50 }}>8</h3>
                   </div>
                   <div
@@ -151,7 +151,7 @@ class Home extends Component {
               <Grid item sm={0.4}></Grid>
               <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                  <div class="circle">
+                  <div class="circle" style={{ background: "#C57A7A" }}>
                     <h3 style={{ padding: 20, fontSize: 50 }}>5</h3>
                   </div>
                   <div
@@ -170,7 +170,7 @@ class Home extends Component {
               <Grid item sm={0.4}></Grid>
               <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                  <div class="circle">
+                  <div class="circle" style={{ background: "#5995B7" }}>
                     <h3 style={{ padding: 20, fontSize: 50 }}>2</h3>
                   </div>
                   <div
