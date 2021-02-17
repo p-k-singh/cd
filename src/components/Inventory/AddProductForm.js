@@ -227,6 +227,8 @@ const AddProductForm = (props) => {
     var currentUser = await Auth.currentUserInfo();
     var owner = currentUser.username;
     var data;
+    var location = "India";
+    var pinCode = "123456"
 
     data = {
       owner: owner,
@@ -237,11 +239,11 @@ const AddProductForm = (props) => {
       width: width,
       length: length,
       weightPerUnit: weightPerUnit,
-      //location: location,
+      location: location,
       categories: categories,
       measurable: switchToggler,
       density: density,
-      //pincode: pinCode,
+      pincode: pinCode,
     };
 
     const payload = {
