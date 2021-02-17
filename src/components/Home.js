@@ -1,7 +1,18 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { API } from "aws-amplify";
 import "./Home.css";
 import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
 import {
   TextField,
   Checkbox,
@@ -15,13 +26,13 @@ import {
 } from "@material-ui/core";
 import { PureComponent } from "react";
 import { Sector, Cell } from "recharts";
-import { PieChart, Pie, Legend, Tooltip } from "recharts";
+import { PieChart, Pie } from "recharts";
 
 const data = [
-  { name: "product A", value: 4 },
-  { name: "product B", value: 3 },
-  { name: "product C", value: 3 },
-  { name: "product D", value: 1 },
+  { name: "product A", orders: 4 },
+  { name: "product B", orders: 3 },
+  { name: "product C", orders: 3 },
+  { name: "product D", orders: 1 },
 ];
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -57,18 +68,31 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <div className="widgetWrap">
-          <div className="widgetTitle">Title</div>
+        {/* <div className="widgetWrap">
           <div className="widgetValue">
             <div className="Value">Hello Gaurav</div>
-            <div className="description">Some Text</div>
           </div>
-        </div>
+        </div> */}
         <div>
-          <Grid container spacing={3} style={{ paddingTop: 10 }}>
-            <Grid item sm={0.4}></Grid>{" "}
-            <Grid item sm={2}>
-              <Card>
+          <Card style={{ marginBottom: 10 }}>
+            <div>
+              <Typography
+                style={{
+                  borderBottom: `1px solid black`,
+                  fontSize: 20,
+                  height: 50,
+                  padding: 10,
+                  paddingLeft: 30,
+                  fontWeight: 700,
+                }}
+                fullWidth
+              >
+                Order Details
+              </Typography>
+            </div>
+            <Grid container spacing={3} style={{ marginTop: 10 }}>
+              <Grid item sm={0.4}></Grid>{" "}
+              <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
                   <div class="circle">
                     <h3 style={{ padding: 20, fontSize: 50 }}>20</h3>
@@ -85,11 +109,9 @@ class Home extends Component {
                     Total Orders placed
                   </div>
                 </CardContent>
-              </Card>
-            </Grid>{" "}
-            <Grid item sm={0.4}></Grid>
-            <Grid item sm={2}>
-              <Card>
+              </Grid>{" "}
+              <Grid item sm={0.4}></Grid>
+              <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
                   <div class="circle">
                     <h3 style={{ padding: 20, fontSize: 50 }}>12</h3>
@@ -106,11 +128,9 @@ class Home extends Component {
                     Orders Accepted
                   </div>
                 </CardContent>
-              </Card>
-            </Grid>{" "}
-            <Grid item sm={0.4}></Grid>
-            <Grid item sm={2}>
-              <Card>
+              </Grid>{" "}
+              <Grid item sm={0.4}></Grid>
+              <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
                   <div class="circle">
                     <h3 style={{ padding: 20, fontSize: 50 }}>8</h3>
@@ -127,11 +147,9 @@ class Home extends Component {
                     Orders Picked up
                   </div>
                 </CardContent>
-              </Card>
-            </Grid>{" "}
-            <Grid item sm={0.4}></Grid>
-            <Grid item sm={2}>
-              <Card>
+              </Grid>{" "}
+              <Grid item sm={0.4}></Grid>
+              <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
                   <div class="circle">
                     <h3 style={{ padding: 20, fontSize: 50 }}>5</h3>
@@ -148,11 +166,9 @@ class Home extends Component {
                     Orders in Transit
                   </div>
                 </CardContent>
-              </Card>
-            </Grid>
-            <Grid item sm={0.4}></Grid>
-            <Grid item sm={2}>
-              <Card>
+              </Grid>
+              <Grid item sm={0.4}></Grid>
+              <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
                   <div class="circle">
                     <h3 style={{ padding: 20, fontSize: 50 }}>2</h3>
@@ -169,48 +185,71 @@ class Home extends Component {
                     Orders Delivered
                   </div>
                 </CardContent>
-              </Card>
+              </Grid>
+              <Grid item sm={0.4}></Grid>
             </Grid>
-            <Grid item sm={0.4}></Grid>
-          </Grid>
+          </Card>
         </div>
         <div>
           <Grid container spacing={3} style={{ paddingTop: 10 }}>
             <Grid item xs={12} sm={8}>
-              <Card>
-                <CardContent>
-                  <Grid container spacing={3} style={{ paddingTop: 10 }}>
-                    <Grid item xs={12} sm={4}>
-                      Image
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
+              <div>
+                <Card Style={{ marginBottom: 20 }}>
+                  <CardContent>
+                    <div
                       style={{
                         padding: 5,
                         paddingTop: 10,
-                        paddingBottom: 0,
+                        paddingBottom: 20,
                         textAlign: "center",
                         fontWeight: 700,
                       }}
                     >
                       Total Products placed
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
+                    </div>
+
+                    <LineChart
+                      width={500}
+                      height={190}
+                      data={data}
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+
+                      <Line type="monotone" dataKey="orders" stroke="#82ca9d" />
+                    </LineChart>
+                  </CardContent>
+                </Card>
+              </div>
             </Grid>
             <Grid item xs={12} sm={4}>
               <Card>
                 <CardContent>
-                  <div style={{ textAlign: "center" }}>
-                    <h2> Product Types</h2>
+                  <div
+                    style={{
+                      padding: 5,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      textAlign: "center",
+                      fontWeight: 700,
+                    }}
+                  >
+                    Product Types
                   </div>
                   <div>
                     <PieChart width={300} height={200}>
                       <Pie
                         isAnimationActive={false}
+                        dataKey="orders"
                         data={data}
                         cx={135}
                         cy={100}
@@ -229,6 +268,55 @@ class Home extends Component {
                     </PieChart>
                   </div>
                 </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </div>
+        <div>
+          <Grid container spacing={3} style={{ paddingTop: 10 }}>
+            <Grid
+              item
+              xs={12}
+              sm={4}
+              style={{
+                paddingTop: 10,
+                paddingBottom: 0,
+                textAlign: "center",
+                fontWeight: 700,
+              }}
+            >
+              <Card>
+                <CardContent>Total Amount Charged</CardContent>
+              </Card>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={4}
+              style={{
+                paddingTop: 10,
+                paddingBottom: 0,
+                textAlign: "center",
+                fontWeight: 700,
+              }}
+            >
+              <Card>
+                <CardContent> Amount to be paid</CardContent>
+              </Card>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={4}
+              style={{
+                paddingTop: 10,
+                paddingBottom: 0,
+                textAlign: "center",
+                fontWeight: 700,
+              }}
+            >
+              <Card>
+                <CardContent>Upcoming payments to be made</CardContent>
               </Card>
             </Grid>
           </Grid>

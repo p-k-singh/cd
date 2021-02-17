@@ -5,7 +5,6 @@ body {
 }
 
 .widgetWrap {
-  background-color: rgb(245, 245, 245);
 }
 
 .widgetTitle {
@@ -17,7 +16,7 @@ body {
 }
 
 .circle {
-  background: rgb(180, 144, 180);
+  background: rgba(49, 44, 49, 0.075);
   width: 150;
 
   height: 150;
@@ -25,9 +24,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: rgb(0, 0, 0);
 }
-
 
 .circle > div {
   text-align: center;
