@@ -89,7 +89,7 @@ const PriceCalculator = (props) => {
   const [loading, setLoading] = useState(true);
   const [calculating, setCalculating] = useState(false);
   const [showPrice, setShowPrice] = useState(false);
-  const [estimatedPrice, setEstimatedPrice] = useState();
+  const [estimatedPrice, setEstimatedPrice] = useState(null);
   const [pickuppin, setpickuppin] = useState();
   const [destinationpin, setdestinationpin] = useState();
   const [pickupZipValidator, setPickupZipValidator] = useState("");
@@ -143,6 +143,12 @@ const PriceCalculator = (props) => {
   }, []);
 
   useEffect(() => {}, []);
+  const emptyPinValidator = (string) => {
+    if (string === "" || string == null) {
+      return false;
+    }
+    return true;
+  };
 
   const onDestinationZipChangeController = (event) => {
     var destinationPinCode = parseInt(event.target.value, 10);
@@ -262,12 +268,34 @@ const PriceCalculator = (props) => {
     setChosenProducts(items);
   };
   const calculatePrice = () => {
+    const msg = myValidator(chosenProducts);
+    if (msg !== "") {
+      alert(msg);
+      return;
+    }
+    if (pickupZipValidator !== "") {
+      alert("Pickup zip must be of 6 digits.");
+      return;
+    }
+    if (deliverZipValidator !== "") {
+      alert("Destination zip must be of 6 digits.");
+      return;
+    }
+    if (
+      emptyPinValidator(destinationpin) === false ||
+      emptyPinValidator(pickuppin) === false
+    ) {
+      alert("Zip codes cannot be empty");
+
+      return;
+    }
     setCalculating(true);
+
     //do something
 
     var items = [];
 
-    for (var i = 0; i < chosenProducts.length; i++) {
+   for (var i = 0; i < chosenProducts.length; i++) {
       //var temp=''
       items.push({
         toPin: pickuppin,
@@ -306,6 +334,21 @@ const PriceCalculator = (props) => {
     setShowPrice(true);
     setCalculating(false);
   };
+
+  const myValidator = (arr) => {
+    var msg = "";
+    arr.map((item) => {
+      if (item === null) {
+        msg = "Product details cannot be empty";
+        return;
+      }
+      if (item.value.measurable === true && item.noOfUnits === 0) {
+        msg = " Number of Units cannot be 0";
+        return;
+      }
+    });
+    return msg;
+  };
   const onNoOfUnitsChange = (event, i) => {
     var items = chosenProducts.slice();
     if (chosenProducts[i] === null) return;
@@ -341,7 +384,7 @@ const PriceCalculator = (props) => {
         var temp = {
           value: {
             productName: newValue.value,
-            productType: newValue.label,
+            productType: null,
             categories: null,
             measurable: true,
             length: null,
