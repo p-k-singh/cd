@@ -295,7 +295,7 @@ const PriceCalculator = (props) => {
 
     var items = [];
 
-   for (var i = 0; i < chosenProducts.length; i++) {
+    for (var i = 0; i < chosenProducts.length; i++) {
       //var temp=''
       items.push({
         toPin: pickuppin,
@@ -315,7 +315,7 @@ const PriceCalculator = (props) => {
     var params = JSON.stringify(items);
     // alert(`/pricing?items=`+params)
     // return
-    var exactParam = `?items=${params}&useCase=price`
+    var exactParam = `?items=${params}&useCase=price`;
     //console.log(exactParam)
     //return
     API.get("GoFlexeOrderPlacement", `/pricing` + exactParam)
@@ -342,13 +342,76 @@ const PriceCalculator = (props) => {
         msg = "Product details cannot be empty";
         return;
       }
-      if (item.value.measurable === true && item.noOfUnits === 0) {
+      if (item.value.measurable === true && item.noOfUnits == 0) {
         msg = " Number of Units cannot be 0";
         return;
       }
+      if (
+        (item.value.measurable === true && item.value.height == null) ||
+        (item.value.measurable === true && item.value.height == 0) ||
+        (item.value.measurable === true && item.value.height == "")
+      ) {
+        msg = "Product Height cannot be empty";
+        return;
+      }
+      if (
+        (item.value.measurable === true && item.value.length == null) ||
+        (item.value.measurable === true && item.value.length == 0) ||
+        (item.value.measurable === true && item.value.length == "")
+      ) {
+        msg = "Product Length cannot be empty";
+        return;
+      }
+      if (
+        (item.value.measurable === true && item.value.width == null) ||
+        (item.value.measurable === true && item.value.width == 0) ||
+        (item.value.measurable === true && item.value.width == "")
+      ) {
+        msg = "Product width cannot be empty";
+        return;
+      }
+      if (
+        (item.value.measurable === true && item.value.weightPerUnit == null) ||
+        (item.value.measurable === true && item.value.weightPerUnit == 0) ||
+        (item.value.measurable === true && item.value.weightPerUnit == "")
+      ) {
+        msg = "WeightPerUnit cannot be empty";
+        return;
+      }
+      if (
+        (item.value.measurable === true && item.value.unit == null) ||
+        (item.value.measurable === true && item.value.unit == "")
+      ) {
+        msg = "Measurement unit cannot be empty";
+        return;
+      }
+      if (
+        (item.value.measurable == null || item.value.measurable == false) &&
+        (item.value.density == 0 || item.value.density == null)
+      ) {
+        msg = "Weight Per Cubic meter cannot be empty";
+        return;
+      }
+      if (
+        (item.value.measurable == null || item.value.measurable == false) &&
+        item.totalWeight == 0
+      ) {
+        msg = "Total Weight cannot be 0";
+        return;
+      }
+      if (item.value.productType == null) {
+        msg = "Product Type cannot be empty";
+        return;
+      }
+      if (item.value.productType == null) {
+        msg = "Product Type cannot be empty";
+        return;
+      }
     });
+
     return msg;
   };
+
   const onNoOfUnitsChange = (event, i) => {
     var items = chosenProducts.slice();
     if (chosenProducts[i] === null) return;
