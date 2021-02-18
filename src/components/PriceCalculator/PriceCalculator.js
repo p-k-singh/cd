@@ -89,7 +89,7 @@ const PriceCalculator = (props) => {
   const [loading, setLoading] = useState(true);
   const [calculating, setCalculating] = useState(false);
   const [showPrice, setShowPrice] = useState(false);
-  const [estimatedPrice, setEstimatedPrice] = useState(1500);
+  const [estimatedPrice, setEstimatedPrice] = useState(null);
   const [pickuppin, setpickuppin] = useState();
   const [destinationpin, setdestinationpin] = useState();
   const [pickupZipValidator, setPickupZipValidator] = useState("");
@@ -295,7 +295,7 @@ const PriceCalculator = (props) => {
 
     var items = [];
 
-    for (var i = 0; i < chosenProducts.length; i++) {
+   for (var i = 0; i < chosenProducts.length; i++) {
       //var temp=''
       items.push({
         toPin: pickuppin,
@@ -312,16 +312,13 @@ const PriceCalculator = (props) => {
         totalWeight: chosenProducts[i].totalWeight,
       });
     }
-
-    // const payload = {
-    //   body:{
-    //     items:items
-    //   }
-    // }
     var params = JSON.stringify(items);
     // alert(`/pricing?items=`+params)
     // return
-    API.get("GoFlexeOrderPlacement", `/pricing?items=` + params)
+    var exactParam = `?items=${params}&useCase=price`
+    //console.log(exactParam)
+    //return
+    API.get("GoFlexeOrderPlacement", `/pricing` + exactParam)
       .then((resp) => {
         console.log(resp);
         setShowPrice(true);
