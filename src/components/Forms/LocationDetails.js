@@ -54,6 +54,7 @@ const BuyerDetails = (props) => {
     var pickupAddress = event.target.value;
     props.setPickupAddressDispatcher(pickupAddress);
   };
+
   const onPickupDateChangeController = (event) => {
     var pickupDate = event.target.value;
     var today = new Date();
@@ -172,6 +173,7 @@ const BuyerDetails = (props) => {
   const onAdditionalNoteChangeController = (event) => {
     props.setAdditionalNoteDispatcher(event.target.value);
   };
+
   return (
     <CardContent style={{ padding: 0 }}>
       <Typography className="TypographyTitle" gutterBottom>
@@ -259,7 +261,7 @@ const BuyerDetails = (props) => {
             <TextField
               id="destinationaddress"
               name="destinationaddress"
-              label="Destination address"
+              label="Destination address*"
               fullWidth
               value={props.destinationAddress}
               onChange={(event) => onDestinationChangeController(event)}
@@ -302,23 +304,25 @@ const BuyerDetails = (props) => {
           </Grid>
         </Grid>
         <Typography className={classes.formHeadings}>
-          Additional Note
+          Additional Note 
         </Typography>
 
         <Grid
           container
           spacing={3}
-          style={{ padding: 50, paddingTop: 20, paddingBottom: 30 }}
+          style={{ padding: 20, paddingTop: 20, paddingBottom: 30 }}
         >
-          <TextareaAutosize
-            style={{ minWidth: 400 }}
-            aria-label="minimum height"
-            value={props.additionalNote}
-            onChange={(event) => onAdditionalNoteChangeController(event)}
-            rowsMin={6}
-            rowsMax={12}
-            placeholder="Share if Any..."
-          />
+          <Grid item xs={12} sm={5}>
+            <TextareaAutosize
+              style={{ minWidth: 375 }}
+              aria-label="minimum height"
+              value={props.additionalNote}
+              onChange={(event) => onAdditionalNoteChangeController(event)}
+              rowsMin={6}
+              rowsMax={12}
+              placeholder="Share if Any..."
+            />
+          </Grid>
         </Grid>
       </form>
     </CardContent>

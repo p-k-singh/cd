@@ -39,6 +39,24 @@ const CompanyKYC = (props) => {
     setMyState({ ...myState, [event.target.name]: event.target.value });
   };
   const submitKYC = () => {
+    if (myState.pan == "") {
+      alert("PAN Details cannot be empty");
+      return;
+    }
+    if (myState.gst == "") {
+      alert("GSTIN cannot be empty");
+      return;
+    }
+
+    if (panDoc == null || panDoc == "") {
+      alert(" Please upload your PAN Proof");
+      return;
+    }
+    if (gstDoc == null || panDoc == "") {
+      alert(" Please upload your GSTIN Proof");
+      return;
+    }
+
     setLoading(true);
     var panLink, gstinLink;
     const metaData = {

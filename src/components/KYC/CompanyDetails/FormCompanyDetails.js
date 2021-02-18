@@ -43,6 +43,20 @@ const CompanyKYC = (props) => {
     setMyState({ ...myState, [event.target.name]: event.target.value });
   };
   const submitKYC = () => {
+    if (
+      myState.registeredName == "" ||
+      myState.registeredAddress == "" ||
+      myState.registeredEmail == "" ||
+      myState.registeredContactNo == ""
+    ) {
+      alert("Company Details cannot be blank");
+      return;
+    }
+    if (registrationDoc == "" || registrationDoc == null) {
+      alert(" Please upload the Registration Certificate");
+      return;
+    }
+
     setLoading(true);
     var docLink;
     const metaData = {
