@@ -287,6 +287,9 @@ class Home extends Component {
             >
               <Card>
                 <CardContent>Total Amount Charged</CardContent>
+                <div class="paymentText" style={{ padding: 20 }}>
+                  Rs. 2773
+                </div>
               </Card>
             </Grid>
             <Grid
@@ -302,6 +305,9 @@ class Home extends Component {
             >
               <Card>
                 <CardContent> Amount to be paid</CardContent>
+                <div class="paymentText" style={{ padding: 20 }}>
+                  Rs. 2773
+                </div>
               </Card>
             </Grid>
             <Grid
@@ -317,6 +323,9 @@ class Home extends Component {
             >
               <Card>
                 <CardContent>Upcoming payments to be made</CardContent>
+                <div class="paymentText" style={{ padding: 20 }}>
+                  Rs. 2773
+                </div>
               </Card>
             </Grid>
           </Grid>
