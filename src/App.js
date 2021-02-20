@@ -6,7 +6,9 @@ import Home from "./components/Home";
 import Form from "./components/Forms/Checkout";
 import RedirForm from "./components/Forms/ForwardedCheckout";
 import MyProfile from "./components/Profile/MyProfile";
+
 import PriceCalculator from "./components/PriceCalculator/PriceCalculator";
+import OpenPriceCalculator from "./components/OpenPriceCalculator";
 import Success from "./components/OrderStatus/orderSuccess";
 import Failure from "./components/OrderStatus/orderFailure";
 import MyOrders from "./components/MyOrders/MyOrders";
@@ -176,6 +178,7 @@ function App(props) {
             />
             {/* Price Calculator */}
             <Route exact path="/price-calculator" component={PriceCalculator} />
+            <Route exact path="/OpenPriceCal" component={OpenPriceCalculator} />
             <Route exact path="/resetPassword" component={ResetPassword} />
             <Redirect to="/" />
           </Switch>
