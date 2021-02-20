@@ -69,10 +69,11 @@ const useStyles = makeStyles({
 const PaymentIndex = () => {
   const classes = useStyles();
   const [paymentOption, setPaymentOption] = useState("fullPayment");
-  const [data, setData] = useState(null);
+  //const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [paymentRatio, setPaymentRatio] = useState("50-50");
   const [paymentMode, setPaymentMode] = useState("accountTransfer");
+  const [data,setData] = useState(null)
   const handlePaymentOptionChange = (event) => {
     setPaymentOption(event.target.value);
   };
@@ -88,8 +89,14 @@ const PaymentIndex = () => {
     API.get("GoFlexeOrderPlacement", `/customer-payments` + param)
       .then((resp) => {
         console.log(resp);
+        
+        //console.log(resp.paymentId)
+        setData({
+          paymentId:resp.paymentId
+        });
+        
         setLoading(false);
-        setData(data);
+        
       })
       .catch((error) => {
         console.log(error);
@@ -101,7 +108,7 @@ const PaymentIndex = () => {
     <React.Fragment>
       <Card style={{ padding: 10 }}>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
-          Total Amount to be paid: 10000 INR
+          Total Amount to be paid: {data!==null ? data.paymentId: 'x'} INR
         </Typography>
         {/* <HelpIcon /> */}
         <Typography style={{ fontSize: 18, marginBottom: 8 }}>
