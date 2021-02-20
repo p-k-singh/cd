@@ -179,10 +179,7 @@ function SimpleCard(props) {
         msg = " Number of Units cannot be 0";
         return;
       }
-      // (item.value.measurable === true && item.value.length == null) ||
-      //   (item.value.measurable === true && item.value.width == null) ||
-      //   (item.value.measurable === true && item.value.weightPerUnit == null) ||
-      //   (item.value.measurable === true && item.value.unit == "")
+
       if (
         (item.value.measurable === true && item.value.height == null) ||
         (item.value.measurable === true && item.value.height == 0) ||
@@ -385,6 +382,7 @@ function SimpleCard(props) {
           pickupSlot: props.pickupSlot,
           additionalNote: props.additionalNote,
           items: items,
+          estimatedPrice: "100",
         },
       ],
     };

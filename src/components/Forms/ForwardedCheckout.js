@@ -108,19 +108,26 @@ function ForwardedCheckout(props) {
   };
 
   const handleNextClick = () => {
+    if (emptyStringValidator(props.pickupPin) === false) {
+      alert("Pickup Zip cannot be empty");
 
-    if(emptyStringValidator(props.pickupPin) === false){ alert("Pickup Zip cannot be empty");
+      return;
+    }
+    if (emptyStringValidator(props.destinationPin) === false) {
+      alert("Destination Zip cannot be empty");
 
-      return;}
-       if(emptyStringValidator(props.destinationPin) === false){ alert("Destination Zip cannot be empty");
+      return;
+    }
+    if (emptyStringValidator(props.pickupAddress) === false) {
+      alert("Pickup Address cannot be empty");
 
-      return;}
-       if(emptyStringValidator(props.pickupAddress) === false){ alert("Pickup Address cannot be empty");
+      return;
+    }
+    if (emptyStringValidator(props.destinationAddress) === false) {
+      alert("Destination Address cannot be empty");
 
-      return;}
-       if(emptyStringValidator(props.destinationAddress) === false){ alert("Destination Address cannot be empty");
-
-      return;}
+      return;
+    }
 
     if (pinValidator(props.pickupPin) === false) {
       alert("Please Enter Correct Pickup Pincode");
@@ -174,6 +181,7 @@ function ForwardedCheckout(props) {
           measurable: item[i].value.measurable,
           density: item[i].value.density,
           pincode: "-",
+          estimatedPrice: props.estimatedPrice,
         };
 
         const payload = {
