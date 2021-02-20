@@ -3,7 +3,7 @@ import { API } from "aws-amplify";
 import "./Home.css";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-
+import Rating from "@material-ui/lab/Rating";
 import {
   LineChart,
   Line,
@@ -34,7 +34,17 @@ const data = [
   { name: "product C", orders: 3 },
   { name: "product D", orders: 1 },
 ];
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
+const goodsdata = [
+  { name: "% of Goods Delivered", Percent: 240 },
+  { name: "% of Goods PickedUp", Percent: 520 },
+];
+const pilferagedata = [
+  { name: "% of Goods with Pilferage", Percent: 10 },
+  { name: "% of Goods with 0 Pilferage", Percent: 76 },
+];
+const GoodsCOLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const PilferageCOLORS = ["#FF8042", "#00C49F", "#FFBB28"];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -192,46 +202,80 @@ class Home extends Component {
         </div>
         <div>
           <Grid container spacing={3} style={{ paddingTop: 10 }}>
-            <Grid item xs={12} sm={8}>
-              <div>
-                <Card Style={{ marginBottom: 20 }}>
-                  <CardContent>
-                    <div
+            <Grid item xs={12} sm={6}>
+              <Card>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
                       style={{
-                        padding: 5,
-                        paddingTop: 10,
-                        paddingBottom: 20,
-                        textAlign: "center",
+                        fontSize: 20,
+                        height: 50,
+                        padding: 20,
+                        paddingLeft: 30,
                         fontWeight: 700,
                       }}
+                      fullWidth
                     >
-                      Total Products placed
-                    </div>
-
-                    <LineChart
-                      width={500}
-                      height={190}
-                      data={data}
-                      margin={{
-                        top: 5,
-                        right: 30,
-                        left: 20,
-                        bottom: 5,
+                      Customer Rating
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Rating
+                      style={{
+                        padding: 20,
                       }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-
-                      <Line type="monotone" dataKey="orders" stroke="#82ca9d" />
-                    </LineChart>
-                  </CardContent>
-                </Card>
-              </div>
+                      size="large"
+                      name="rating"
+                      precision={0.5}
+                      value={3.5}
+                      readOnly
+                    />
+                  </Grid>
+                </Grid>
+              </Card>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
+              <Card>
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={7}>
+                    <Typography
+                      style={{
+                        fontSize: 20,
+                        height: 50,
+                        padding: 20,
+                        paddingBottom: 50,
+                        paddingLeft: 30,
+                        fontWeight: 700,
+                      }}
+                      fullWidth
+                    >
+                      Total Amount saved :
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={4}
+                    style={{
+                      fontSize: 20,
+
+                      padding: 20,
+                      padddingTop: 50,
+                      paddingLeft: 30,
+
+                      fontWeight: 700,
+                    }}
+                  >
+                    ₹ 9,567
+                  </Grid>
+                </Grid>
+              </Card>
+            </Grid>
+          </Grid>
+        </div>
+        <div>
+          <Grid container spacing={3} style={{ paddingTop: 10 }}>
+            <Grid item xs={12} sm={6}>
               <Card>
                 <CardContent>
                   <div
@@ -241,31 +285,144 @@ class Home extends Component {
                       paddingBottom: 10,
                       textAlign: "center",
                       fontWeight: 700,
+                      borderBottom: `1px solid lightgrey`,
                     }}
                   >
-                    Product Types
+                    Logistics quality for pilferage
                   </div>
+
                   <div>
-                    <PieChart width={300} height={200}>
-                      <Pie
-                        isAnimationActive={false}
-                        dataKey="orders"
-                        data={data}
-                        cx={135}
-                        cy={100}
-                        labelLine={false}
-                        label={renderCustomizedLabel}
-                        outerRadius={80}
+                    <Grid container>
+                      <Grid item xs={12} sm={7}>
+                        <PieChart width={300} height={200}>
+                          <Pie
+                            isAnimationActive={false}
+                            dataKey="Percent"
+                            data={pilferagedata}
+                            cx={135}
+                            cy={100}
+                            labelLine={false}
+                            label={renderCustomizedLabel}
+                            outerRadius={80}
+                          >
+                            {data.map((entry, index) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={
+                                  PilferageCOLORS[
+                                    index % PilferageCOLORS.length
+                                  ]
+                                }
+                              />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </Grid>
+                      <Grid item xs={12} sm={1} style={{ marginTop: 75 }}>
+                        <div
+                          style={{
+                            background: "#00C49F",
+                            width: 10,
+                            marginBottom: 35,
+                            height: 10,
+                          }}
+                        ></div>
+                        {/* <div
+                          style={{
+                            background: "#0088FE",
+                            width: 10,
+
+                            height: 10,
+                          }}
+                        ></div> */}
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={4}
+                        style={{ marginTop: 70, fontWeight: 600, fontSize: 12 }}
                       >
-                        {data.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
-                          />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
+                        <div style={{ marginBottom: 30 }}>
+                          % of Goods with 0 Pilferage
+                        </div>
+                        {/* <div>% Goods Picked Up</div> */}
+                      </Grid>
+                    </Grid>
+                  </div>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Card>
+                <CardContent>
+                  <div
+                    style={{
+                      padding: 5,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      textAlign: "center",
+                      fontWeight: 700,
+                      borderBottom: `1px solid lightgrey`,
+                    }}
+                  >
+                    Order statistics for pick up and delivered
+                  </div>
+
+                  <div>
+                    <Grid container>
+                      <Grid item xs={12} sm={7}>
+                        <PieChart width={300} height={200}>
+                          <Pie
+                            isAnimationActive={false}
+                            dataKey="Percent"
+                            data={goodsdata}
+                            cx={135}
+                            cy={100}
+                            labelLine={false}
+                            label={renderCustomizedLabel}
+                            outerRadius={80}
+                          >
+                            {data.map((entry, index) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={GoodsCOLORS[index % GoodsCOLORS.length]}
+                              />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </Grid>
+                      <Grid item xs={12} sm={1} style={{ marginTop: 75 }}>
+                        <div
+                          style={{
+                            background: "#0088FE",
+                            width: 10,
+                            marginBottom: 35,
+                            height: 10,
+                          }}
+                        ></div>
+                        <div
+                          style={{
+                            background: "#00C49F",
+                            width: 10,
+
+                            height: 10,
+                          }}
+                        ></div>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={4}
+                        style={{ marginTop: 70, fontWeight: 600, fontSize: 12 }}
+                      >
+                        <div style={{ marginBottom: 30 }}>
+                          % Goods Delivered
+                        </div>
+                        <div>% Goods Picked Up</div>
+                      </Grid>
+                    </Grid>
                   </div>
                 </CardContent>
               </Card>

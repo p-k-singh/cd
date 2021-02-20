@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -10,6 +10,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Upload from "./Upload/Upload";
 import InfoIcon from "@material-ui/icons/Info";
+import { Auth, API } from "aws-amplify";
 import {
   Select,
   InputLabel,
@@ -44,9 +45,32 @@ const useStyles = makeStyles({
     minWidth: 120,
   },
 });
+
+// {
+//   "queryStringParameters": {
+//     "orderId": "154"
+//   },
+//   "httpMethod": "POST",
+//   "body": {
+//     "invokeType": "external",
+//     "orderId": "154",
+//     "totalAmount": "1200",
+//     "paymentOption": "partialPayment",
+//     "paymentMode": "accountTransfer",
+//     "paymentModeDetails": {
+//       "referenceId": "idMe"
+//     },
+//     "paymentOptionDetails": {
+//       "paymentRatio": 30
+//     }
+//   }
+// }
+
 const PaymentIndex = () => {
   const classes = useStyles();
   const [paymentOption, setPaymentOption] = useState("fullPayment");
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [paymentRatio, setPaymentRatio] = useState("50-50");
   const [paymentMode, setPaymentMode] = useState("accountTransfer");
   const handlePaymentOptionChange = (event) => {
@@ -59,12 +83,25 @@ const PaymentIndex = () => {
     setPaymentMode(event.target.value);
     // alert(event.target.value)
   };
+  useEffect(() => {
+    var param = `?orderId=154`;
+    API.get("GoFlexeOrderPlacement", `/customer-payments` + param)
+      .then((resp) => {
+        console.log(resp);
+        setLoading(false);
+        setData(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, []);
 
   const fullPayToAccountDashboard = (
     <React.Fragment>
       <Card style={{ padding: 10 }}>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
-          Total Amount to be paid: 10,000 INR
+          Total Amount to be paid: 10000 INR
         </Typography>
         {/* <HelpIcon /> */}
         <Typography style={{ fontSize: 18, marginBottom: 8 }}>
@@ -149,79 +186,172 @@ const PaymentIndex = () => {
     </React.Fragment>
   );
 
-  const cashPayment = (
-    <React.Fragment>
-      <Card style={{ padding: 10 }}>
-        <Typography style={{ fontSize: 20, marginBottom: 20 }}>
-          Total Amount to be paid: 10,000 INR
-        </Typography>
-        {/* <HelpIcon /> */}
-        <Typography style={{ marginBottom: 10 }}>
-          Please provide the name and contact details of the payer
-        </Typography>
-        <div className="row">
-          <div>
-            <p
-              style={{
-                marginLeft: 20,
-                marginRight: 8,
-                marginTop: 8,
-                fontSize: 18,
-              }}
-            >
-              Name:
-            </p>
+  const cashPayment =
+    data == null ? (
+      <React.Fragment>
+        <Card style={{ padding: 10 }}>
+          <Typography style={{ fontSize: 20, marginBottom: 20 }}>
+            Total Amount to be paid: 10,000 INR
+          </Typography>
+          {/* <HelpIcon /> */}
+          <Typography style={{ marginBottom: 10 }}>
+            Please provide the name and contact details of the payer
+          </Typography>
+          <div className="row">
+            <div>
+              <p
+                style={{
+                  marginLeft: 20,
+                  marginRight: 8,
+                  marginTop: 8,
+                  fontSize: 18,
+                }}
+              >
+                Name:
+              </p>
+            </div>
+            <div>
+              <TextField
+                variant="outlined"
+                id="standard-size-small"
+                size="small"
+              />
+            </div>
           </div>
-          <div>
-            <TextField
-              variant="outlined"
-              id="standard-size-small"
-              size="small"
-            />
+          <div className="row">
+            <div>
+              <p
+                style={{
+                  marginLeft: 20,
+                  marginRight: 8,
+                  marginTop: 8,
+                  fontSize: 18,
+                }}
+              >
+                Phone:
+              </p>
+            </div>
+            <div>
+              <TextField
+                variant="outlined"
+                id="standard-size-small"
+                size="small"
+              />
+            </div>
           </div>
-        </div>
-        <div className="row">
-          <div>
-            <p
-              style={{
-                marginLeft: 20,
-                marginRight: 8,
-                marginTop: 8,
-                fontSize: 18,
-              }}
-            >
-              Phone:
-            </p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              margin: 20,
+            }}
+          >
+            <Button variant="contained" style={{ backgroundColor: "#FF8C00" }}>
+              Submit
+            </Button>
           </div>
-          <div>
-            <TextField
-              variant="outlined"
-              id="standard-size-small"
-              size="small"
-            />
-          </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            margin: 20,
-          }}
-        >
-          <Button variant="contained" style={{ backgroundColor: "#FF8C00" }}>
-            Submit
-          </Button>
-        </div>
 
-        <Divider style={{ marginBottom: 20 }} />
-        <p>
-          Note:Please hand over the cash to the delivery personnel at the time
-          of delivery
-        </p>
-      </Card>
-    </React.Fragment>
-  );
+          <Divider style={{ marginBottom: 20 }} />
+          <p>
+            Note:Please hand over the cash to the delivery personnel at the time
+            of delivery
+          </p>
+        </Card>
+      </React.Fragment>
+    ) : (
+      <React.Fragment>
+        <Card style={{ padding: 10 }}>
+          <Typography style={{ fontSize: 20, marginBottom: 20 }}>
+            Total Amount to be paid: 10,000 INR
+          </Typography>
+          {/* <HelpIcon /> */}
+          <Typography style={{ marginBottom: 10 }}>
+            Please provide the name and contact details of the payer
+          </Typography>
+          <div className="row">
+            <div>
+              <p
+                style={{
+                  marginLeft: 20,
+                  marginRight: 8,
+                  marginTop: 8,
+                  fontSize: 18,
+                }}
+              >
+                Name:
+              </p>
+            </div>
+            <div>
+              {/* <TextField
+                variant="outlined"
+                id="standard-size-small"
+                size="small"
+              /> */}
+              <p
+                style={{
+                  marginLeft: 20,
+                  marginRight: 8,
+                  marginTop: 8,
+                  fontSize: 18,
+                }}
+              >
+                Gaurav
+              </p>
+            </div>
+          </div>
+          <div className="row">
+            <div>
+              <p
+                style={{
+                  marginLeft: 20,
+                  marginRight: 8,
+                  marginTop: 8,
+                  fontSize: 18,
+                }}
+              >
+                Phone:
+              </p>
+            </div>
+            <div>
+              {/* <TextField
+                variant="outlined"
+                id="standard-size-small"
+                size="small"
+              /> */}
+              <p
+                style={{
+                  marginLeft: 20,
+                  marginRight: 8,
+                  marginTop: 8,
+                  fontSize: 18,
+                }}
+              >
+                7073142922
+              </p>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              margin: 20,
+            }}
+          >
+            <Button variant="contained" style={{ backgroundColor: "#FF8C00" }}>
+              Submit
+            </Button>
+          </div>
+
+          <Divider style={{ marginBottom: 20 }} />
+          <p>
+            Note:Please hand over the cash to the delivery personnel at the time
+            of delivery
+          </p>
+        </Card>
+      </React.Fragment>
+    );
 
   const OthersPayment = (
     <React.Fragment>
