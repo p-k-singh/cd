@@ -36,20 +36,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "1%",
   },
 }));
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <LocationDetails />;
-    // case 1:
-    //      return <ProductDetails/>
-    // case 2:
-    //      return <CustomerDetails/>
-    case 1:
-      return <OrderSummary />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
+
 
 function ForwardedCheckout(props) {
   const classes = useStyles();
@@ -58,6 +45,22 @@ function ForwardedCheckout(props) {
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [estimatedPrice,setEstimatedPrice] = useState(0)
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <LocationDetails />;
+      // case 1:
+      //      return <ProductDetails/>
+      // case 2:
+      //      return <CustomerDetails/>
+      case 1:
+        return <OrderSummary setEstimatedPrice={setEstimatedPrice} />;
+      default:
+        throw new Error("Unknown step");
+    }
+  }
   const pinValidator = (pin) => {
     var greater = 999999,
       smaller = 100000;
@@ -156,6 +159,7 @@ function ForwardedCheckout(props) {
   };
 
   const handlePlaceOrderClick = async () => {
+    
     setLoading(true);
     var currentUser = await Auth.currentUserInfo();
     var owner = currentUser.username;
@@ -181,7 +185,6 @@ function ForwardedCheckout(props) {
           measurable: item[i].value.measurable,
           density: item[i].value.density,
           pincode: "-",
-          estimatedPrice: props.estimatedPrice,
         };
 
         const payload = {
@@ -233,6 +236,7 @@ function ForwardedCheckout(props) {
           pickupSlot: props.pickupSlot,
           additionalNote: props.additionalNote,
           items: items,
+          estimatedPrice:estimatedPrice
         },
       ],
     };

@@ -79,7 +79,7 @@ function Details(props, id) {
         <OrderDetails value={props} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <PaymentIndex />
+        <PaymentIndex orderId={id} />
       </TabPanel>
       <TabPanel value={value} index={2}>
         Pricing
