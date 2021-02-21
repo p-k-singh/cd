@@ -42,7 +42,6 @@ const useStyles = makeStyles({
 
 const OpenPriceCalculator = (props) => {
   const classes = useStyles();
-
   //State Variables for form fields
   const [height, setHeight] = useState();
   const [width, setWidth] = useState();
@@ -60,10 +59,8 @@ const OpenPriceCalculator = (props) => {
   const [redirect, setRedirect] = useState(false);
   const [totalWeight, setTotalWeight] = useState();
   const [density, setDensity] = useState();
-
   const [pickupZipValidator, setPickupZipValidator] = useState("");
   const [deliverZipValidator, setDeliverZipValidator] = useState("");
-
   const [switchToggler, setSwitchToggler] = useState(true);
 
   const handleSwitchTogglerChange = (event) => {
@@ -424,7 +421,7 @@ const OpenPriceCalculator = (props) => {
   };
 
   var content = (
-    <Card className={classes.root}>
+    <Card className={classes.root} style={{width:"100%"}}>
       <CardContent style={{ padding: 0 }}>
         <Typography
           className={classes.title}

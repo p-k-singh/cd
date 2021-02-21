@@ -112,6 +112,11 @@ function App(props) {
             <Switch>
               <Route
                 exact
+                path="/OpenPriceCal"
+                component={OpenPriceCalculator}
+              />
+              <Route
+                exact
                 path="/price-calculator"
                 component={PriceCalculator}
               />
