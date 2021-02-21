@@ -74,6 +74,7 @@ const OrderSummary = (props) => {
     API.get("GoFlexeOrderPlacement", `/pricing` + exactParam)
       .then((resp) => {
         setEstimatedMoney(resp.estimatedPrice);
+        props.setEstimatedPrice(resp.estimatedPrice)
       })
       .catch((err) => {
         setEstimatedMoney("Error: Try Later");
