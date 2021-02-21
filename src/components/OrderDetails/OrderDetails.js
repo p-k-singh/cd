@@ -141,7 +141,7 @@ const OrderDetails = (props) => {
                 {props.value.items.map((unit) => unit.height)} x{" "}
                 {props.value.items.map((unit) => unit.width)} x{" "}
                 {props.value.items.map((unit) => unit.length)}{" "}
-                {props.value.items.map((unit) => unit.unit.label)}
+                {/* {props.value.items.map((unit) => unit ? unit.unit.label: 'x')} */}
               </td>
             </tr>
           </Grid>

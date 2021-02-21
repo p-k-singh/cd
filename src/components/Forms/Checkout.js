@@ -41,25 +41,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "1%",
   },
 }));
-function getStepContent(step, chosenProducts, setChosenProducts) {
-  switch (step) {
-    case 0:
-      return <LocationDetails />;
-    case 1:
-      return (
-        <ProductDetails
-          chosenProducts={chosenProducts}
-          setChosenProducts={setChosenProducts}
-        />
-      );
-    // case 2:
-    //      return <CustomerDetails/>
-    case 2:
-      return <OrderSummary />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
+
 
 function SimpleCard(props) {
   const classes = useStyles();
@@ -69,6 +51,27 @@ function SimpleCard(props) {
   const [failure, setFailure] = useState(false);
   const [loading, setLoading] = useState(false);
   const [chosenProducts, setChosenProducts] = useState([null]);
+  const [estimatedPrice,setEstimatedPrice] = useState(0)
+
+  function getStepContent(step, chosenProducts, setChosenProducts) {
+    switch (step) {
+      case 0:
+        return <LocationDetails />;
+      case 1:
+        return (
+          <ProductDetails
+            chosenProducts={chosenProducts}
+            setChosenProducts={setChosenProducts}
+          />
+        );
+      // case 2:
+      //      return <CustomerDetails/>
+      case 2:
+        return <OrderSummary setEstimatedPrice={setEstimatedPrice} />;
+      default:
+        throw new Error("Unknown step");
+    }
+  }
 
   const handleNextClick = () => {
     if (emptyStringValidator(props.pickupPin) === false) {
@@ -382,7 +385,7 @@ function SimpleCard(props) {
           pickupSlot: props.pickupSlot,
           additionalNote: props.additionalNote,
           items: items,
-          estimatedPrice: "100",
+          estimatedPrice: estimatedPrice
         },
       ],
     };
