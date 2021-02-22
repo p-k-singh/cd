@@ -96,9 +96,16 @@ const Login = (props) => {
               className="img-fluid mb-3 d-none d-md-block"
             />
             <h1>Login to your Account</h1>
-
-            <a href="https://serviceprovider.goflexe.com/#/login">
-              Serivce Provider Login
+            <a href="https://partner.goflexe.com/#/login">
+              <Button
+                style={{
+                  backgroundColor: "orange",
+                }}
+                variant="contained"
+                color="primary"
+              >
+                Serivce Provider Login
+              </Button>
             </a>
           </div>
 

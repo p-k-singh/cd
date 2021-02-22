@@ -108,7 +108,7 @@ const MyOrders = () => {
                   }}
                 >
                   <Grid container spacing={0}>
-                    <Grid item xs={12} style={{}}>
+                    <Grid item sm={12} xs={12} style={{}}>
                       <h6
                         style={{
                           marginBottom: 25,
@@ -118,12 +118,12 @@ const MyOrders = () => {
                         Order Id : <span>{eachOrder.OrderId}</span>
                       </h6>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid itemsm={12} xs={6}>
                       <h6>
                         Order Date : <span>{eachOrder.pickupdate}</span>
                       </h6>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid itemsm={12} xs={6}>
                       <h6>
                         Total Amount : {Math.floor(Math.random() * 100000)}
                       </h6>
@@ -150,10 +150,10 @@ const MyOrders = () => {
                   </h6>
                   <h6>Total Amount : {Math.floor(Math.random() * 100000)}</h6>
                 </Grid> */}
-                <Grid item xs={3}>
+                <Grid itemsm={12} xs={3}>
                   <Grid container spacing={0}>
-                    <Grid item xs={5}></Grid>
-                    <Grid item xs={6}>
+                    <Grid item sm={12} xs={5}></Grid>
+                    <Grid item sm={12} xs={6}>
                       <Button
                         style={{
                           maxWidth: "150px",

@@ -151,7 +151,10 @@ const BuyerDetails = (props) => {
         // Storing data in form of JSON
         var data = await response.json();
         console.log(data);
-        var pickuplocation = data !== null ? data[0].PostOffice[0].Block : "";
+        var pickuplocation =
+          data !== null && data[0].PostOffice !== null
+            ? data[0].PostOffice[0].Block
+            : "";
         setPickupPinLocation(pickuplocation);
       }
       // Calling that async function
@@ -189,7 +192,7 @@ const BuyerDetails = (props) => {
         var data = await response.json();
         console.log(data);
         var Deliverylocation =
-          data !== null && Array.isArray(data[0]) === true 
+          data !== null && data[0].PostOffice !== null
             ? data[0].PostOffice[0].Block
             : "";
         setDeliveryPinLocation(Deliverylocation);
