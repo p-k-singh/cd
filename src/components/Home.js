@@ -6,13 +6,15 @@ import Typography from "@material-ui/core/Typography";
 import Rating from "@material-ui/lab/Rating";
 import { Link } from "react-router-dom";
 import {
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 import {
   TextField,
@@ -26,26 +28,29 @@ import {
   Switch,
 } from "@material-ui/core";
 import { PureComponent } from "react";
-import { Sector, Cell } from "recharts";
+import { Sector } from "recharts";
 import { PieChart, Pie } from "recharts";
 
 const data = [
-  { name: "product A", orders: 4 },
-  { name: "product B", orders: 3 },
-  { name: "product C", orders: 3 },
-  { name: "product D", orders: 1 },
+  {
+    name: "Pickup OnTime",
+
+    Ontime_Delivery: 24,
+  },
+  {
+    name: "Delivery OnTime",
+
+    Ontime_Delivery: 13,
+  },
 ];
 
-const goodsdata = [
-  { name: "% of Goods Delivered", Percent: 240 },
-  { name: "% of Goods PickedUp", Percent: 520 },
-];
 const pilferagedata = [
-  { name: "% of Goods with Pilferage", Percent: 10 },
-  { name: "% of Goods with 0 Pilferage", Percent: 76 },
+  { name: "Goods with Pilferage", Percent: 10 },
+  { name: "Perfect Orders", Percent: 76 },
+  { name: "Damaged Goods", Percent: 16 },
 ];
-const GoodsCOLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-const PilferageCOLORS = ["#FF8042", "#00C49F", "#FFBB28"];
+
+const COLORS = ["#FF8042", "#00C49F", "#FFBB28"];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -291,7 +296,7 @@ class Home extends Component {
                       borderBottom: `1px solid lightgrey`,
                     }}
                   >
-                    Logistics quality for pilferage
+                    Perfect Order %
                   </div>
 
                   <div>
@@ -311,11 +316,7 @@ class Home extends Component {
                             {data.map((entry, index) => (
                               <Cell
                                 key={`cell-${index}`}
-                                fill={
-                                  PilferageCOLORS[
-                                    index % PilferageCOLORS.length
-                                  ]
-                                }
+                                fill={COLORS[index % COLORS.length]}
                               />
                             ))}
                           </Pie>
@@ -325,20 +326,20 @@ class Home extends Component {
                       <Grid item xs={12} sm={1} style={{ marginTop: 75 }}>
                         <div
                           style={{
-                            background: "#00C49F",
+                            background: "#FF8042",
                             width: 10,
                             marginBottom: 35,
                             height: 10,
                           }}
                         ></div>
-                        {/* <div
+                        <div
                           style={{
-                            background: "#0088FE",
+                            background: "#FFBB28",
                             width: 10,
 
                             height: 10,
                           }}
-                        ></div> */}
+                        ></div>
                       </Grid>
                       <Grid
                         item
@@ -347,9 +348,9 @@ class Home extends Component {
                         style={{ marginTop: 70, fontWeight: 600, fontSize: 12 }}
                       >
                         <div style={{ marginBottom: 30 }}>
-                          % of Goods with 0 Pilferage
+                          Goods with Pilferage
                         </div>
-                        {/* <div>% Goods Picked Up</div> */}
+                        <div>Damaged Goods</div>
                       </Grid>
                     </Grid>
                   </div>
@@ -369,63 +370,29 @@ class Home extends Component {
                       borderBottom: `1px solid lightgrey`,
                     }}
                   >
-                    Order statistics for pick up and delivered
+                    On time Delivery
                   </div>
 
                   <div>
-                    <Grid container>
-                      <Grid item xs={12} sm={7}>
-                        <PieChart width={300} height={200}>
-                          <Pie
-                            isAnimationActive={false}
-                            dataKey="Percent"
-                            data={goodsdata}
-                            cx={135}
-                            cy={100}
-                            labelLine={false}
-                            label={renderCustomizedLabel}
-                            outerRadius={80}
-                          >
-                            {data.map((entry, index) => (
-                              <Cell
-                                key={`cell-${index}`}
-                                fill={GoodsCOLORS[index % GoodsCOLORS.length]}
-                              />
-                            ))}
-                          </Pie>
-                          <Tooltip />
-                        </PieChart>
-                      </Grid>
-                      <Grid item xs={12} sm={1} style={{ marginTop: 75 }}>
-                        <div
-                          style={{
-                            background: "#0088FE",
-                            width: 10,
-                            marginBottom: 35,
-                            height: 10,
-                          }}
-                        ></div>
-                        <div
-                          style={{
-                            background: "#00C49F",
-                            width: 10,
+                    <BarChart
+                      width={400}
+                      height={200}
+                      data={data}
+                      margin={{
+                        top: 35,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis dataKey="Ontime_Delivery" fill="#82ca9d" />
+                      <Tooltip />
 
-                            height: 10,
-                          }}
-                        ></div>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={4}
-                        sm={4}
-                        style={{ marginTop: 70, fontWeight: 600, fontSize: 12 }}
-                      >
-                        <div style={{ marginBottom: 30 }}>
-                          % Goods Delivered
-                        </div>
-                        <div>% Goods Picked Up</div>
-                      </Grid>
-                    </Grid>
+                      <Bar dataKey="Ontime_Delivery" fill="#82ca9d" />
+                    </BarChart>
+                    <Tooltip />
                   </div>
                 </CardContent>
               </Card>
