@@ -32,13 +32,15 @@ const useStyles = makeStyles({
 
 const BuyerDetails = (props) => {
   const classes = useStyles();
+
+  const [pinloc, setpinloc] = useState("");
   const [pickupZipValidator, setPickupZipValidator] = useState("");
   const [deliverZipValidator, setDeliverZipValidator] = useState("");
   const [pickupDateValidator, setPickupDateValidator] = useState("");
   const [deliveryDateValidator, setDeliveryDateValidator] = useState("");
   const [PickupPinLocation, setPickupPinLocation] = useState("");
   const [DeliveryPinLocation, setDeliveryPinLocation] = useState("");
-
+  const [PickupNames, setPickupNames] = useState([]);
   useEffect(() => {
     //alert('topin'+props.pickupPin+'from pin'+props.destinationPin)
     var today = new Date();
@@ -155,6 +157,9 @@ const BuyerDetails = (props) => {
           data !== null && data[0].PostOffice !== null
             ? data[0].PostOffice[0].Block
             : "";
+        setPickupNames(
+          data !== null && data[0].PostOffice !== null ? data[0].PostOffice : ""
+        );
         setPickupPinLocation(pickuplocation);
       }
       // Calling that async function
@@ -221,6 +226,10 @@ const BuyerDetails = (props) => {
   const onTimeSlotChangeController = (event) => {
     props.setPickupSlotDispatcher(event.target.value);
   };
+  const onpinlocChangeController = (event) => {
+    setpinloc(event.target.value);
+  };
+
   const onAdditionalNoteChangeController = (event) => {
     props.setAdditionalNoteDispatcher(event.target.value);
   };
@@ -312,6 +321,7 @@ const BuyerDetails = (props) => {
               </Select>
             </FormControl>
           </Grid>
+
           <Grid item xs={12} sm={5}>
             <TextField
               id="destinationaddress"
@@ -358,6 +368,31 @@ const BuyerDetails = (props) => {
               onChange={(event) => onDeliveryDateChangeController(event)}
               autoComplete="shipping address-line1"
             />
+          </Grid>
+          <Grid item xs={12} sm={2}>
+            {PickupNames !== "" ? (
+              <FormControl className={classes.formControl}>
+                <InputLabel htmlFor="age-native-simple">
+                  Pickup Pin suggestion
+                </InputLabel>
+
+                <Select
+                  native
+                  onChange={(event) => onpinlocChangeController(event)}
+                  value={pinloc}
+                  inputProps={{
+                    name: "age",
+                    id: "age-native-simple",
+                  }}
+                >
+                  {PickupNames.map((d) => (
+                    <option>{d.Name}</option>
+                  ))}
+                </Select>
+              </FormControl>
+            ) : (
+              ""
+            )}
           </Grid>
         </Grid>
         <Typography className={classes.formHeadings}>

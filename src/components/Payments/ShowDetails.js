@@ -416,6 +416,7 @@ const ShowDetails = (props) => {
           >
             <Grid item xs={12} sm={4}>
               <FormControl component="fieldset">
+                
                 <FormLabel component="legend">Selected payment mode</FormLabel>
                 <RadioGroup
                   aria-label="gender"

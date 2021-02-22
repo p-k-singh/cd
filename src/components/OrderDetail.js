@@ -62,7 +62,7 @@ function Details(props, id) {
   //console.log('addresss'+props.fromAddress);
   return (
     <div className={classes.root}>
-      <AppBar style={{ background: "#1e7d3a" }} position="static">
+      <AppBar style={{ background: "#fff", color: "black" }} position="static">
         <Tabs
           value={value}
           onChange={handleChange}

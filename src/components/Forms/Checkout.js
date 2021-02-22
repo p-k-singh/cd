@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function SimpleCard(props) {
   const classes = useStyles();
   //Handle Page Change
@@ -51,7 +50,7 @@ function SimpleCard(props) {
   const [failure, setFailure] = useState(false);
   const [loading, setLoading] = useState(false);
   const [chosenProducts, setChosenProducts] = useState([null]);
-  const [estimatedPrice,setEstimatedPrice] = useState(0)
+  const [estimatedPrice, setEstimatedPrice] = useState(0);
 
   function getStepContent(step, chosenProducts, setChosenProducts) {
     switch (step) {
@@ -385,7 +384,7 @@ function SimpleCard(props) {
           pickupSlot: props.pickupSlot,
           additionalNote: props.additionalNote,
           items: items,
-          estimatedPrice: estimatedPrice
+          estimatedPrice: estimatedPrice,
         },
       ],
     };
