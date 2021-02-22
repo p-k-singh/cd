@@ -137,6 +137,7 @@ const PaymentIndex = (props) => {
               ? null
               : resp.new.paymentOption,
           totalAmount: resp.new.totalAmount,
+          paymentModeDetails: resp.new.paymentModeDetails,
         });
       })
       .catch((error) => {
@@ -184,7 +185,7 @@ const PaymentIndex = (props) => {
       .then((resp) => {
         console.log(resp);
         setData({
-          paymentModeDetails: resp.paymentModeDetails,
+          paymentModeDetails: resp.new.paymentModeDetails,
           paymentId: resp.new.paymentId,
           paymentMode: resp.new.paymentMode,
           paymentOption:

@@ -416,7 +416,7 @@ class Home extends Component {
                       </Grid>
                       <Grid
                         item
-                        xs={12}
+                        xs={4}
                         sm={4}
                         style={{ marginTop: 70, fontWeight: 600, fontSize: 12 }}
                       >

@@ -129,7 +129,10 @@ const ShowDetails = (props) => {
                 fontSize: 18,
               }}
             >
-              Reference Id: {props.data.paymentModeDetails.referenceId}
+              Reference Id:{" "}
+              {props.data.paymentMode == "accountTransfer"
+                ? props.data.paymentModeDetails.referenceId
+                : ""}
             </p>
           </div>
         </div>
@@ -147,7 +150,7 @@ const ShowDetails = (props) => {
     <React.Fragment>
       <Card style={{ padding: 10 }}>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
-          Total Amount paid: {data !== null ? data.totalAmount : "x"} INR
+          Total Amount paid: {props.data.totalAmount} INR
         </Typography>
         {/* <HelpIcon /> */}
         <Typography style={{ marginBottom: 10 }}>
@@ -164,11 +167,9 @@ const ShowDetails = (props) => {
               }}
             >
               Name:{" "}
-              {data !== null &&
-              data.paymentModeDetails !== null &&
-              data.paymentModeDetails !== undefined
-                ? data.paymentModeDetails.nameOfPayer
-                : "Null"}
+              {props.data !== null && props.data.paymentMode == "cash"
+                ? props.data.paymentModeDetails.nameOfPayer
+                : ""}
             </p>
           </div>
         </div>
@@ -183,11 +184,9 @@ const ShowDetails = (props) => {
               }}
             >
               Phone:
-              {data !== null &&
-              data.paymentModeDetails !== null &&
-              data.paymentModeDetails !== undefined
-                ? data.paymentModeDetails.phoneOfPayer
-                : "Null"}
+              {props.data.paymentMode == "cash"
+                ? props.data.paymentModeDetails.phoneOfPayer
+                : ""}
             </p>
           </div>
         </div>
@@ -201,11 +200,12 @@ const ShowDetails = (props) => {
     <React.Fragment>
       <Card style={{ padding: 10 }}>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
-          Total Amount paid: {data !== null ? data.totalAmount : "x"} INR
+          Total Amount paid: {props.data.totalAmount} INR
         </Typography>
         {/* <HelpIcon /> */}
         Proof of Payment :
-        <Divider style={{ marginBottom: 20, marginTop: 220 }} />
+        <a href={props.data.paymentModeDetails.chequeLink}>Check here</a>
+        <Divider style={{ marginBottom: 20, marginTop: 50 }} />
       </Card>
     </React.Fragment>
   );
@@ -323,7 +323,7 @@ const ShowDetails = (props) => {
               )}
             </FormControl>
           )}
-          {paymentOption == "Subscription" ? (
+          {props.data.paymentOption == "Subscription" ? (
             <FormControl
               style={{ marginLeft: 50 }}
               className={classes.formControl}
@@ -334,25 +334,33 @@ const ShowDetails = (props) => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={paymentRatio}
+                value={props.data.paymentModeDetails.paymentCycle}
 
                 //   value={age}
                 //   onChange={handleChange}
               >
-                <MenuItem value="Monthly">Monthly</MenuItem>
-                <MenuItem value="Weekly">Weekly</MenuItem>
+                {props.data.paymentModeDetails.paymentCycle == "Monthly" ? (
+                  <MenuItem value="Monthly">Monthly</MenuItem>
+                ) : (
+                  ""
+                )}
+                {props.data.paymentModeDetails.paymentCycle == "Weekly" ? (
+                  <MenuItem value="Weekly">Weekly</MenuItem>
+                ) : (
+                  ""
+                )}
               </Select>
-              {paymentRatio === "Monthly" && (
+              {props.data.paymentModeDetails.paymentCycle === "Monthly" && (
                 <FormHelperText>Pay each Month</FormHelperText>
               )}
-              {paymentRatio === "Weekly" && (
+              {props.data.paymentModeDetails.paymentCycle === "Weekly" && (
                 <FormHelperText>Pay each Week</FormHelperText>
               )}
             </FormControl>
           ) : (
             ""
           )}
-          {props.data.paymentModeDetails.paymentOption == "partialPayment" && (
+          {props.data.paymentOption == "partialPayment" && (
             <FormControl
               style={{ marginLeft: 50 }}
               className={classes.formControl}

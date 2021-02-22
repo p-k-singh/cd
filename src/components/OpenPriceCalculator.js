@@ -421,7 +421,7 @@ const OpenPriceCalculator = (props) => {
   };
 
   var content = (
-    <Card className={classes.root} style={{width:"100%"}}>
+    <Card className={classes.root} style={{ width: "100%" }}>
       <CardContent style={{ padding: 0 }}>
         <Typography
           className={classes.title}
@@ -439,20 +439,6 @@ const OpenPriceCalculator = (props) => {
           Price Calculator
         </Typography>
         <form>
-          <FormControlLabel
-            style={{ margin: 20 }}
-            control={
-              <Switch
-                checked={switchToggler}
-                onChange={handleSwitchTogglerChange}
-                name="checkedB"
-                color="primary"
-              />
-            }
-            label="(Measureable Dimensions)"
-          />
-
-          {switchToggler === true ? measureablePerUnit : notMeasureable}
           <Typography className={classes.formHeadings}>
             Location Details
           </Typography>
@@ -497,6 +483,21 @@ const OpenPriceCalculator = (props) => {
               />
             </Grid>
           </Grid>
+          <FormControlLabel
+            style={{ margin: 20 }}
+            control={
+              <Switch
+                checked={switchToggler}
+                onChange={handleSwitchTogglerChange}
+                name="checkedB"
+                color="primary"
+              />
+            }
+            label="(Measureable Dimensions)"
+          />
+
+          {switchToggler === true ? measureablePerUnit : notMeasureable}
+
           {vases()}
         </form>
       </CardContent>

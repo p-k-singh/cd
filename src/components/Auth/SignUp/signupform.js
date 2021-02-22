@@ -138,9 +138,17 @@ const SignUp = (props) => {
               className="img-fluid mb-3 d-none d-md-block"
             />
             <h1>Create an Account</h1>
-            
-            <a href="https://serviceprovider.goflexe.com/#/signup">
-              SignUp as Service Provider
+
+            <a href="https://partner.goflexe.com/#/signup">
+              <Button
+                style={{
+                  backgroundColor: "orange",
+                }}
+                variant="contained"
+                color="primary"
+              >
+                Serivce Provider Signup
+              </Button>
             </a>
           </div>
 
