@@ -74,7 +74,7 @@ const OrderSummary = (props) => {
     API.get("GoFlexeOrderPlacement", `/pricing` + exactParam)
       .then((resp) => {
         setEstimatedMoney(resp.estimatedPrice);
-        props.setEstimatedPrice(resp.estimatedPrice)
+        props.setEstimatedPrice(resp.estimatedPrice);
       })
       .catch((err) => {
         setEstimatedMoney("Error: Try Later");
@@ -303,7 +303,6 @@ const OrderSummary = (props) => {
           </Grid>
         </table>
       </CardContent>
-      <PaymentIndex />
     </Card>
   );
 };

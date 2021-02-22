@@ -200,7 +200,6 @@ const AddProductForm = (props) => {
       return;
     }
     if (categories == null || categories == "") {
-
       alert("Product Category can't be empty");
       return;
     }
@@ -221,14 +220,29 @@ const AddProductForm = (props) => {
       alert("Density cannot be empty");
       return;
     }
-
+    if (lengthValidator !== "") {
+      alert(lengthValidator);
+      return;
+    }
+    if (widthValidator !== "") {
+      alert(widthValidator);
+      return;
+    }
+    if (heightValidator !== "") {
+      alert(heightValidator);
+      return;
+    }
+    if (weightPerUnitValidator !== "") {
+      alert(weightPerUnitValidator);
+      return;
+    }
 
     setLoading(true);
     var currentUser = await Auth.currentUserInfo();
     var owner = currentUser.username;
     var data;
     var location = "India";
-    var pinCode = "123456"
+    var pinCode = "123456";
 
     data = {
       owner: owner,

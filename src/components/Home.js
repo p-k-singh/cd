@@ -4,6 +4,7 @@ import "./Home.css";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Rating from "@material-ui/lab/Rating";
+import { Link } from "react-router-dom";
 import {
   LineChart,
   Line,
@@ -84,121 +85,123 @@ class Home extends Component {
           </div>
         </div> */}
         <div>
-          <Card style={{ marginBottom: 10 }}>
-            <div>
-              <Typography
-                style={{
-                  borderBottom: `1px solid black`,
-                  fontSize: 20,
-                  height: 50,
-                  padding: 10,
-                  paddingLeft: 30,
-                  fontWeight: 700,
-                }}
-                fullWidth
-              >
-                Order Details
-              </Typography>
-            </div>
-            <Grid container spacing={3} style={{ marginTop: 10 }}>
-              <Grid item sm={0.4}></Grid>{" "}
-              <Grid item sm={2}>
-                <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                  <div class="circle" style={{ background: "#062B79" }}>
-                    <h3 style={{ padding: 20, fontSize: 50 }}>20</h3>
-                  </div>
-                  <div
-                    style={{
-                      padding: 5,
-                      paddingTop: 10,
-                      paddingBottom: 0,
-                      textAlign: "center",
-                      fontWeight: 700,
-                    }}
-                  >
-                    Total Orders placed
-                  </div>
-                </CardContent>
-              </Grid>{" "}
-              <Grid item sm={0.4}></Grid>
-              <Grid item sm={2}>
-                <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                  <div class="circle" style={{ background: "green" }}>
-                    <h3 style={{ padding: 20, fontSize: 50 }}>12</h3>
-                  </div>
-                  <div
-                    style={{
-                      padding: 5,
-                      paddingTop: 10,
-                      paddingBottom: 0,
-                      textAlign: "center",
-                      fontWeight: 700,
-                    }}
-                  >
-                    Orders Accepted
-                  </div>
-                </CardContent>
-              </Grid>{" "}
-              <Grid item sm={0.4}></Grid>
-              <Grid item sm={2}>
-                <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                  <div class="circle" style={{ background: "orange" }}>
-                    <h3 style={{ padding: 20, fontSize: 50 }}>8</h3>
-                  </div>
-                  <div
-                    style={{
-                      padding: 5,
-                      paddingTop: 10,
-                      paddingBottom: 0,
-                      textAlign: "center",
-                      fontWeight: 700,
-                    }}
-                  >
-                    Orders Picked up
-                  </div>
-                </CardContent>
-              </Grid>{" "}
-              <Grid item sm={0.4}></Grid>
-              <Grid item sm={2}>
-                <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                  <div class="circle" style={{ background: "#C57A7A" }}>
-                    <h3 style={{ padding: 20, fontSize: 50 }}>5</h3>
-                  </div>
-                  <div
-                    style={{
-                      padding: 5,
-                      paddingTop: 10,
-                      paddingBottom: 0,
-                      textAlign: "center",
-                      fontWeight: 700,
-                    }}
-                  >
-                    Orders in Transit
-                  </div>
-                </CardContent>
+          <Link to="/myorders">
+            <Card style={{ marginBottom: 10 }}>
+              <div>
+                <Typography
+                  style={{
+                    borderBottom: `1px solid black`,
+                    fontSize: 20,
+                    height: 50,
+                    padding: 10,
+                    paddingLeft: 30,
+                    fontWeight: 700,
+                  }}
+                  fullWidth
+                >
+                  Order Details
+                </Typography>
+              </div>
+              <Grid container spacing={3} style={{ marginTop: 10 }}>
+                <Grid item sm={0.4}></Grid>{" "}
+                <Grid item sm={2}>
+                  <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
+                    <div class="circle" style={{ background: "#062B79" }}>
+                      <h3 style={{ padding: 20, fontSize: 50 }}>20</h3>
+                    </div>
+                    <div
+                      style={{
+                        padding: 5,
+                        paddingTop: 10,
+                        paddingBottom: 0,
+                        textAlign: "center",
+                        fontWeight: 700,
+                      }}
+                    >
+                      Total Orders placed
+                    </div>
+                  </CardContent>
+                </Grid>{" "}
+                <Grid item sm={0.4}></Grid>
+                <Grid item sm={2}>
+                  <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
+                    <div class="circle" style={{ background: "green" }}>
+                      <h3 style={{ padding: 20, fontSize: 50 }}>12</h3>
+                    </div>
+                    <div
+                      style={{
+                        padding: 5,
+                        paddingTop: 10,
+                        paddingBottom: 0,
+                        textAlign: "center",
+                        fontWeight: 700,
+                      }}
+                    >
+                      Orders Accepted
+                    </div>
+                  </CardContent>
+                </Grid>{" "}
+                <Grid item sm={0.4}></Grid>
+                <Grid item sm={2}>
+                  <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
+                    <div class="circle" style={{ background: "orange" }}>
+                      <h3 style={{ padding: 20, fontSize: 50 }}>8</h3>
+                    </div>
+                    <div
+                      style={{
+                        padding: 5,
+                        paddingTop: 10,
+                        paddingBottom: 0,
+                        textAlign: "center",
+                        fontWeight: 700,
+                      }}
+                    >
+                      Orders Picked up
+                    </div>
+                  </CardContent>
+                </Grid>{" "}
+                <Grid item sm={0.4}></Grid>
+                <Grid item sm={2}>
+                  <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
+                    <div class="circle" style={{ background: "#C57A7A" }}>
+                      <h3 style={{ padding: 20, fontSize: 50 }}>5</h3>
+                    </div>
+                    <div
+                      style={{
+                        padding: 5,
+                        paddingTop: 10,
+                        paddingBottom: 0,
+                        textAlign: "center",
+                        fontWeight: 700,
+                      }}
+                    >
+                      Orders in Transit
+                    </div>
+                  </CardContent>
+                </Grid>
+                <Grid item sm={0.4}></Grid>
+                <Grid item sm={2}>
+                  <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
+                    <div class="circle" style={{ background: "#5995B7" }}>
+                      <h3 style={{ padding: 20, fontSize: 50 }}>2</h3>
+                    </div>
+                    <div
+                      style={{
+                        padding: 5,
+                        paddingTop: 10,
+                        paddingBottom: 0,
+                        textAlign: "center",
+                        fontWeight: 700,
+                      }}
+                    >
+                      Orders Delivered
+                    </div>
+                  </CardContent>
+                </Grid>
+                <Grid item sm={0.4}></Grid>
               </Grid>
-              <Grid item sm={0.4}></Grid>
-              <Grid item sm={2}>
-                <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
-                  <div class="circle" style={{ background: "#5995B7" }}>
-                    <h3 style={{ padding: 20, fontSize: 50 }}>2</h3>
-                  </div>
-                  <div
-                    style={{
-                      padding: 5,
-                      paddingTop: 10,
-                      paddingBottom: 0,
-                      textAlign: "center",
-                      fontWeight: 700,
-                    }}
-                  >
-                    Orders Delivered
-                  </div>
-                </CardContent>
-              </Grid>
-              <Grid item sm={0.4}></Grid>
-            </Grid>
-          </Card>
+            </Card>
+          </Link>
         </div>
         <div>
           <Grid container spacing={3} style={{ paddingTop: 10 }}>
@@ -443,9 +446,13 @@ class Home extends Component {
               }}
             >
               <Card>
-                <CardContent>Total Amount Charged</CardContent>
-                <div class="paymentText" style={{ padding: 20 }}>
-                  Rs. 2773
+                <CardContent>
+                  <div style={{ borderBottom: `1px solid lightgrey` }}>
+                    Total Amount Charged
+                  </div>
+                </CardContent>
+                <div class="paymentText" style={{ padding: 20, fontSize: 20 }}>
+                  ₹ 8,323
                 </div>
               </Card>
             </Grid>
@@ -461,9 +468,15 @@ class Home extends Component {
               }}
             >
               <Card>
-                <CardContent> Amount to be paid</CardContent>
-                <div class="paymentText" style={{ padding: 20 }}>
-                  Rs. 2773
+                <CardContent>
+                  {" "}
+                  <div style={{ borderBottom: `1px solid lightgrey` }}>
+                    {" "}
+                    Amount to be paid
+                  </div>
+                </CardContent>
+                <div class="paymentText" style={{ padding: 20, fontSize: 20 }}>
+                  ₹ 4,343
                 </div>
               </Card>
             </Grid>
@@ -479,9 +492,14 @@ class Home extends Component {
               }}
             >
               <Card>
-                <CardContent>Upcoming payments to be made</CardContent>
-                <div class="paymentText" style={{ padding: 20 }}>
-                  Rs. 2773
+                <CardContent>
+                  {" "}
+                  <div style={{ borderBottom: `1px solid lightgrey` }}>
+                    Upcoming payments to be made
+                  </div>
+                </CardContent>
+                <div class="paymentText" style={{ padding: 20, fontSize: 20 }}>
+                  ₹ 2,773
                 </div>
               </Card>
             </Grid>
