@@ -36,6 +36,8 @@ const BuyerDetails = (props) => {
   const [deliverZipValidator, setDeliverZipValidator] = useState("");
   const [pickupDateValidator, setPickupDateValidator] = useState("");
   const [deliveryDateValidator, setDeliveryDateValidator] = useState("");
+  const [PickupPinLocation, setPickupPinLocation] = useState("");
+  const [DeliveryPinLocation, setDeliveryPinLocation] = useState("");
 
   useEffect(() => {
     //alert('topin'+props.pickupPin+'from pin'+props.destinationPin)
@@ -137,6 +139,24 @@ const BuyerDetails = (props) => {
       count++;
       temp = Math.floor(temp / 10);
     }
+    if (count == 6) {
+      const api_url = "https://api.postalpincode.in/pincode/" + pickupPinCode;
+
+      // Defining async function
+      async function getapi(url) {
+        // Storing response
+
+        const response = await fetch(url);
+
+        // Storing data in form of JSON
+        var data = await response.json();
+        console.log(data);
+        var pickuplocation = data !== null ? data[0].PostOffice[0].Block : "";
+        setPickupPinLocation(pickuplocation);
+      }
+      // Calling that async function
+      getapi(api_url);
+    }
     if (count !== 6) {
       setPickupZipValidator("Must be of six digits");
     } else {
@@ -149,6 +169,34 @@ const BuyerDetails = (props) => {
     var greater = 999999,
       smaller = 100000;
     var check = 1;
+    var count = 0,
+      temp = destinationPinCode;
+    while (temp > 0) {
+      count++;
+      temp = Math.floor(temp / 10);
+    }
+    if (count == 6) {
+      const api_url =
+        "https://api.postalpincode.in/pincode/" + destinationPinCode;
+
+      // Defining async function
+      async function getapi(url) {
+        // Storing response
+
+        const response = await fetch(url);
+
+        // Storing data in form of JSON
+        var data = await response.json();
+        console.log(data);
+        var Deliverylocation =
+          data !== null && Array.isArray(data[0]) === true 
+            ? data[0].PostOffice[0].Block
+            : "";
+        setDeliveryPinLocation(Deliverylocation);
+      }
+      // Calling that async function
+      getapi(api_url);
+    }
     if (destinationPinCode < smaller || destinationPinCode > greater) {
       setDeliverZipValidator("Must be of 6 digits");
       check = 0;
@@ -210,7 +258,11 @@ const BuyerDetails = (props) => {
             <TextField
               required
               error={pickupZipValidator !== ""}
-              helperText={pickupZipValidator === "" ? " " : pickupZipValidator}
+              helperText={
+                pickupZipValidator === ""
+                  ? PickupPinLocation
+                  : pickupZipValidator
+              }
               type="number"
               id="pickupzip"
               name="pickupzip"
@@ -274,7 +326,9 @@ const BuyerDetails = (props) => {
               required
               error={deliverZipValidator !== ""}
               helperText={
-                deliverZipValidator === "" ? " " : deliverZipValidator
+                deliverZipValidator === ""
+                  ? DeliveryPinLocation
+                  : deliverZipValidator
               }
               type="number"
               id="destinationzip"
@@ -304,7 +358,7 @@ const BuyerDetails = (props) => {
           </Grid>
         </Grid>
         <Typography className={classes.formHeadings}>
-          Additional Note 
+          Additional Note
         </Typography>
 
         <Grid

@@ -85,7 +85,7 @@ class Home extends Component {
           </div>
         </div> */}
         <div>
-          <Link to="/OpenPriceCal">
+          <Link to="/myorders">
             <Card style={{ marginBottom: 10 }}>
               <div>
                 <Typography

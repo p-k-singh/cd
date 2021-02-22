@@ -1,13 +1,470 @@
+// import { useEffect } from "react";
+
+// const ShowDetails = (props) => {
+//     useEffect(()=>{
+//         console.log(props.data)
+//     },[])
+//     return(
+//         <div>
+//            Payment Option: {props.data.paymentOption}
+//         </div>
+//     )
+// }
+// export default ShowDetails;
 import { useEffect } from "react";
+import React, { useState } from "react";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
+import Tooltip from "@material-ui/core/Tooltip";
+import { makeStyles } from "@material-ui/core/styles";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import Upload from "./Upload/Upload";
+import InfoIcon from "@material-ui/icons/Info";
+import { Auth, API } from "aws-amplify";
+import Spinner from "../UI/Spinner";
+import {
+  Select,
+  InputLabel,
+  MenuItem,
+  Grid,
+  Card,
+  FormHelperText,
+  Divider,
+  TextField,
+  Button,
+} from "@material-ui/core";
+
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+    flexGrow: 1,
+  },
+  title: {
+    fontSize: 20,
+    height: 50,
+    padding: 10,
+    paddingLeft: 55,
+    //color: 'white',
+    borderBottomStyle: "solid",
+    borderWidth: "1px",
+  },
+  formHeadings: {
+    margin: 20,
+    marginBottom: 0,
+  },
+  formControl: {
+    //margin: theme.spacing(1),
+    minWidth: 120,
+  },
+});
 
 const ShowDetails = (props) => {
-    useEffect(()=>{
-        console.log(props.data)
-    },[])
-    return(
-        <div>
-           Payment Option: {props.data.paymentOption}
+  useEffect(() => {
+    console.log(props.data);
+  }, []);
+
+  const classes = useStyles();
+  const [paymentOption, setPaymentOption] = useState("fullPayment");
+  //const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [paymentRatio, setPaymentRatio] = useState("50-50");
+  const [paymentMode, setPaymentMode] = useState("accountTransfer");
+  const [data, setData] = useState(null);
+  const [referenceId, setReferenceId] = useState();
+  const [nameOfPayer, setNameOfPayer] = useState();
+  const [phoneOfPayer, setPhoneOfPayer] = useState();
+
+  const PaidfullPayToAccountDashboard = (
+    <React.Fragment>
+      <Card style={{ padding: 10 }}>
+        <Typography style={{ fontSize: 20, marginBottom: 20 }}>
+          Total Amount paid: {data !== null ? data.totalAmount : "x"} INR
+        </Typography>
+        {/* <HelpIcon /> */}
+        <Typography style={{ fontSize: 18, marginBottom: 8 }}>
+          Account Details -
+        </Typography>
+        <div className="row" style={{ fontSize: 16, marginBottom: 20 }}>
+          <div className="col col-xs-12 col-sm-6" style={{ marginBottom: 6 }}>
+            Account No: 7814289632{" "}
+            <Tooltip
+              title="Beneficiary’s account number, make the payment to this account."
+              placement="top-start"
+            >
+              <InfoIcon style={{ color: "lightgrey" }} fontSize="small" />
+            </Tooltip>
+          </div>
+          <div className="col col-xs-12 col-sm-8" style={{ paddingBottom: 10 }}>
+            Account Holder's Name: GoFlexe Ltd.{" "}
+            <Tooltip
+              title="Beneficiary’s account name, make the payment to this account."
+              placement="top-start"
+            >
+              <InfoIcon style={{ color: "lightgrey" }} fontSize="small" />
+            </Tooltip>
+          </div>
+
+          <div className="col col-xs-12 col-sm-6">Bank Name: Yes Bank</div>
+          <div className="col col-xs-12 col-sm-6">
+            IFSC: BNK0123456{" "}
+            <Tooltip
+              title="IFSC is short for Indian Financial System Code, represented by an 11 digit character."
+              placement="top-start"
+            >
+              <InfoIcon style={{ color: "lightgrey" }} fontSize="small" />
+            </Tooltip>
+          </div>
         </div>
-    )
-}
+        <div className="row">
+          <div>
+            <p
+              style={{
+                marginLeft: 20,
+                marginRight: 8,
+                marginTop: 8,
+                fontSize: 18,
+              }}
+            >
+              Reference Id: {props.data.paymentModeDetails.referenceId}
+            </p>
+          </div>
+        </div>
+
+        <Divider style={{ marginBottom: 20 }} />
+        {/* <p>
+          Note:Please submit the amount in the following account and paste the
+          Reference Id of the transaction in the textbox given above
+        </p> */}
+      </Card>
+    </React.Fragment>
+  );
+
+  const PaidcashPayment = (
+    <React.Fragment>
+      <Card style={{ padding: 10 }}>
+        <Typography style={{ fontSize: 20, marginBottom: 20 }}>
+          Total Amount paid: {data !== null ? data.totalAmount : "x"} INR
+        </Typography>
+        {/* <HelpIcon /> */}
+        <Typography style={{ marginBottom: 10 }}>
+          Name and contact details of the payer
+        </Typography>
+        <div className="row">
+          <div>
+            <p
+              style={{
+                marginLeft: 20,
+                marginRight: 8,
+                marginTop: 8,
+                fontSize: 18,
+              }}
+            >
+              Name:{" "}
+              {data !== null &&
+              data.paymentModeDetails !== null &&
+              data.paymentModeDetails !== undefined
+                ? data.paymentModeDetails.nameOfPayer
+                : "Null"}
+            </p>
+          </div>
+        </div>
+        <div className="row">
+          <div>
+            <p
+              style={{
+                marginLeft: 20,
+                marginRight: 8,
+                marginTop: 8,
+                fontSize: 18,
+              }}
+            >
+              Phone:
+              {data !== null &&
+              data.paymentModeDetails !== null &&
+              data.paymentModeDetails !== undefined
+                ? data.paymentModeDetails.phoneOfPayer
+                : "Null"}
+            </p>
+          </div>
+        </div>
+
+        <Divider style={{ marginBottom: 20 }} />
+      </Card>
+    </React.Fragment>
+  );
+
+  const PaidOthersPayment = (
+    <React.Fragment>
+      <Card style={{ padding: 10 }}>
+        <Typography style={{ fontSize: 20, marginBottom: 20 }}>
+          Total Amount paid: {data !== null ? data.totalAmount : "x"} INR
+        </Typography>
+        {/* <HelpIcon /> */}
+        Proof of Payment :
+        <Divider style={{ marginBottom: 20, marginTop: 220 }} />
+      </Card>
+    </React.Fragment>
+  );
+
+  const Paidcontent = (
+    <Card className={classes.root}>
+      <CardContent style={{ padding: 0 }}>
+        <Typography className={classes.title} gutterBottom>
+          Payment
+        </Typography>
+        <form style={{ padding: 10 }}>
+          <FormControl component="fieldset">
+            <RadioGroup
+              row
+              style={{ width: "auto" }}
+              aria-label="position"
+              name="position"
+              value={props.data.paymentOption}
+            >
+              <FormLabel component="legend">Selected payment option:</FormLabel>
+              <Grid
+                container
+                spacing={0}
+                style={{ padding: 20, paddingBottom: 30 }}
+              >
+                {props.data.paymentOption == "fullPayment" ? (
+                  <Grid item xs={12} sm={6}>
+                    <FormControlLabel
+                      value="fullPayment"
+                      control={<Radio color="primary" />}
+                      label="Full Payment"
+                    />
+                  </Grid>
+                ) : (
+                  <p></p>
+                )}
+                {props.data.paymentOption == "partialPayment" ? (
+                  <Grid item xs={12} sm={6}>
+                    <FormControlLabel
+                      value="partialPayment"
+                      control={<Radio color="primary" />}
+                      label="Partial Payment"
+                    />
+                  </Grid>
+                ) : (
+                  <p></p>
+                )}
+                {props.data.paymentOption == "CreditBased" ? (
+                  <Grid item xs={12} sm={6}>
+                    <FormControlLabel
+                      value="CreditBased"
+                      control={<Radio color="primary" />}
+                      label="Credit Based"
+                    />
+                  </Grid>
+                ) : (
+                  <p></p>
+                )}
+                {props.data.paymentOption == "Subscription" ? (
+                  <Grid item xs={12} sm={6}>
+                    <FormControlLabel
+                      value="Subscription"
+                      control={<Radio color="primary" />}
+                      label="Subscription"
+                    />
+                  </Grid>
+                ) : (
+                  <p></p>
+                )}
+              </Grid>
+            </RadioGroup>
+          </FormControl>
+
+          <Divider style={{ marginBottom: 20 }} />
+          {props.data.paymentOption === "CreditBased" && (
+            <FormControl
+              style={{ marginLeft: 50 }}
+              className={classes.formControl}
+            >
+              <InputLabel id="demo-simple-select-label">
+                Payment Delay
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={props.data.paymentModeDetails.paymentDelay}
+
+                //   value={age}
+                //   onChange={handleChange}
+              >
+                {props.data.paymentModeDetails.paymentDelay == "7 Days" ? (
+                  <MenuItem value="7 Days">7 Days</MenuItem>
+                ) : (
+                  ""
+                )}
+                {props.data.paymentModeDetails.paymentDelay == "30 Days" ? (
+                  <MenuItem value="30 Days">30 Days</MenuItem>
+                ) : (
+                  ""
+                )}
+                {props.data.paymentModeDetails.paymentDelay == "45 Days" ? (
+                  <MenuItem value="45 Days">45 Days</MenuItem>
+                ) : (
+                  ""
+                )}
+              </Select>
+              {props.data.paymentModeDetails.paymentDelay === "45 Days" && (
+                <FormHelperText>Pay the total amount in 45 Days</FormHelperText>
+              )}
+              {props.data.paymentModeDetails.paymentDelay === "30 Days" && (
+                <FormHelperText>Pay the total amount in 30 Days</FormHelperText>
+              )}
+              {props.data.paymentModeDetails.paymentDelay === "7 Days" && (
+                <FormHelperText>Pay the total amount in 7 Days</FormHelperText>
+              )}
+            </FormControl>
+          )}
+          {paymentOption == "Subscription" ? (
+            <FormControl
+              style={{ marginLeft: 50 }}
+              className={classes.formControl}
+            >
+              <InputLabel id="demo-simple-select-label">
+                Payment Cycle
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={paymentRatio}
+
+                //   value={age}
+                //   onChange={handleChange}
+              >
+                <MenuItem value="Monthly">Monthly</MenuItem>
+                <MenuItem value="Weekly">Weekly</MenuItem>
+              </Select>
+              {paymentRatio === "Monthly" && (
+                <FormHelperText>Pay each Month</FormHelperText>
+              )}
+              {paymentRatio === "Weekly" && (
+                <FormHelperText>Pay each Week</FormHelperText>
+              )}
+            </FormControl>
+          ) : (
+            ""
+          )}
+          {props.data.paymentModeDetails.paymentOption == "partialPayment" && (
+            <FormControl
+              style={{ marginLeft: 50 }}
+              className={classes.formControl}
+            >
+              <InputLabel id="demo-simple-select-label">
+                Payment Ratio
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={props.data.paymentModeDetails.paymentRatio}
+              >
+                {props.data.paymentModeDetails.paymentRatio == "10%" ? (
+                  <MenuItem value="10%">10%</MenuItem>
+                ) : (
+                  ""
+                )}
+                {props.data.paymentModeDetails.paymentRatio == "30%" ? (
+                  <MenuItem value="30%">30%</MenuItem>
+                ) : (
+                  ""
+                )}
+                {props.data.paymentModeDetails.paymentRatio == "50%" ? (
+                  <MenuItem value="50%">50%</MenuItem>
+                ) : (
+                  ""
+                )}
+              </Select>
+              {props.data.paymentModeDetails.paymentRatio === "50%" && (
+                <FormHelperText>
+                  Pay 50% now and 50%
+                  <br /> at time of delivery
+                </FormHelperText>
+              )}
+              {props.data.paymentModeDetails.paymentRatio === "30%" && (
+                <FormHelperText>
+                  Pay 30% now and 70%
+                  <br /> at time of delivery
+                </FormHelperText>
+              )}
+              {props.data.paymentModeDetails.paymentRatio === "10%" && (
+                <FormHelperText>
+                  Pay 10% now and 90%
+                  <br /> at time of delivery
+                </FormHelperText>
+              )}
+            </FormControl>
+          )}
+          <Grid
+            container
+            spacing={3}
+            style={{ padding: 50, paddingTop: 20, paddingBottom: 30 }}
+          >
+            <Grid item xs={12} sm={4}>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Selected payment mode</FormLabel>
+                <RadioGroup
+                  aria-label="gender"
+                  name="gender1"
+                  value={props.data.paymentMode}
+                >
+                  {props.data.paymentMode == "accountTransfer" ? (
+                    <FormControlLabel
+                      value="accountTransfer"
+                      control={<Radio color="primary" />}
+                      label="Account Transfer"
+                    />
+                  ) : (
+                    <p></p>
+                  )}
+                  {props.data.paymentMode == "cash" ? (
+                    <FormControlLabel
+                      value="cash"
+                      control={<Radio color="primary" />}
+                      label="Cash"
+                    />
+                  ) : (
+                    <p></p>
+                  )}
+                  {props.data.paymentMode == "Others" ? (
+                    <FormControlLabel
+                      value="Others"
+                      control={<Radio color="primary" />}
+                      label="Others"
+                    />
+                  ) : (
+                    <p></p>
+                  )}
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              {props.data.paymentMode === "accountTransfer" &&
+                PaidfullPayToAccountDashboard}
+              {props.data.paymentMode === "cash" && PaidcashPayment}
+              {props.data.paymentMode === "Others" && PaidOthersPayment}
+            </Grid>
+          </Grid>
+        </form>
+      </CardContent>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          margin: 20,
+        }}
+      ></div>
+    </Card>
+  );
+
+  return <div>{Paidcontent}</div>;
+};
+
 export default ShowDetails;

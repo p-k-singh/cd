@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import Upload from "./Upload/Upload";
 import InfoIcon from "@material-ui/icons/Info";
 import { Auth, API } from "aws-amplify";
-import Spinner from '../UI/Spinner'
+import Spinner from "../UI/Spinner";
 import {
   Select,
   InputLabel,
@@ -75,14 +75,11 @@ const PaymentIndex = (props) => {
   const [loading, setLoading] = useState(true);
   const [paymentRatio, setPaymentRatio] = useState("50-50");
   const [paymentMode, setPaymentMode] = useState("accountTransfer");
-  const [data,setData] = useState(null)
-  const [referenceId,setReferenceId] = useState()
-  const [nameOfPayer,setNameOfPayer] = useState()
-  const [phoneOfPayer,setPhoneOfPayer] = useState()
- // const [fetchData,setFetchData] = useState(0);
-
-
-
+  const [data, setData] = useState(null);
+  const [referenceId, setReferenceId] = useState();
+  const [nameOfPayer, setNameOfPayer] = useState();
+  const [phoneOfPayer, setPhoneOfPayer] = useState();
+  // const [fetchData,setFetchData] = useState(0);
 
   const handlePaymentOptionChange = (event) => {
     setPaymentOption(event.target.value);
@@ -90,168 +87,166 @@ const PaymentIndex = (props) => {
   };
   const handleRatioChange = (event) => {
     setPaymentRatio(event.target.value);
-    
   };
   const handlePaymentMode = (event) => {
     setPaymentMode(event.target.value);
     // alert(event.target.value)
   };
 
+  /**Payment Submit functions */
 
-
-
-/**Payment Submit functions */
-
-const handleAccountTransfer = () => {
-  var paymentModeDetails;
-  if(paymentOption==='fullPayment'){
-    paymentModeDetails = {
-      referenceId:referenceId
+  const handleAccountTransfer = () => {
+    var paymentModeDetails;
+    if (paymentOption === "fullPayment") {
+      paymentModeDetails = {
+        referenceId: referenceId,
+      };
+    } else if (paymentOption === "partialPayment") {
+      paymentModeDetails = {
+        referenceId: referenceId,
+        paymentRatio: paymentRatio,
+      };
+    } else if (paymentOption === "CreditBased") {
+      paymentModeDetails = {
+        referenceId: referenceId,
+        paymentDelay: paymentRatio,
+      };
+    } else if (paymentOption === "Subscription") {
+      paymentModeDetails = {
+        referenceId: referenceId,
+        paymentCycle: paymentRatio,
+      };
     }
-  }
-  else if(paymentOption==='partialPayment'){
-    paymentModeDetails={
-      referenceId:referenceId,
-      paymentRatio:paymentRatio
-    }
-  }
-  else if(paymentOption==='CreditBased'){
-    paymentModeDetails={
-      referenceId:referenceId,
-      paymentDelay:paymentRatio
-    }
-  }
-  else if(paymentOption==='Subscription'){
-    paymentModeDetails={
-      referenceId:referenceId,
-      paymentCycle:paymentRatio
-    }
-  }
-  const toSendData = {
-    paymentOption:paymentOption,
-    paymentMode:paymentMode,
-    orderId: props.orderId,
-    paymentModeDetails: paymentModeDetails
-  };
-  const payload = {
-    body: toSendData,
-  };
-  API.post("GoFlexeOrderPlacement", `/customer-payments`, payload)
-    .then((resp) => {
-      console.log(resp);
-      setData({
-        paymentId:resp.new.paymentId,
-        paymentMode:resp.new.paymentMode,
-        paymentOption:resp.new.paymentOption ===undefined ? null :resp.new.paymentOption,
-        totalAmount:resp.new.totalAmount
+    const toSendData = {
+      paymentOption: paymentOption,
+      paymentMode: paymentMode,
+      orderId: props.orderId,
+      paymentModeDetails: paymentModeDetails,
+    };
+    const payload = {
+      body: toSendData,
+    };
+    API.post("GoFlexeOrderPlacement", `/customer-payments`, payload)
+      .then((resp) => {
+        console.log(resp);
+        setData({
+          paymentId: resp.new.paymentId,
+          paymentMode: resp.new.paymentMode,
+          paymentOption:
+            resp.new.paymentOption === undefined
+              ? null
+              : resp.new.paymentOption,
+          totalAmount: resp.new.totalAmount,
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
       });
-     
-      
-    })
-    .catch((error) => {
-      console.log(error.response);
-      
-    });
-
-}
-
-const handleCashTransfer = () => {
-  var paymentModeDetails = null;
-
-  if(paymentOption==='fullPayment'){
-    paymentModeDetails={
-      nameOfPayer:nameOfPayer,
-      phoneOfPayer:phoneOfPayer
-    }
-  }
-  else if(paymentOption==='partialPayment'){
-    paymentModeDetails={
-      paymentRatio:paymentRatio,
-      nameOfPayer:nameOfPayer,
-      phoneOfPayer:phoneOfPayer
-    }
-  }
-  else if(paymentOption==='CreditBased'){
-    paymentModeDetails={
-      paymentDelay:paymentRatio,
-      nameOfPayer:nameOfPayer,
-      phoneOfPayer:phoneOfPayer
-    }
-  }
-  else if(paymentOption==='Subscription'){
-    paymentModeDetails={
-      paymentCycle:paymentRatio,
-      nameOfPayer:nameOfPayer,
-      phoneOfPayer:phoneOfPayer
-    }
-  }
-  const toSendData = {
-    paymentOption:paymentOption,
-    paymentMode:paymentMode,
-    orderId: props.orderId,
-    paymentModeDetails: paymentModeDetails
   };
-  const payload = {
-    body: toSendData,
-  };
-  API.post("GoFlexeOrderPlacement", `/customer-payments`, payload)
-    .then((resp) => {
-      console.log(resp);
-      setData({
-        paymentId:resp.new.paymentId,
-        paymentMode:resp.new.paymentMode,
-        paymentOption:resp.new.paymentOption ===undefined ? null :resp.new.paymentOption,
-        totalAmount:resp.new.totalAmount
+
+  const handleCashTransfer = () => {
+    var paymentModeDetails = null;
+
+    if (paymentOption === "fullPayment") {
+      paymentModeDetails = {
+        nameOfPayer: nameOfPayer,
+        phoneOfPayer: phoneOfPayer,
+      };
+    } else if (paymentOption === "partialPayment") {
+      paymentModeDetails = {
+        paymentRatio: paymentRatio,
+        nameOfPayer: nameOfPayer,
+        phoneOfPayer: phoneOfPayer,
+      };
+    } else if (paymentOption === "CreditBased") {
+      paymentModeDetails = {
+        paymentDelay: paymentRatio,
+        nameOfPayer: nameOfPayer,
+        phoneOfPayer: phoneOfPayer,
+      };
+    } else if (paymentOption === "Subscription") {
+      paymentModeDetails = {
+        paymentCycle: paymentRatio,
+        nameOfPayer: nameOfPayer,
+        phoneOfPayer: phoneOfPayer,
+      };
+    }
+    const toSendData = {
+      paymentOption: paymentOption,
+      paymentMode: paymentMode,
+      orderId: props.orderId,
+      paymentModeDetails: paymentModeDetails,
+    };
+    const payload = {
+      body: toSendData,
+    };
+    API.post("GoFlexeOrderPlacement", `/customer-payments`, payload)
+      .then((resp) => {
+        console.log(resp);
+        setData({
+          paymentModeDetails: resp.paymentModeDetails,
+          paymentId: resp.new.paymentId,
+          paymentMode: resp.new.paymentMode,
+          paymentOption:
+            resp.new.paymentOption === undefined
+              ? null
+              : resp.new.paymentOption,
+          totalAmount: resp.new.totalAmount,
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
       });
-      
-    })
-    .catch((error) => {
-      console.log(error.response);
-      
-    });
+  };
 
-}
-
-
-
-
-/** */
-
-
+  /** */
 
   useEffect(() => {
     //alert(props.orderId)
-    if(props.orderId){
+    if (props.orderId) {
       var param = `?orderId=${props.orderId}`;
-    API.get("GoFlexeOrderPlacement", `/customer-payments` + param)
-      .then((resp) => {
-        console.log(resp);
-        
-        //console.log(resp.paymentId)
-        setData({
-          paymentId:resp.paymentId,
-          paymentMode:resp.paymentMode,
-          paymentOption:resp.paymentOption ===undefined ? null :resp.paymentOption,
-          totalAmount:resp.totalAmount
-        });
-        
-        setLoading(false);
-        
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
+      API.get("GoFlexeOrderPlacement", `/customer-payments` + param)
+        .then((resp) => {
+          console.log(resp);
 
+          //console.log(resp.paymentId)
+          setData({
+            paymentId: resp.paymentId,
+            paymentMode: resp.paymentMode,
+            paymentOption:
+              resp.paymentOption === undefined ? null : resp.paymentOption,
+            totalAmount: resp.totalAmount,
+            paymentModeDetails: resp.paymentModeDetails,
+          });
+
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
     }
-    
   }, []);
+
+  //   /
+  //   /
+  //   /
+  //   /
+  //   /
+  //   /
+  //   /
+  //  If Not Paid
+  // /
+  // /
+  // /
+  // /
+  // /
 
   const fullPayToAccountDashboard = (
     <React.Fragment>
       <Card style={{ padding: 10 }}>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
-          Total Amount to be paid: {data!==null ? data.totalAmount: 'x'} INR
+          Total Amount to be paid: {data !== null ? data.totalAmount : "x"} INR
         </Typography>
         {/* <HelpIcon /> */}
         <Typography style={{ fontSize: 18, marginBottom: 8 }}>
@@ -259,7 +254,7 @@ const handleCashTransfer = () => {
         </Typography>
         <div className="row" style={{ fontSize: 16, marginBottom: 20 }}>
           <div className="col col-xs-12 col-sm-6" style={{ marginBottom: 6 }}>
-            Account No: 7814289632{" "}
+            Account No: 7814289632
             <Tooltip
               title="Beneficiary’s account number, make the payment to this account."
               placement="top-start"
@@ -308,7 +303,7 @@ const handleCashTransfer = () => {
                 id="standard-size-small"
                 size="small"
                 value={referenceId}
-                onChange={(event)=>setReferenceId(event.target.value)}
+                onChange={(event) => setReferenceId(event.target.value)}
               />
             </Tooltip>
           </div>
@@ -325,7 +320,7 @@ const handleCashTransfer = () => {
             className="AllButtons"
             variant="contained"
             // style={{backgroundColor:'#FF8C00'}}
-            onClick={()=>handleAccountTransfer()}
+            onClick={() => handleAccountTransfer()}
           >
             Submit
           </Button>
@@ -339,98 +334,103 @@ const handleCashTransfer = () => {
     </React.Fragment>
   );
 
-  const cashPayment =
-    
-      <React.Fragment>
-        <Card style={{ padding: 10 }}>
-          <Typography style={{ fontSize: 20, marginBottom: 20 }}>
-          Total Amount to be paid: {data!==null ? data.totalAmount: 'x'} INR
-          </Typography>
-          {/* <HelpIcon /> */}
-          <Typography style={{ marginBottom: 10 }}>
-            Please provide the name and contact details of the payer
-          </Typography>
-          <div className="row">
-            <div>
-              <p
-                style={{
-                  marginLeft: 20,
-                  marginRight: 8,
-                  marginTop: 8,
-                  fontSize: 18,
-                }}
-              >
-                Name:
-              </p>
-            </div>
-            <div>
-              <TextField
-                variant="outlined"
-                id="standard-size-small"
-                size="small"
-                value={nameOfPayer}
-                onChange={(event)=>setNameOfPayer(event.target.value)}
-              />
-            </div>
+  const cashPayment = (
+    <React.Fragment>
+      <Card style={{ padding: 10 }}>
+        <Typography style={{ fontSize: 20, marginBottom: 20 }}>
+          Total Amount to be paid: {data !== null ? data.totalAmount : "x"} INR
+        </Typography>
+        {/* <HelpIcon /> */}
+        <Typography style={{ marginBottom: 10 }}>
+          Please provide the name and contact details of the payer
+        </Typography>
+        <div className="row">
+          <div>
+            <p
+              style={{
+                marginLeft: 20,
+                marginRight: 8,
+                marginTop: 8,
+                fontSize: 18,
+              }}
+            >
+              Name:
+            </p>
           </div>
-          <div className="row">
-            <div>
-              <p
-                style={{
-                  marginLeft: 20,
-                  marginRight: 8,
-                  marginTop: 8,
-                  fontSize: 18,
-                }}
-              >
-                Phone:
-              </p>
-            </div>
-            <div>
-              <TextField
-                type="number"
-                variant="outlined"
-                id="standard-size-small"
-                size="small"
-                value={phoneOfPayer}
-                onChange={(event)=>setPhoneOfPayer(event.target.value)}
-              />
-            </div>
+          <div>
+            <TextField
+              variant="outlined"
+              id="standard-size-small"
+              size="small"
+              value={nameOfPayer}
+              onChange={(event) => setNameOfPayer(event.target.value)}
+            />
           </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-              margin: 20,
-            }}
+        </div>
+        <div className="row">
+          <div>
+            <p
+              style={{
+                marginLeft: 20,
+                marginRight: 8,
+                marginTop: 8,
+                fontSize: 18,
+              }}
+            >
+              Phone:
+            </p>
+          </div>
+          <div>
+            <TextField
+              type="number"
+              variant="outlined"
+              id="standard-size-small"
+              size="small"
+              value={phoneOfPayer}
+              onChange={(event) => setPhoneOfPayer(event.target.value)}
+            />
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            margin: 20,
+          }}
+        >
+          <Button
+            variant="contained"
+            style={{ backgroundColor: "#FF8C00" }}
+            onClick={() => handleCashTransfer()}
           >
-            <Button variant="contained"
-             style={{ backgroundColor: "#FF8C00" }}
-             onClick={()=>handleCashTransfer()}
-             >
-              Submit
-            </Button>
-          </div>
+            Submit
+          </Button>
+        </div>
 
-          <Divider style={{ marginBottom: 20 }} />
-          <p>
-            Note:Please hand over the cash to the delivery personnel at the time
-            of delivery
-          </p>
-        </Card>
-      </React.Fragment>
-    
-  
+        <Divider style={{ marginBottom: 20 }} />
+        <p>
+          Note:Please hand over the cash to the delivery personnel at the time
+          of delivery
+        </p>
+      </Card>
+    </React.Fragment>
+  );
 
   const OthersPayment = (
     <React.Fragment>
       <Card style={{ padding: 10 }}>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
-        Total Amount to be paid: {data!==null ? data.totalAmount: 'x'} INR
+          Total Amount to be paid: {data !== null ? data.totalAmount : "x"} INR
         </Typography>
         {/* <HelpIcon /> */}
-        <Upload setData={setData} orderId={props.orderId} paymentOption={paymentOption} paymentMode={paymentMode} paymentRatio={paymentRatio} />
+        <Upload
+          setData={setData}
+          orderId={props.orderId}
+          paymentOption={paymentOption}
+          paymentMode={paymentMode}
+          paymentRatio={paymentRatio}
+        />
 
         <Divider style={{ marginBottom: 20, marginTop: 20 }} />
         <p>
@@ -695,15 +695,11 @@ const handleCashTransfer = () => {
     </Card>
   );
 
-  if(loading===true){
-    return (
-      <Spinner />
-    )
+  if (loading === true) {
+    return <Spinner />;
   }
-  if(data!==null && data.paymentOption!==null){
-    return(
-      <ShowDetails data={data} />
-    )
+  if (data !== null && data.paymentOption !== null) {
+    return <ShowDetails data={data} />;
   }
   return <div>{content}</div>;
 };
