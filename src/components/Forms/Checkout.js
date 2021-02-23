@@ -51,6 +51,7 @@ function SimpleCard(props) {
   const [loading, setLoading] = useState(false);
   const [chosenProducts, setChosenProducts] = useState([null]);
   const [estimatedPrice, setEstimatedPrice] = useState(0);
+  const [OrderId, setOrderId] = useState(0);
 
   function getStepContent(step, chosenProducts, setChosenProducts) {
     switch (step) {
@@ -393,6 +394,8 @@ function SimpleCard(props) {
     };
     API.post("GoFlexeOrderPlacement", `/customerorder`, payload)
       .then((response) => {
+        setOrderId(response[0].OrderId);
+
         // Add your code here
         console.log(response);
         setLoading(false);
@@ -408,7 +411,7 @@ function SimpleCard(props) {
 
   let redirect = null;
   if (success === true) {
-    redirect = <Redirect to="/orderSuccess"></Redirect>;
+    redirect = <Redirect to={`/orderSuccess/${OrderId}`}></Redirect>;
   } else if (failure === true) {
     redirect = <Redirect to="/orderFailure"></Redirect>;
   }

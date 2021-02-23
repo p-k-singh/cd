@@ -148,6 +148,13 @@ function App(props) {
             <Route exact path="/ordersRedir" component={RedirForm} />
             <Route exact path="/myorders" component={MyOrders} />
             <Route exact path="/orderSuccess" component={Success} />
+
+            <Route
+              path="/orderSuccess/:id"
+              render={(props) => {
+                return <Success {...props} />;
+              }}
+            />
             <Route exact path="/orderFailure" component={Failure} />
             <Route exact path="/profile" component={MyProfile} />
             <Route exact path="/inventory-manager" component={Inventory} />

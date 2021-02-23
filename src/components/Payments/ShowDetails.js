@@ -278,8 +278,6 @@ const ShowDetails = (props) => {
               </Grid>
             </RadioGroup>
           </FormControl>
-
-          <Divider style={{ marginBottom: 20 }} />
           {props.data.paymentOption === "CreditBased" && (
             <FormControl
               style={{ marginLeft: 50 }}
@@ -409,6 +407,9 @@ const ShowDetails = (props) => {
               )}
             </FormControl>
           )}
+
+          <Divider style={{ marginBottom: 20 }} />
+
           <Grid
             container
             spacing={3}
@@ -416,7 +417,6 @@ const ShowDetails = (props) => {
           >
             <Grid item xs={12} sm={4}>
               <FormControl component="fieldset">
-                
                 <FormLabel component="legend">Selected payment mode</FormLabel>
                 <RadioGroup
                   aria-label="gender"

@@ -425,8 +425,7 @@ const ProductDetails = (props) => {
 
   const [user, setUser] = useState();
   const [allProducts, setAllProducts] = useState([]);
-  //const [props.chosenProducts, props.setChosenProducts] = useState([null]);
-  //const [loading, setLoading] = useState(true);
+
   const [calculating, setCalculating] = useState(false);
 
   const capabilityOptions = {

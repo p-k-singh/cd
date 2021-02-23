@@ -209,7 +209,6 @@ const PaymentIndex = (props) => {
       API.get("GoFlexeOrderPlacement", `/customer-payments` + param)
         .then((resp) => {
           console.log(resp);
-
           //console.log(resp.paymentId)
           setData({
             paymentId: resp.paymentId,
