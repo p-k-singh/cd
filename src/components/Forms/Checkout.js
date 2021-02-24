@@ -439,7 +439,7 @@ function SimpleCard(props) {
         )}
         {activeStep < 1 && (
           <Button variant="contained" color="primary" onClick={handleNextClick}>
-            Next
+            Fill Product Details
           </Button>
         )}
         {/* Button for confirm page */}

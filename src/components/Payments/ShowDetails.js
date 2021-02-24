@@ -13,6 +13,7 @@
 // export default ShowDetails;
 import { useEffect } from "react";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -214,246 +215,300 @@ const ShowDetails = (props) => {
     <Card className={classes.root}>
       <CardContent style={{ padding: 0 }}>
         <Typography className={classes.title} gutterBottom>
-          Payment
+          Payment details
         </Typography>
+        <Grid container spacing={0} style={{ paddingLeft: 30 }}>
+          <Grid item xs={12} sm={6}>
+            <form style={{ padding: 10 }}>
+              <FormControl component="fieldset">
+                <RadioGroup
+                  row
+                  style={{ width: "auto" }}
+                  aria-label="position"
+                  name="position"
+                  value="ImmediatePayment"
+                >
+                  <FormLabel component="legend">
+                    Selected payment Promise:
+                  </FormLabel>
+                  <Grid
+                    container
+                    spacing={0}
+                    style={{ padding: 20, paddingLeft: 0, paddingBottom: 30 }}
+                  >
+                    <Grid item xs={12} sm={6}>
+                      <FormControlLabel
+                        value="ImmediatePayment"
+                        control={<Radio color="primary" />}
+                        label="Immediate Payment"
+                      />
+                    </Grid>
+                    {/* <Grid item xs={12} sm={6}>
+                      <FormControlLabel
+                        value="30DaysCycle"
+                        control={<Radio color="primary" />}
+                        label="30 Days Cycle"
+                      />
+                    </Grid> */}
+                  </Grid>
+                </RadioGroup>
+              </FormControl>
+            </form>
+          </Grid>
+          <Grid item sm={6} style={{ padding: 10 }}>
+            <FormControl component="fieldset">
+              <RadioGroup
+                row
+                style={{ width: "auto" }}
+                aria-label="position"
+                name="position"
+                value={props.data.paymentOption}
+              >
+                <FormLabel component="legend">
+                  Selected payment option:
+                </FormLabel>
+                <Grid
+                  container
+                  spacing={0}
+                  style={{ padding: 20, paddingBottom: 30 }}
+                >
+                  {props.data.paymentOption == "fullPayment" ? (
+                    <Grid item xs={12} sm={6}>
+                      <FormControlLabel
+                        value="fullPayment"
+                        control={<Radio color="primary" />}
+                        label="Full Payment"
+                      />
+                    </Grid>
+                  ) : (
+                    <p></p>
+                  )}
+                  {props.data.paymentOption == "partialPayment" ? (
+                    <Grid item xs={12} sm={6}>
+                      <FormControlLabel
+                        value="partialPayment"
+                        control={<Radio color="primary" />}
+                        label="Partial Payment"
+                      />
+                    </Grid>
+                  ) : (
+                    <p></p>
+                  )}
+                  {props.data.paymentOption == "CreditBased" ? (
+                    <Grid item xs={12} sm={6}>
+                      <FormControlLabel
+                        value="CreditBased"
+                        control={<Radio color="primary" />}
+                        label="Credit Based"
+                      />
+                    </Grid>
+                  ) : (
+                    <p></p>
+                  )}
+                  {props.data.paymentOption == "Subscription" ? (
+                    <Grid item xs={12} sm={6}>
+                      <FormControlLabel
+                        value="Subscription"
+                        control={<Radio color="primary" />}
+                        label="Subscription"
+                      />
+                    </Grid>
+                  ) : (
+                    <p></p>
+                  )}
+                </Grid>
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={0} style={{ paddingLeft: 30 }}>
+          <Grid item xs={12} sm={6}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Selected payment mode</FormLabel>
+              <RadioGroup
+                aria-label="gender"
+                name="gender1"
+                value={props.data.paymentMode}
+              >
+                {props.data.paymentMode == "accountTransfer" ? (
+                  <FormControlLabel
+                    value="accountTransfer"
+                    control={<Radio color="primary" />}
+                    label="Account Transfer"
+                  />
+                ) : (
+                  <p></p>
+                )}
+                {props.data.paymentMode == "cash" ? (
+                  <FormControlLabel
+                    value="cash"
+                    control={<Radio color="primary" />}
+                    label="Cash"
+                  />
+                ) : (
+                  <p></p>
+                )}
+                {props.data.paymentMode == "Others" ? (
+                  <FormControlLabel
+                    value="Others"
+                    control={<Radio color="primary" />}
+                    label="Others"
+                  />
+                ) : (
+                  <p></p>
+                )}
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            {" "}
+            {props.data.paymentOption === "CreditBased" && (
+              <FormControl
+                style={{ marginLeft: 50 }}
+                className={classes.formControl}
+              >
+                <InputLabel id="demo-simple-select-label">
+                  Payment Delay
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={props.data.paymentModeDetails.paymentDelay}
+
+                  //   value={age}
+                  //   onChange={handleChange}
+                >
+                  {props.data.paymentModeDetails.paymentDelay == "7 Days" ? (
+                    <MenuItem value="7 Days">7 Days</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {props.data.paymentModeDetails.paymentDelay == "30 Days" ? (
+                    <MenuItem value="30 Days">30 Days</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {props.data.paymentModeDetails.paymentDelay == "45 Days" ? (
+                    <MenuItem value="45 Days">45 Days</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                </Select>
+                {props.data.paymentModeDetails.paymentDelay === "45 Days" && (
+                  <FormHelperText>
+                    Pay the total amount in 45 Days
+                  </FormHelperText>
+                )}
+                {props.data.paymentModeDetails.paymentDelay === "30 Days" && (
+                  <FormHelperText>
+                    Pay the total amount in 30 Days
+                  </FormHelperText>
+                )}
+                {props.data.paymentModeDetails.paymentDelay === "7 Days" && (
+                  <FormHelperText>
+                    Pay the total amount in 7 Days
+                  </FormHelperText>
+                )}
+              </FormControl>
+            )}
+            {props.data.paymentOption == "Subscription" ? (
+              <FormControl
+                style={{ marginLeft: 50 }}
+                className={classes.formControl}
+              >
+                <InputLabel id="demo-simple-select-label">
+                  Payment Cycle
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={props.data.paymentModeDetails.paymentCycle}
+
+                  //   value={age}
+                  //   onChange={handleChange}
+                >
+                  {props.data.paymentModeDetails.paymentCycle == "Monthly" ? (
+                    <MenuItem value="Monthly">Monthly</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {props.data.paymentModeDetails.paymentCycle == "Weekly" ? (
+                    <MenuItem value="Weekly">Weekly</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                </Select>
+                {props.data.paymentModeDetails.paymentCycle === "Monthly" && (
+                  <FormHelperText>Pay each Month</FormHelperText>
+                )}
+                {props.data.paymentModeDetails.paymentCycle === "Weekly" && (
+                  <FormHelperText>Pay each Week</FormHelperText>
+                )}
+              </FormControl>
+            ) : (
+              ""
+            )}
+            {props.data.paymentOption == "partialPayment" && (
+              <FormControl
+                style={{ marginLeft: 50 }}
+                className={classes.formControl}
+              >
+                <InputLabel id="demo-simple-select-label">
+                  Payment Ratio
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={props.data.paymentModeDetails.paymentRatio}
+                >
+                  {props.data.paymentModeDetails.paymentRatio == "10%" ? (
+                    <MenuItem value="10%">10%</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {props.data.paymentModeDetails.paymentRatio == "30%" ? (
+                    <MenuItem value="30%">30%</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                  {props.data.paymentModeDetails.paymentRatio == "50%" ? (
+                    <MenuItem value="50%">50%</MenuItem>
+                  ) : (
+                    ""
+                  )}
+                </Select>
+                {props.data.paymentModeDetails.paymentRatio === "50%" && (
+                  <FormHelperText>
+                    Pay 50% now and 50%
+                    <br /> at time of delivery
+                  </FormHelperText>
+                )}
+                {props.data.paymentModeDetails.paymentRatio === "30%" && (
+                  <FormHelperText>
+                    Pay 30% now and 70%
+                    <br /> at time of delivery
+                  </FormHelperText>
+                )}
+                {props.data.paymentModeDetails.paymentRatio === "10%" && (
+                  <FormHelperText>
+                    Pay 10% now and 90%
+                    <br /> at time of delivery
+                  </FormHelperText>
+                )}
+              </FormControl>
+            )}
+          </Grid>
+        </Grid>
         <form style={{ padding: 10 }}>
-          <FormControl component="fieldset">
-            <RadioGroup
-              row
-              style={{ width: "auto" }}
-              aria-label="position"
-              name="position"
-              value={props.data.paymentOption}
-            >
-              <FormLabel component="legend">Selected payment option:</FormLabel>
-              <Grid
-                container
-                spacing={0}
-                style={{ padding: 20, paddingBottom: 30 }}
-              >
-                {props.data.paymentOption == "fullPayment" ? (
-                  <Grid item xs={12} sm={6}>
-                    <FormControlLabel
-                      value="fullPayment"
-                      control={<Radio color="primary" />}
-                      label="Full Payment"
-                    />
-                  </Grid>
-                ) : (
-                  <p></p>
-                )}
-                {props.data.paymentOption == "partialPayment" ? (
-                  <Grid item xs={12} sm={6}>
-                    <FormControlLabel
-                      value="partialPayment"
-                      control={<Radio color="primary" />}
-                      label="Partial Payment"
-                    />
-                  </Grid>
-                ) : (
-                  <p></p>
-                )}
-                {props.data.paymentOption == "CreditBased" ? (
-                  <Grid item xs={12} sm={6}>
-                    <FormControlLabel
-                      value="CreditBased"
-                      control={<Radio color="primary" />}
-                      label="Credit Based"
-                    />
-                  </Grid>
-                ) : (
-                  <p></p>
-                )}
-                {props.data.paymentOption == "Subscription" ? (
-                  <Grid item xs={12} sm={6}>
-                    <FormControlLabel
-                      value="Subscription"
-                      control={<Radio color="primary" />}
-                      label="Subscription"
-                    />
-                  </Grid>
-                ) : (
-                  <p></p>
-                )}
-              </Grid>
-            </RadioGroup>
-          </FormControl>
-          {props.data.paymentOption === "CreditBased" && (
-            <FormControl
-              style={{ marginLeft: 50 }}
-              className={classes.formControl}
-            >
-              <InputLabel id="demo-simple-select-label">
-                Payment Delay
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={props.data.paymentModeDetails.paymentDelay}
-
-                //   value={age}
-                //   onChange={handleChange}
-              >
-                {props.data.paymentModeDetails.paymentDelay == "7 Days" ? (
-                  <MenuItem value="7 Days">7 Days</MenuItem>
-                ) : (
-                  ""
-                )}
-                {props.data.paymentModeDetails.paymentDelay == "30 Days" ? (
-                  <MenuItem value="30 Days">30 Days</MenuItem>
-                ) : (
-                  ""
-                )}
-                {props.data.paymentModeDetails.paymentDelay == "45 Days" ? (
-                  <MenuItem value="45 Days">45 Days</MenuItem>
-                ) : (
-                  ""
-                )}
-              </Select>
-              {props.data.paymentModeDetails.paymentDelay === "45 Days" && (
-                <FormHelperText>Pay the total amount in 45 Days</FormHelperText>
-              )}
-              {props.data.paymentModeDetails.paymentDelay === "30 Days" && (
-                <FormHelperText>Pay the total amount in 30 Days</FormHelperText>
-              )}
-              {props.data.paymentModeDetails.paymentDelay === "7 Days" && (
-                <FormHelperText>Pay the total amount in 7 Days</FormHelperText>
-              )}
-            </FormControl>
-          )}
-          {props.data.paymentOption == "Subscription" ? (
-            <FormControl
-              style={{ marginLeft: 50 }}
-              className={classes.formControl}
-            >
-              <InputLabel id="demo-simple-select-label">
-                Payment Cycle
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={props.data.paymentModeDetails.paymentCycle}
-
-                //   value={age}
-                //   onChange={handleChange}
-              >
-                {props.data.paymentModeDetails.paymentCycle == "Monthly" ? (
-                  <MenuItem value="Monthly">Monthly</MenuItem>
-                ) : (
-                  ""
-                )}
-                {props.data.paymentModeDetails.paymentCycle == "Weekly" ? (
-                  <MenuItem value="Weekly">Weekly</MenuItem>
-                ) : (
-                  ""
-                )}
-              </Select>
-              {props.data.paymentModeDetails.paymentCycle === "Monthly" && (
-                <FormHelperText>Pay each Month</FormHelperText>
-              )}
-              {props.data.paymentModeDetails.paymentCycle === "Weekly" && (
-                <FormHelperText>Pay each Week</FormHelperText>
-              )}
-            </FormControl>
-          ) : (
-            ""
-          )}
-          {props.data.paymentOption == "partialPayment" && (
-            <FormControl
-              style={{ marginLeft: 50 }}
-              className={classes.formControl}
-            >
-              <InputLabel id="demo-simple-select-label">
-                Payment Ratio
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={props.data.paymentModeDetails.paymentRatio}
-              >
-                {props.data.paymentModeDetails.paymentRatio == "10%" ? (
-                  <MenuItem value="10%">10%</MenuItem>
-                ) : (
-                  ""
-                )}
-                {props.data.paymentModeDetails.paymentRatio == "30%" ? (
-                  <MenuItem value="30%">30%</MenuItem>
-                ) : (
-                  ""
-                )}
-                {props.data.paymentModeDetails.paymentRatio == "50%" ? (
-                  <MenuItem value="50%">50%</MenuItem>
-                ) : (
-                  ""
-                )}
-              </Select>
-              {props.data.paymentModeDetails.paymentRatio === "50%" && (
-                <FormHelperText>
-                  Pay 50% now and 50%
-                  <br /> at time of delivery
-                </FormHelperText>
-              )}
-              {props.data.paymentModeDetails.paymentRatio === "30%" && (
-                <FormHelperText>
-                  Pay 30% now and 70%
-                  <br /> at time of delivery
-                </FormHelperText>
-              )}
-              {props.data.paymentModeDetails.paymentRatio === "10%" && (
-                <FormHelperText>
-                  Pay 10% now and 90%
-                  <br /> at time of delivery
-                </FormHelperText>
-              )}
-            </FormControl>
-          )}
-
-          <Divider style={{ marginBottom: 20 }} />
+          <Divider style={{ marginBottom: 5 }} />
 
           <Grid
             container
             spacing={3}
             style={{ padding: 50, paddingTop: 20, paddingBottom: 30 }}
           >
-            <Grid item xs={12} sm={4}>
-              <FormControl component="fieldset">
-                <FormLabel component="legend">Selected payment mode</FormLabel>
-                <RadioGroup
-                  aria-label="gender"
-                  name="gender1"
-                  value={props.data.paymentMode}
-                >
-                  {props.data.paymentMode == "accountTransfer" ? (
-                    <FormControlLabel
-                      value="accountTransfer"
-                      control={<Radio color="primary" />}
-                      label="Account Transfer"
-                    />
-                  ) : (
-                    <p></p>
-                  )}
-                  {props.data.paymentMode == "cash" ? (
-                    <FormControlLabel
-                      value="cash"
-                      control={<Radio color="primary" />}
-                      label="Cash"
-                    />
-                  ) : (
-                    <p></p>
-                  )}
-                  {props.data.paymentMode == "Others" ? (
-                    <FormControlLabel
-                      value="Others"
-                      control={<Radio color="primary" />}
-                      label="Others"
-                    />
-                  ) : (
-                    <p></p>
-                  )}
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={12}>
               {props.data.paymentMode === "accountTransfer" &&
                 PaidfullPayToAccountDashboard}
               {props.data.paymentMode === "cash" && PaidcashPayment}
@@ -462,6 +517,25 @@ const ShowDetails = (props) => {
           </Grid>
         </form>
       </CardContent>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          marginRight: 60,
+        }}
+      >
+        <Link to="/" className="btn btn-primary">
+          <Button
+            className="AllButtons"
+            variant="contained"
+            // style={{backgroundColor:'#FF8C00'}}
+            // onClick={() => handleAccountTransfer()}
+          >
+            Go Home
+          </Button>
+        </Link>
+      </div>
       <div
         style={{
           display: "flex",

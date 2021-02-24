@@ -50,7 +50,7 @@ const pilferagedata = [
   { name: "Damaged Goods", Percent: 16 },
 ];
 
-const COLORS = ["#FF8042", "#00C49F", "#FFBB28"];
+const COLORS = ["#FF8042", "#00C49F", "#cc3300"];
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -313,7 +313,7 @@ class Home extends Component {
                             label={renderCustomizedLabel}
                             outerRadius={80}
                           >
-                            {data.map((entry, index) => (
+                            {pilferagedata.map((entry, index) => (
                               <Cell
                                 key={`cell-${index}`}
                                 fill={COLORS[index % COLORS.length]}
@@ -334,7 +334,7 @@ class Home extends Component {
                         ></div>
                         <div
                           style={{
-                            background: "#FFBB28",
+                            background: "#cc3300",
                             width: 10,
 
                             height: 10,

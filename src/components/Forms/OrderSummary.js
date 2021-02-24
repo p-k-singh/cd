@@ -131,6 +131,7 @@ const OrderSummary = (props) => {
     props.setCompany(newCompany);
     setEditCompany(false);
   };
+  var measure = props.chosenProducts.map((unit) => unit.value.measurable);
   return (
     <Card className={classes.paper}>
       <CardContent style={{ padding: 0, marginTop: 10 }}>
@@ -174,21 +175,35 @@ const OrderSummary = (props) => {
             <Grid item xs={12} sm={6}>
               <tr>
                 <th scope="row">{constants.noOfUnits + ": "}</th>
-                <td>{props.noOfUnits}</td>
+                <td>
+                  {props.chosenProducts.map((unit) => unit.noOfUnits)}
+                  {/* {props.chosenProducts[0].value.noOfUnits} */}
+                </td>
               </tr>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <tr>
-                <th scope="row">{constants.weightPerUnit + ": "}</th>
-                <td>{props.weightPerUnit}</td>
-              </tr>
-            </Grid>
+            {measure == "false" ? (
+              <Grid item xs={12} sm={6}>
+                <tr>
+                  <th scope="row">{constants.weightPerUnit + ": "}</th>
+                  <td>
+                    {" "}
+                    {props.chosenProducts.map((unit) => unit.weightPerUnit)}
+                  </td>
+                </tr>
+              </Grid>
+            ) : (
+              <p></p>
+            )}
+
             <Grid item xs={12} sm={6}>
               <tr>
                 <th scope="row">{constants.DimensionPerUnit + ": "}</th>
                 <td>
-                  {props.height}x{props.length}x{props.width + " "}
-                  {props.unit}{" "}
+                  {props.chosenProducts.map((i) => i.value.height)}x
+                  {props.chosenProducts.map((i) => i.value.length)}x
+                  {props.chosenProducts.map((i) => i.value.width + " ")}
+                  {""}
+                  {props.chosenProducts.map((i) => i.value.unit.label)}
                 </td>
               </tr>
             </Grid>
