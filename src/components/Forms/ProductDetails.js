@@ -341,6 +341,8 @@
 
 // export default connect(mapStateToProps,mapDispatchToProps)(ProductDimensions);
 import Tooltip from "@material-ui/core/Tooltip";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 import React, { useEffect, useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import CardContent from "@material-ui/core/CardContent";
@@ -350,16 +352,19 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Spinner from "../UI/Spinner";
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 import InfoIcon from "@material-ui/icons/Info";
 import {
   TextField,
   Grid,
+  FormHelperText,
   Card,
   Checkbox,
   Button,
   IconButton,
   Divider,
-  FormControlLabel,
   Switch,
 } from "@material-ui/core";
 import { Auth, API } from "aws-amplify";
@@ -425,8 +430,7 @@ const ProductDetails = (props) => {
 
   const [user, setUser] = useState();
   const [allProducts, setAllProducts] = useState([]);
-  //const [props.chosenProducts, props.setChosenProducts] = useState([null]);
-  //const [loading, setLoading] = useState(true);
+  const [paymentOption, setPaymentOption] = useState("fullPayment");
   const [calculating, setCalculating] = useState(false);
 
   const capabilityOptions = {
@@ -437,6 +441,10 @@ const ProductDetails = (props) => {
       ...base,
       zIndex: 100,
     }),
+  };
+  const handlePaymentOptionChange = (event) => {
+    setPaymentOption(event.target.value);
+    //alert(event.target.value);
   };
 
   useEffect(() => {
@@ -1114,9 +1122,56 @@ const ProductDetails = (props) => {
           margin: 20,
         }}
       ></div>
-
-      {/* </Card> */}
-      {/* //if(showPrice===true) */}
+      <CardContent style={{ padding: 30 }}>
+        <Typography fullWidth className={classes.title} gutterBottom>
+          Payments
+        </Typography>
+        <form style={{ padding: 10 }}>
+          <FormControl component="fieldset">
+            <RadioGroup
+              row
+              style={{ width: "auto" }}
+              aria-label="position"
+              name="position"
+              onChange={(event) => handlePaymentOptionChange(event)}
+              value={paymentOption}
+            >
+              <FormLabel component="legend">
+                Choose your payment Promise:
+              </FormLabel>
+              <Grid
+                container
+                spacing={0}
+                style={{ padding: 20, paddingBottom: 30 }}
+              >
+                <Grid item xs={12} sm={6}>
+                  <FormControlLabel
+                    value="ImmediatePayment"
+                    control={<Radio color="primary" />}
+                    label="Immediate Payment"
+                  />
+                  {paymentOption === "ImmediatePayment" && (
+                    <FormHelperText>
+                      For Immediate Payment, We will do negotitation on your
+                      behalf to give you a discounted price.
+                    </FormHelperText>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControlLabel
+                    value="30DaysCycle"
+                    control={<Radio color="primary" />}
+                    label="30 Days Cycle"
+                  />
+                  {paymentOption === "30DaysCycle" && (
+                    <FormHelperText>Pay in 30 Days.</FormHelperText>
+                  )}
+                </Grid>
+              </Grid>
+            </RadioGroup>
+          </FormControl>
+        </form>
+      </CardContent>
     </div>
   );
 };

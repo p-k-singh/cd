@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function SimpleCard(props) {
   const classes = useStyles();
   //Handle Page Change
@@ -51,7 +50,8 @@ function SimpleCard(props) {
   const [failure, setFailure] = useState(false);
   const [loading, setLoading] = useState(false);
   const [chosenProducts, setChosenProducts] = useState([null]);
-  const [estimatedPrice,setEstimatedPrice] = useState(0)
+  const [estimatedPrice, setEstimatedPrice] = useState(0);
+  const [OrderId, setOrderId] = useState(0);
 
   function getStepContent(step, chosenProducts, setChosenProducts) {
     switch (step) {
@@ -385,7 +385,7 @@ function SimpleCard(props) {
           pickupSlot: props.pickupSlot,
           additionalNote: props.additionalNote,
           items: items,
-          estimatedPrice: estimatedPrice
+          estimatedPrice: estimatedPrice,
         },
       ],
     };
@@ -394,6 +394,8 @@ function SimpleCard(props) {
     };
     API.post("GoFlexeOrderPlacement", `/customerorder`, payload)
       .then((response) => {
+        setOrderId(response[0].OrderId);
+
         // Add your code here
         console.log(response);
         setLoading(false);
@@ -409,7 +411,7 @@ function SimpleCard(props) {
 
   let redirect = null;
   if (success === true) {
-    redirect = <Redirect to="/orderSuccess"></Redirect>;
+    redirect = <Redirect to={`/orderSuccess/${OrderId}`}></Redirect>;
   } else if (failure === true) {
     redirect = <Redirect to="/orderFailure"></Redirect>;
   }
@@ -437,7 +439,7 @@ function SimpleCard(props) {
         )}
         {activeStep < 1 && (
           <Button variant="contained" color="primary" onClick={handleNextClick}>
-            Next
+            Fill Product Details
           </Button>
         )}
         {/* Button for confirm page */}

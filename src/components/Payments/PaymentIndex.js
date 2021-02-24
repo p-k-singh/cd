@@ -10,6 +10,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Upload from "./Upload/Upload";
 import InfoIcon from "@material-ui/icons/Info";
+import { Link } from "react-router-dom";
 import { Auth, API } from "aws-amplify";
 import Spinner from "../UI/Spinner";
 import {
@@ -209,7 +210,6 @@ const PaymentIndex = (props) => {
       API.get("GoFlexeOrderPlacement", `/customer-payments` + param)
         .then((resp) => {
           console.log(resp);
-
           //console.log(resp.paymentId)
           setData({
             paymentId: resp.paymentId,
@@ -332,6 +332,7 @@ const PaymentIndex = (props) => {
           Reference Id of the transaction in the textbox given above
         </p>
       </Card>
+     
     </React.Fragment>
   );
 
@@ -448,6 +449,51 @@ const PaymentIndex = (props) => {
         <Typography className={classes.title} gutterBottom>
           Payment
         </Typography>
+        <form style={{ padding: 10 }}>
+          <FormControl component="fieldset">
+            <RadioGroup
+              row
+              style={{ width: "auto" }}
+              aria-label="position"
+              name="position"
+              onChange={(event) => handlePaymentOptionChange(event)}
+              value={paymentOption}
+            >
+              <FormLabel component="legend">
+                Selected payment Promise:
+              </FormLabel>
+              <Grid
+                container
+                spacing={0}
+                style={{ padding: 20, paddingBottom: 30 }}
+              >
+                <Grid item xs={12} sm={6}>
+                  <FormControlLabel
+                    value="ImmediatePayment"
+                    control={<Radio color="primary" />}
+                    label="Immediate Payment"
+                  />
+                  {paymentOption === "ImmediatePayment" && (
+                    <FormHelperText>
+                      For Immediate Payment, We will do negotitation on your
+                      behalf to give you a discounted price.
+                    </FormHelperText>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControlLabel
+                    value="30DaysCycle"
+                    control={<Radio color="primary" />}
+                    label="30 Days Cycle"
+                  />
+                  {paymentOption === "30DaysCycle" && (
+                    <FormHelperText>Pay in 30 Days.</FormHelperText>
+                  )}
+                </Grid>
+              </Grid>
+            </RadioGroup>
+          </FormControl>
+        </form>
         <form style={{ padding: 10 }}>
           <FormControl component="fieldset">
             <RadioGroup
@@ -693,6 +739,25 @@ const PaymentIndex = (props) => {
           margin: 20,
         }}
       ></div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          margin: 20,
+        }}
+      >
+        <Link to="/" className="btn btn-primary">
+          <Button
+            className="AllButtons"
+            variant="contained"
+            // style={{backgroundColor:'#FF8C00'}}
+            // onClick={() => handleAccountTransfer()}
+          >
+            Pay Later
+          </Button>
+        </Link>
+      </div>
     </Card>
   );
 

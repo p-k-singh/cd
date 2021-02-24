@@ -32,13 +32,15 @@ const useStyles = makeStyles({
 
 const BuyerDetails = (props) => {
   const classes = useStyles();
+
+  const [pickupArea, setPickupArea] = useState("");
+  const [deliveryArea, setDeliveryArea] = useState("");
   const [pickupZipValidator, setPickupZipValidator] = useState("");
   const [deliverZipValidator, setDeliverZipValidator] = useState("");
   const [pickupDateValidator, setPickupDateValidator] = useState("");
   const [deliveryDateValidator, setDeliveryDateValidator] = useState("");
-  const [PickupPinLocation, setPickupPinLocation] = useState("");
-  const [DeliveryPinLocation, setDeliveryPinLocation] = useState("");
-
+  const [PickupData, setPickupData] = useState([]);
+  const [DeliveryData, setDeliveryData] = useState([]);
   useEffect(() => {
     //alert('topin'+props.pickupPin+'from pin'+props.destinationPin)
     var today = new Date();
@@ -151,11 +153,9 @@ const BuyerDetails = (props) => {
         // Storing data in form of JSON
         var data = await response.json();
         console.log(data);
-        var pickuplocation =
-          data !== null && data[0].PostOffice !== null
-            ? data[0].PostOffice[0].Block
-            : "";
-        setPickupPinLocation(pickuplocation);
+        setPickupData(
+          data !== null && data[0].PostOffice !== null ? data[0].PostOffice : ""
+        );
       }
       // Calling that async function
       getapi(api_url);
@@ -191,11 +191,9 @@ const BuyerDetails = (props) => {
         // Storing data in form of JSON
         var data = await response.json();
         console.log(data);
-        var Deliverylocation =
-          data !== null && data[0].PostOffice !== null
-            ? data[0].PostOffice[0].Block
-            : "";
-        setDeliveryPinLocation(Deliverylocation);
+        setDeliveryData(
+          data !== null && data[0].PostOffice !== null ? data[0].PostOffice : ""
+        );
       }
       // Calling that async function
       getapi(api_url);
@@ -221,6 +219,13 @@ const BuyerDetails = (props) => {
   const onTimeSlotChangeController = (event) => {
     props.setPickupSlotDispatcher(event.target.value);
   };
+  const onPickupAreaChangeController = (event) => {
+    setPickupArea(event.target.value);
+  };
+  const onDeliveryAreaChangeController = (event) => {
+    setDeliveryArea(event.target.value);
+  };
+
   const onAdditionalNoteChangeController = (event) => {
     props.setAdditionalNoteDispatcher(event.target.value);
   };
@@ -263,7 +268,9 @@ const BuyerDetails = (props) => {
               error={pickupZipValidator !== ""}
               helperText={
                 pickupZipValidator === ""
-                  ? PickupPinLocation
+                  ? PickupData == ""
+                    ? ""
+                    : PickupData[0].District + ", " + PickupData[0].State
                   : pickupZipValidator
               }
               type="number"
@@ -276,6 +283,30 @@ const BuyerDetails = (props) => {
               autoComplete="Pickup postal-code"
             />
           </Grid>
+          {PickupData.length !== 0 ? (
+            <Grid item xs={12} sm={2}>
+              <FormControl className={classes.formControl} fullWidth>
+                <InputLabel htmlFor="age-native-simple">Locality</InputLabel>
+
+                <Select
+                  native
+                  onChange={(event) => onPickupAreaChangeController(event)}
+                  value={pickupArea}
+                  inputProps={{
+                    name: "age",
+                    id: "age-native-simple",
+                  }}
+                >
+                  {PickupData.map((d) => (
+                    <option>{d.Name}</option>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          ) : (
+            <p></p>
+          )}
+
           <Grid item xs={12} sm={3}>
             <TextField
               required
@@ -312,6 +343,8 @@ const BuyerDetails = (props) => {
               </Select>
             </FormControl>
           </Grid>
+          <Grid item xs={12} sm={10}></Grid>
+
           <Grid item xs={12} sm={5}>
             <TextField
               id="destinationaddress"
@@ -330,7 +363,9 @@ const BuyerDetails = (props) => {
               error={deliverZipValidator !== ""}
               helperText={
                 deliverZipValidator === ""
-                  ? DeliveryPinLocation
+                  ? DeliveryData == ""
+                    ? ""
+                    : DeliveryData[0].District + ", " + DeliveryData[0].State
                   : deliverZipValidator
               }
               type="number"
@@ -343,6 +378,29 @@ const BuyerDetails = (props) => {
               autoComplete="Destination postal-code"
             />
           </Grid>
+          {DeliveryData.length !== 0 ? (
+            <Grid item xs={12} sm={2}>
+              <FormControl className={classes.formControl} fullWidth>
+                <InputLabel htmlFor="age-native-simple">Locality</InputLabel>
+
+                <Select
+                  native
+                  onChange={(event) => onDeliveryAreaChangeController(event)}
+                  value={deliveryArea}
+                  inputProps={{
+                    name: "age",
+                    id: "age-native-simple",
+                  }}
+                >
+                  {DeliveryData.map((d) => (
+                    <option>{d.Name}</option>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          ) : (
+            <p></p>
+          )}
           <Grid item xs={12} sm={3}>
             <TextField
               error={deliveryDateValidator !== ""}
