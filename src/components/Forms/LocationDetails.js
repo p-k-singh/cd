@@ -14,16 +14,6 @@ import {
   TextareaAutosize,
 } from "@material-ui/core";
 const useStyles = makeStyles({
-  root: {
-    // minWidth: 275,
-  },
-  // title: {
-  //   fontSize: 20,
-  //   height: 50,
-  //   padding: 10,
-  //   paddingLeft: 55,
-  //   color: 'white'
-  // },
   formHeadings: {
     margin: 20,
     marginBottom: 0,
@@ -287,7 +277,6 @@ const BuyerDetails = (props) => {
             <Grid item xs={12} sm={2}>
               <FormControl className={classes.formControl} fullWidth>
                 <InputLabel htmlFor="age-native-simple">Locality</InputLabel>
-
                 <Select
                   native
                   onChange={(event) => onPickupAreaChangeController(event)}
