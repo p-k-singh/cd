@@ -636,22 +636,7 @@ const ProductDetails = (props) => {
   var measureablePerUnit = (i) => (
     <React.Fragment>
       <Grid container spacing={3} style={{ padding: 50, paddingTop: 10 }}>
-        <Grid item xs={12} sm={2}>
-          <Select
-            styles={selectStyles}
-            className="basic-single"
-            classNamePrefix="Unit"
-            isSearchable
-            name="unit"
-            placeholder="Unit"
-            value={props.chosenProducts[i].value.unit}
-            onChange={(event) => unitChangeController(event, i)}
-            options={constants.lengthDimensions}
-          />
-          {/* </FormControl> */}
-        </Grid>
-        <Grid item xs={12} sm={4}></Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="number"
             id="weightPerUnit"
@@ -666,7 +651,9 @@ const ProductDetails = (props) => {
             onChange={(event) => onWeightPerUnitChangeController(event, i)}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={9}></Grid>
+
+        <Grid item xs={12} sm={3}>
           <TextField
             type="number"
             id="height"
@@ -681,7 +668,7 @@ const ProductDetails = (props) => {
             onChange={(event) => onHeightChangeController(event, i)}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="number"
             id="width"
@@ -696,7 +683,7 @@ const ProductDetails = (props) => {
             onChange={(event) => onWidthChangeController(event, i)}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="number"
             id="length"
@@ -710,6 +697,20 @@ const ProductDetails = (props) => {
             onChange={(event) => onLengthChangeController(event, i)}
             autoComplete="Length"
           />
+        </Grid>
+        <Grid item xs={12} sm={2}>
+          <Select
+            styles={selectStyles}
+            className="basic-single"
+            classNamePrefix="Unit"
+            isSearchable
+            name="unit"
+            placeholder="Unit"
+            value={props.chosenProducts[i].value.unit}
+            onChange={(event) => unitChangeController(event, i)}
+            options={constants.lengthDimensions}
+          />
+          {/* </FormControl> */}
         </Grid>
       </Grid>
     </React.Fragment>

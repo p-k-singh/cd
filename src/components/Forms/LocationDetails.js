@@ -305,7 +305,7 @@ const BuyerDetails = (props) => {
               }
               id="pickupdate"
               name="pickupdate"
-              label="Pickup Date(dd/mm/yyyy)"
+              label="Pickup Date(mm/dd/yyyy)"
               fullWidth
               type="date"
               // defaultValue='2021-01-01'
