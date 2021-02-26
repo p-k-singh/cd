@@ -131,7 +131,6 @@ const OrderSummary = (props) => {
     props.setCompany(newCompany);
     setEditCompany(false);
   };
-  var measure = props.chosenProducts.map((unit) => unit.value.measurable);
   return (
     <Card className={classes.paper}>
       <CardContent style={{ padding: 0, marginTop: 10 }}>
@@ -151,8 +150,14 @@ const OrderSummary = (props) => {
           >
             <Grid item xs={12} sm={6}>
               <tr>
-                <th scope="row">Order Date :</th>
-                <td>{new Date().toLocaleDateString()}</td>
+                <th scope="row">Pickup Date :</th>
+                <td>{props.pickupDate}</td>
+              </tr>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <tr>
+                <th scope="row">Delivery Date :</th>
+                <td>{props.deliveryDate}</td>
               </tr>
             </Grid>
 
@@ -172,20 +177,6 @@ const OrderSummary = (props) => {
                 </td>
               </tr>
             </Grid>
-
-            {measure == "false" ? (
-              <Grid item xs={12} sm={6}>
-                <tr>
-                  <th scope="row">{constants.weightPerUnit + ": "}</th>
-                  <td>
-                    {" "}
-                    {props.chosenProducts.map((unit) => unit.weightPerUnit)}
-                  </td>
-                </tr>
-              </Grid>
-            ) : (
-              <p></p>
-            )}
 
             <Grid item xs={12} sm={6}>
               <tr>
@@ -303,7 +294,7 @@ const OrderSummary = (props) => {
               className={classes.title}
               style={{ color: "black", backgroundColor: "lightgrey" }}
             >
-              Product No. {index + 1}
+              Product {index + 1}
             </Typography>
             <table>
               <Grid
@@ -323,11 +314,11 @@ const OrderSummary = (props) => {
                     <td>{each.noOfUnits}</td>
                   </tr>
                 </Grid>
-                {each.measure == "false" ? (
+                {each.value.measurable === false ? (
                   <Grid item xs={12} sm={6}>
                     <tr>
                       <th scope="row">{"Weight per Unit : "}</th>
-                      <td>{each.weightPerUnit}</td>
+                      <td>{each.value.weightPerUnit}</td>
                     </tr>
                   </Grid>
                 ) : (
@@ -340,15 +331,19 @@ const OrderSummary = (props) => {
                     <td>{each.value.productType.label}</td>
                   </tr>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <tr>
-                    <th scope="row">{"Dimensions : "}</th>
-                    <td>
-                      {each.value.height} x {each.value.length} x{" "}
-                      {each.value.width} {each.value.unit.label}
-                    </td>
-                  </tr>
-                </Grid>
+                {each.value.measurable === true ? (
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">{"Dimensions : "}</th>
+                      <td>
+                        {each.value.height} x {each.value.length} x{" "}
+                        {each.value.width} {each.value.unit.label}
+                      </td>
+                    </tr>
+                  </Grid>
+                ) : (
+                  <p></p>
+                )}
 
                 <Grid item xs={12} sm={6}>
                   <tr>
@@ -370,6 +365,8 @@ const OrderSummary = (props) => {
 const mapStateToProps = (state) => {
   return {
     name: state.order.name,
+    pickupDate: state.order.pickupDate,
+    deliveryDate: state.order.deliveryDate,
     pickupAddress: state.order.pickupAddress,
     pickupPin: state.order.pickupPin,
     destinationAddress: state.order.destinationAddress,

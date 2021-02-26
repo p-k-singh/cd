@@ -35,21 +35,21 @@ export default function CollapsibleTable(props) {
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
   const [toEdit, setToEdit] = useState(false);
-  useEffect(async () => {
-    var currentUser = await Auth.currentUserInfo();
-    var owner = currentUser.username;
-    API.get("GoFlexeOrderPlacement", `/inventory?type=owner&ownerId=${owner}`)
-      .then((response) => {
-        // Add your code here
-        console.log(response);
-        setRows(response);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-  }, [toEdit]);
+  // useEffect(async () => {
+  //   var currentUser = await Auth.currentUserInfo();
+  //   var owner = currentUser.username;
+  //   API.get("GoFlexeOrderPlacement", `/inventory?type=owner&ownerId=${owner}`)
+  //     .then((response) => {
+  //       // Add your code here
+  //       console.log(response);
+  //       setRows(response);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       setLoading(false);
+  //     });
+  // }, [toEdit]);
 
   const handleOpen = (event, idx) => {
     const selectedIndex = openedPages.indexOf(idx);

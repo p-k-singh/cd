@@ -51,7 +51,7 @@ const PreferencePage = (props) => {
             variant="contained"
             style={{ marginBottom: "10px", float: "right" }}
           >
-            {showForm === true ? "My Addresses" : "Add new Addresses"}
+            {showForm === true ? "My Addresses" : "Add new Address"}
           </Button>
         )}
       </div>
