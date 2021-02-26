@@ -26,7 +26,6 @@ const constants = {
   /*Price Calculator(same for inventory management)*/
   dimensionOptions: [
     { name: "Centimeters", value: "centimeters" },
-
     { name: "Inches", value: "inches" },
     { name: "Feets", value: "feets" },
     { name: "Millimeter", value: "millimeter" },
@@ -36,7 +35,7 @@ const constants = {
     { label: "Centimeters", value: "centimeters" },
     { label: "Inches", value: "inches" },
     { label: "Feets", value: "feets" },
-    { name: "Millimeter", value: "millimeter" },
+    { label: "Millimeter", value: "millimeter" },
   ],
 
   /*Inventory Management */
@@ -63,13 +62,51 @@ const constants = {
   /**Types of product */
   typesOfProducts: [
     { label: "Auto Parts", value: "autoParts" },
-    { label: "Building Materials", value: "buildingMaterials" },
-    { label: "Fertilizers", value: "fertilizers" },
-    { label: "Fruits And Vegetables", value: "fruitsAndVegetables" },
-    { label: "Furniture And Wood Products", value: "furnitureAndWoodProducts" },
-    { label: "Liquid in Drums", value: "liquidInDrums" },
-    { label: "Liquid/Oil", value: "liquidOrOil" },
-    { label: "Medicals", value: "medicals" },
+    { label: "Bardana Jute", value: "BardanaJute" },
+    { label: "Building Material", value: "BuildingMaterial" },
+    { label: "Cement", value: "Cement" },
+    { label: "Chemicals", value: "Chemicals" },
+    { label: "Coal and Ash", value: "CoalAsh" },
+    { label: "Containers", value: "Containers" },
+    { label: "Cotton Seed", value: "CottonSeed" },
+    {
+      label: "Electronics Consumer Durable",
+      value: "ElectronicsConsumerDurable",
+    },
+    { label: "Fertilizers", value: "Fertilizers" },
+    { label: "Fruits and Vegetables", value: "FruitsAndVegetables" },
+    {
+      label: "Furniture and Wood Products",
+      value: "FurnitureAndWoodProducts",
+    },
+    { label: "House Hold Goods", value: "HouseHoldGoods" },
+    { label: "Industrial Equipments", value: "IndustrialEquipments" },
+    {
+      label: "Iron sheets / bars / scraps",
+      value: "IronSheetsBarsScraps",
+    },
+    { label: "Liquid in drums", value: "LiquidInDrums" },
+    { label: "Liquids/Oil", value: "LiquidsOil" },
+    { label: "Machinery new or old", value: "Machinery" },
+    { label: "Medicals", value: "Medicals" },
+    { label: "Metals", value: "Metals" },
+    { label: "Mill Jute Oil", value: "MillJuteOil" },
+    { label: "Packed Food", value: "PackedFood" },
+    { label: "Plastic pipes", value: "PlasticPipes" },
+    { label: "Powder Bags", value: "powderBags" },
+    {
+      label: "printed books or paper rolls",
+      value: "printedBooksPaperRolls",
+    },
+    { label: "Refrigerated Goods", value: "RefrigeratedGoods" },
+    {
+      label: "Rice or wheat or agriculture products",
+      value: "agricultureProducts",
+    },
+    { label: "scrap", value: "scrap" },
+    { label: "spices", value: "spices" },
+    { label: "Textiles", value: "Textiles" },
+    { label: "Tyres and rubber products", value: "TyreAndRubber" },
   ],
 
   /*User Manager */

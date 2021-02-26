@@ -141,6 +141,12 @@ const AddUser = () => {
                   <InputLabel id="phone">Phone</InputLabel>
                   <TextField
                     fullWidth
+                    type="number"
+                    onInput={(e) => {
+                      e.target.value = Math.max(0, parseInt(e.target.value))
+                        .toString()
+                        .slice(0, 10);
+                    }}
                     id="outlined-start-adornment"
                     className={(classes.margin, classes.textField)}
                     InputProps={{

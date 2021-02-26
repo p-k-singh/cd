@@ -642,6 +642,11 @@ const ProductDetails = (props) => {
             id="weightPerUnit"
             name="weightPerUnit"
             label="Weight Per Unit(in Kg)"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
             fullWidth
             value={props.chosenProducts[i].value.weightPerUnit}
             variant="outlined"
@@ -660,6 +665,11 @@ const ProductDetails = (props) => {
             name="height"
             label="Height"
             fullWidth
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
             value={props.chosenProducts[i].value.height}
             autoComplete="Height"
             variant="outlined"
@@ -671,6 +681,11 @@ const ProductDetails = (props) => {
         <Grid item xs={12} sm={3}>
           <TextField
             type="number"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
             id="width"
             name="width"
             label="Width"
@@ -691,6 +706,11 @@ const ProductDetails = (props) => {
             label="Length"
             value={props.chosenProducts[i].value.length}
             fullWidth
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
@@ -730,8 +750,13 @@ const ProductDetails = (props) => {
               type="number"
               id="density"
               name="density"
-              label="Weight per cubic meter"
+              label="Weight in Kg"
               fullWidth
+              onInput={(e) => {
+                e.target.value = Math.max(0, parseInt(e.target.value))
+                  .toString()
+                  .slice(0, 5);
+              }}
               value={props.chosenProducts[i].value.density}
               variant="outlined"
               size="small"
@@ -759,6 +784,11 @@ const ProductDetails = (props) => {
         <Grid item xs={12} sm={4}>
           <TextField
             type="text"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
             id="unit"
             name="unit"
             label="Unit"
@@ -927,6 +957,11 @@ const ProductDetails = (props) => {
               type="number"
               size="small"
               id="outlined-basic"
+              onInput={(e) => {
+                e.target.value = Math.max(0, parseInt(e.target.value))
+                  .toString()
+                  .slice(0, 5);
+              }}
               label="No. of units"
               variant="outlined"
               value={
@@ -943,6 +978,11 @@ const ProductDetails = (props) => {
               fullWidth
               type="number"
               size="small"
+              onInput={(e) => {
+                e.target.value = Math.max(0, parseInt(e.target.value))
+                  .toString()
+                  .slice(0, 5);
+              }}
               id="outlined-basic"
               label="Total Weight"
               variant="outlined"

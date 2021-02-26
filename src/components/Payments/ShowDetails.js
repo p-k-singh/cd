@@ -205,7 +205,7 @@ const ShowDetails = (props) => {
         </Typography>
         {/* <HelpIcon /> */}
         Proof of Payment :
-        <a href={props.data.paymentModeDetails.chequeLink}>Check here</a>
+        <a href={props.data !== null && props.data.paymentMode == "others" ?props.data.paymentModeDetails.chequeLink : ""}>Check here</a>
         <Divider style={{ marginBottom: 20, marginTop: 50 }} />
       </Card>
     </React.Fragment>

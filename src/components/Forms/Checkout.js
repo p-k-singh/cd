@@ -86,6 +86,7 @@ function SimpleCard(props) {
     }
     if (emptyStringValidator(props.pickupAddress) === false) {
       alert("Pickup Address cannot be empty");
+      
 
       return;
     }

@@ -113,6 +113,7 @@ const AccountInfoForm = (props) => {
             <TextField
               type="text"
               id="accountNumber"
+              inputProps={{ maxLength: 18 }}
               name="accountNumber"
               label="Account Number"
               value={myState.accountNumber}
@@ -123,6 +124,7 @@ const AccountInfoForm = (props) => {
           <Grid item xs={12} sm={6}>
             <TextField
               type="text"
+              inputProps={{ maxLength: 11 }}
               id="ifscCode"
               name="ifscCode"
               value={myState.ifscCode}
