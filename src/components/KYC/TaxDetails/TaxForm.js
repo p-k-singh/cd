@@ -30,15 +30,41 @@ const CompanyKYC = (props) => {
   const classes = useStyles();
   const [panDoc, setPanDoc] = useState();
   const [gstDoc, setGSTDoc] = useState();
+  const [PanValidator, setPanValidator] = useState("");
+  const [GstValidator, setGstValidator] = useState("");
   const [loading, setLoading] = useState(false);
   const [myState, setMyState] = useState({
     pan: "",
     gstin: "",
   });
   const fieldsChange = (event) => {
+    var pancount = 0;
+    var gstcount = 0,
+      temp = event.target.value;
+    while (temp > 0) {
+      pancount++;
+      gstcount++;
+      temp = Math.floor(temp / 10);
+    }
+    if (event.target.name == "pan" && pancount > 10) {
+      setPanValidator("PAN Number cannot exceed 10 Digits");
+    } else {
+      setPanValidator("");
+    }
+    if (event.target.name == "gstin" || gstcount > 15) {
+      setGstValidator("Gst Number cannot exceed 15 Digits");
+    } else {
+      setGstValidator("");
+    }
     setMyState({ ...myState, [event.target.name]: event.target.value });
   };
   const submitKYC = () => {
+    if (PanValidator !== "") {
+      return;
+    }
+    if (GstValidator !== "") {
+      return;
+    }
     if (myState.pan == "") {
       alert("PAN Details cannot be empty");
       return;
@@ -178,10 +204,13 @@ const CompanyKYC = (props) => {
               type="text"
               id="pan"
               name="pan"
+              // error={PanValidator !== ""}
+              // helperText={PanValidator === "" ? "" : PanValidator}
               value={myState.pan}
               onChange={(event) => fieldsChange(event)}
               label="Enter PAN Details"
               fullWidth
+              inputProps={{ maxLength: 10 }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -190,7 +219,10 @@ const CompanyKYC = (props) => {
               type="text"
               id="gstin"
               name="gstin"
+              // error={GstValidator !== ""}
+              // helperText={GstValidator === "" ? "" : GstValidator}
               value={myState.gstin}
+              inputProps={{ maxLength: 15 }}
               onChange={(event) => fieldsChange(event)}
               label="GSTIN"
               fullWidth

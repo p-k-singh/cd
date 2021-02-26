@@ -6,7 +6,7 @@ import Home from "./components/Home";
 import Form from "./components/Forms/Checkout";
 import RedirForm from "./components/Forms/ForwardedCheckout";
 import MyProfile from "./components/Profile/MyProfile";
-
+import Track from "./components/Track/Track";
 import PriceCalculator from "./components/PriceCalculator/PriceCalculator";
 import OpenPriceCalculator from "./components/OpenPriceCalculator";
 import Success from "./components/OrderStatus/orderSuccess";
@@ -145,6 +145,7 @@ function App(props) {
             <Route exact path="/" component={Home} />
             {/* Order Form */}
             <Route exact path="/orders" component={Form} />
+            <Route exact path="/tracking" component={Track} />
             <Route exact path="/ordersRedir" component={RedirForm} />
             <Route exact path="/myorders" component={MyOrders} />
             <Route exact path="/orderSuccess" component={Success} />

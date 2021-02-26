@@ -29,6 +29,7 @@ const useStyles = makeStyles({
 const CompanyKYC = (props) => {
   const classes = useStyles();
   const [registrationDoc, setRegistrationDoc] = useState();
+  const [PhoneValidator, setPhoneValidator] = useState("");
   const [loading, setLoading] = useState(false);
   const [myState, setMyState] = useState({
     registeredName: "",
@@ -37,12 +38,26 @@ const CompanyKYC = (props) => {
     registeredContactNo: "",
   });
   const fieldsChange = (event) => {
+    var count = 0,
+      temp = event.target.value;
+    while (temp > 0) {
+      count++;
+      temp = Math.floor(temp / 10);
+    }
+    if (event.target.name == "phone" || count > 10) {
+      setPhoneValidator("Phone Number cannot exceed 10 Digits");
+    } else {
+      setPhoneValidator("");
+    }
     if (event.target.name == "phone" || event.target.value < 0) {
       event.target.value = 0;
     }
     setMyState({ ...myState, [event.target.name]: event.target.value });
   };
   const submitKYC = () => {
+    if (PhoneValidator !== "") {
+      return;
+    }
     if (
       myState.registeredName == "" ||
       myState.registeredAddress == "" ||
@@ -180,7 +195,10 @@ const CompanyKYC = (props) => {
               id="registeredContactNo"
               name="registeredContactNo"
               label="Contact number"
+           
               value={myState.registeredContactNo}
+              error={PhoneValidator !== ""}
+              helperText={PhoneValidator === "" ? "" : PhoneValidator}
               onChange={(event) => fieldsChange(event)}
               InputProps={{
                 startAdornment: (

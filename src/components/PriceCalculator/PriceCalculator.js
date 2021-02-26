@@ -490,6 +490,87 @@ const PriceCalculator = (props) => {
   var measureablePerUnit = (i) => (
     <React.Fragment>
       <Grid container spacing={3} style={{ padding: 50, paddingTop: 10 }}>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            type="number"
+            id="weightPerUnit"
+            name="weightPerUnit"
+            label="Weight Per Unit(in Kg)"
+            fullWidth
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            value={chosenProducts[i].value.weightPerUnit}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+            autoComplete="weightPerUnit"
+            onChange={(event) => onWeightPerUnitChangeController(event, i)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={9}></Grid>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            type="number"
+            id="height"
+            name="height"
+            label="Height"
+            fullWidth
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            value={chosenProducts[i].value.height}
+            autoComplete="Height"
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+            onChange={(event) => onHeightChangeController(event, i)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            type="number"
+            id="width"
+            name="width"
+            label="Width"
+            fullWidth
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            value={chosenProducts[i].value.width}
+            autoComplete="width"
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+            onChange={(event) => onWidthChangeController(event, i)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            type="number"
+            id="length"
+            name="length"
+            label="Length"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            value={chosenProducts[i].value.length}
+            fullWidth
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+            onChange={(event) => onLengthChangeController(event, i)}
+            autoComplete="Length"
+          />
+        </Grid>
         <Grid item xs={12} sm={2}>
           <Select
             styles={selectStyles}
@@ -503,67 +584,6 @@ const PriceCalculator = (props) => {
             options={constants.lengthDimensions}
           />
           {/* </FormControl> */}
-        </Grid>
-        <Grid item xs={12} sm={4}></Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            type="number"
-            id="weightPerUnit"
-            name="weightPerUnit"
-            label="Weight Per Unit(in Kg)"
-            fullWidth
-            value={chosenProducts[i].value.weightPerUnit}
-            variant="outlined"
-            size="small"
-            style={{ backgroundColor: "#fff" }}
-            autoComplete="weightPerUnit"
-            onChange={(event) => onWeightPerUnitChangeController(event, i)}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            type="number"
-            id="height"
-            name="height"
-            label="Height"
-            fullWidth
-            value={chosenProducts[i].value.height}
-            autoComplete="Height"
-            variant="outlined"
-            size="small"
-            style={{ backgroundColor: "#fff" }}
-            onChange={(event) => onHeightChangeController(event, i)}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            type="number"
-            id="width"
-            name="width"
-            label="Width"
-            fullWidth
-            value={chosenProducts[i].value.width}
-            autoComplete="width"
-            variant="outlined"
-            size="small"
-            style={{ backgroundColor: "#fff" }}
-            onChange={(event) => onWidthChangeController(event, i)}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <TextField
-            type="number"
-            id="length"
-            name="length"
-            label="Length"
-            value={chosenProducts[i].value.length}
-            fullWidth
-            variant="outlined"
-            size="small"
-            style={{ backgroundColor: "#fff" }}
-            onChange={(event) => onLengthChangeController(event, i)}
-            autoComplete="Length"
-          />
         </Grid>
       </Grid>
     </React.Fragment>
@@ -583,7 +603,12 @@ const PriceCalculator = (props) => {
               type="number"
               id="density"
               name="density"
-              label="Weight per cubic meter"
+              onInput={(e) => {
+                e.target.value = Math.max(0, parseInt(e.target.value))
+                  .toString()
+                  .slice(0, 5);
+              }}
+              label="Weight (in Kg)"
               fullWidth
               value={chosenProducts[i].value.density}
               variant="outlined"
@@ -780,6 +805,11 @@ const PriceCalculator = (props) => {
               size="small"
               id="outlined-basic"
               label="No. of units"
+              onInput={(e) => {
+                e.target.value = Math.max(0, parseInt(e.target.value))
+                  .toString()
+                  .slice(0, 5);
+              }}
               variant="outlined"
               value={
                 chosenProducts[i] === null ? 0 : chosenProducts[i].noOfUnits
@@ -794,6 +824,11 @@ const PriceCalculator = (props) => {
               type="number"
               size="small"
               id="outlined-basic"
+              onInput={(e) => {
+                e.target.value = Math.max(0, parseInt(e.target.value))
+                  .toString()
+                  .slice(0, 5);
+              }}
               label="Total Weight"
               variant="outlined"
               value={chosenProducts[i].totalWeight}

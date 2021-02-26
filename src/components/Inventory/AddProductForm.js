@@ -307,6 +307,11 @@ const AddProductForm = (props) => {
             helperText={
               weightPerUnitValidator === "" ? " " : weightPerUnitValidator
             }
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
             id="weightPerUnit"
             name="weightPerUnit"
             label="Weight Per Unit(in Kg)"
@@ -328,6 +333,11 @@ const AddProductForm = (props) => {
             name="height"
             label="Height"
             fullWidth
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
             value={height}
             autoComplete="Height"
             variant="outlined"
@@ -344,6 +354,11 @@ const AddProductForm = (props) => {
             id="width"
             name="width"
             label="Width"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
             fullWidth
             value={width}
             autoComplete="width"
@@ -360,6 +375,11 @@ const AddProductForm = (props) => {
             helperText={lengthValidator === "" ? " " : lengthValidator}
             id="length"
             name="length"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
             label="Length"
             value={length}
             fullWidth
@@ -398,6 +418,11 @@ const AddProductForm = (props) => {
             type="number"
             id="density"
             name="density"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
             label="Weight per cubic meter"
             fullWidth
             value={density}

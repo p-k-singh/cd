@@ -86,6 +86,7 @@ function SimpleCard(props) {
     }
     if (emptyStringValidator(props.pickupAddress) === false) {
       alert("Pickup Address cannot be empty");
+      
 
       return;
     }
@@ -439,7 +440,7 @@ function SimpleCard(props) {
         )}
         {activeStep < 1 && (
           <Button variant="contained" color="primary" onClick={handleNextClick}>
-            Fill Product Details
+            Proceed to Fill Product Details
           </Button>
         )}
         {/* Button for confirm page */}

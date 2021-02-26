@@ -10,6 +10,7 @@ import Box from "@material-ui/core/Box";
 import OrderDetails from "./OrderDetails/OrderDetails";
 import CompleteDetails from "./OrderDetails/CompleteDetails";
 import PaymentIndex from "./Payments/PaymentIndex";
+import Track from "./Track/Track";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -82,7 +83,7 @@ function Details(props, id) {
         <PaymentIndex orderId={id} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Pricing
+        <Track />
       </TabPanel>
       <TabPanel value={value} index={3}>
         <CompleteDetails orderId={id} />
