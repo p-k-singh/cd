@@ -421,7 +421,8 @@ const OpenPriceCalculator = (props) => {
   };
 
   var content = (
-    <Card className={classes.root} style={{ width: "100%" }}>
+    // <Grid className={classes.root} style={{width:"100%",marginRight:"50%" }}>
+    <Card>
       <CardContent style={{ padding: 0 }}>
         <Typography
           className={classes.title}
@@ -439,6 +440,20 @@ const OpenPriceCalculator = (props) => {
           Price Calculator
         </Typography>
         <form>
+          <FormControlLabel
+            style={{ margin: 20 }}
+            control={
+              <Switch
+                checked={switchToggler}
+                onChange={handleSwitchTogglerChange}
+                name="checkedB"
+                color="primary"
+              />
+            }
+            label="(Measureable Dimensions)"
+          />
+
+          {switchToggler === true ? measureablePerUnit : notMeasureable}
           <Typography className={classes.formHeadings}>
             Location Details
           </Typography>
@@ -483,21 +498,6 @@ const OpenPriceCalculator = (props) => {
               />
             </Grid>
           </Grid>
-          <FormControlLabel
-            style={{ margin: 20 }}
-            control={
-              <Switch
-                checked={switchToggler}
-                onChange={handleSwitchTogglerChange}
-                name="checkedB"
-                color="primary"
-              />
-            }
-            label="(Measureable Dimensions)"
-          />
-
-          {switchToggler === true ? measureablePerUnit : notMeasureable}
-
           {vases()}
         </form>
       </CardContent>
@@ -517,6 +517,8 @@ const OpenPriceCalculator = (props) => {
           Calculate
         </Button>
       </div>
+      
+    {/* </Grid> */}
     </Card>
   );
 
@@ -562,7 +564,7 @@ const OpenPriceCalculator = (props) => {
     return <Redirect to="/ordersRedir" />;
   }
   return (
-    <div>
+    <div style={{marginLeft:"5%",marginRight:"5%"}}>
       {content}
       {priceContent}
     </div>
