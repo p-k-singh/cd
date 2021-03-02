@@ -4,13 +4,14 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { connect } from "react-redux";
 import * as actions from "../../store/actions/index";
+import Select from "react-select";
 import constants from "../../Constants/constants";
 import {
   TextField,
   Grid,
   FormControl,
   InputLabel,
-  Select,
+  Select as MaterialSelect,
   TextareaAutosize,
 } from "@material-ui/core";
 const useStyles = makeStyles({
@@ -31,6 +32,8 @@ const BuyerDetails = (props) => {
   const [deliveryDateValidator, setDeliveryDateValidator] = useState("");
   const [PickupData, setPickupData] = useState([]);
   const [DeliveryData, setDeliveryData] = useState([]);
+  const [DistanceRange, setDistanceRange] = useState("");
+
   useEffect(() => {
     //alert('topin'+props.pickupPin+'from pin'+props.destinationPin)
     var today = new Date();
@@ -209,6 +212,9 @@ const BuyerDetails = (props) => {
   const onTimeSlotChangeController = (event) => {
     props.setPickupSlotDispatcher(event.target.value);
   };
+  const onDistanceChangeController = (event) => {
+    setDistanceRange(event.target.value);
+  };
   const onPickupAreaChangeController = (event) => {
     setPickupArea(event.target.value);
   };
@@ -277,7 +283,7 @@ const BuyerDetails = (props) => {
             <Grid item xs={12} sm={2}>
               <FormControl className={classes.formControl} fullWidth>
                 <InputLabel htmlFor="age-native-simple">Locality</InputLabel>
-                <Select
+                <MaterialSelect
                   native
                   onChange={(event) => onPickupAreaChangeController(event)}
                   value={pickupArea}
@@ -289,7 +295,7 @@ const BuyerDetails = (props) => {
                   {PickupData.map((d) => (
                     <option>{d.Name}</option>
                   ))}
-                </Select>
+                </MaterialSelect>
               </FormControl>
             </Grid>
           ) : (
@@ -314,24 +320,7 @@ const BuyerDetails = (props) => {
               autoComplete="shipping address-line1"
             />
           </Grid>
-          <Grid item xs={12} sm={2}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="age-native-simple">Pickup Slot</InputLabel>
-              <Select
-                native
-                value={props.pickupSlot}
-                onChange={(event) => onTimeSlotChangeController(event)}
-                inputProps={{
-                  name: "age",
-                  id: "age-native-simple",
-                }}
-              >
-                {constants.timeSlots.map((d) => (
-                  <option value={d.value}>{d.name}</option>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+
           <Grid item xs={12} sm={10}></Grid>
 
           <Grid item xs={12} sm={5}>
@@ -372,7 +361,7 @@ const BuyerDetails = (props) => {
               <FormControl className={classes.formControl} fullWidth>
                 <InputLabel htmlFor="age-native-simple">Locality</InputLabel>
 
-                <Select
+                <MaterialSelect
                   native
                   onChange={(event) => onDeliveryAreaChangeController(event)}
                   value={deliveryArea}
@@ -384,7 +373,7 @@ const BuyerDetails = (props) => {
                   {DeliveryData.map((d) => (
                     <option>{d.Name}</option>
                   ))}
-                </Select>
+                </MaterialSelect>
               </FormControl>
             </Grid>
           ) : (
@@ -405,6 +394,42 @@ const BuyerDetails = (props) => {
               onChange={(event) => onDeliveryDateChangeController(event)}
               autoComplete="shipping address-line1"
             />
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="age-native-simple">Pickup Slot</InputLabel>
+              <MaterialSelect
+                native
+                value={props.pickupSlot}
+                onChange={(event) => onTimeSlotChangeController(event)}
+                inputProps={{
+                  name: "age",
+                  id: "age-native-simple",
+                }}
+              >
+                {constants.timeSlots.map((d) => (
+                  <option value={d.value}>{d.name}</option>
+                ))}
+              </MaterialSelect>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="age-native-simple">Distance</InputLabel>
+              <MaterialSelect
+                native
+                value={DistanceRange}
+                onChange={(event) => onDistanceChangeController(event)}
+                inputProps={{
+                  name: "age",
+                  id: "age-native-simple",
+                }}
+              >
+                {constants.DistanceOptions.map((d) => (
+                  <option value={d.value}>{d.name}</option>
+                ))}
+              </MaterialSelect>
+            </FormControl>
           </Grid>
         </Grid>
         <Typography className={classes.formHeadings}>
@@ -460,6 +485,7 @@ const mapDispatchToProps = (dispatch) => {
     setDeliveryDateDispatcher: (ddate) =>
       dispatch(actions.setDeliveryDate(ddate)),
     setPickupSlotDispatcher: (slot) => dispatch(actions.setPickupSlot(slot)),
+    // setDeliveryRange: (range) => dispatch(actions.setDeliveryRange(range)),
     setAdditionalNoteDispatcher: (note) =>
       dispatch(actions.setAdditionalNote(note)),
   };

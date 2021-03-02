@@ -103,6 +103,7 @@ const PriceCalculator = (props) => {
   const [DeliveryData, setDeliveryData] = useState([]);
   const [pickupArea, setPickupArea] = useState("");
   const [deliveryArea, setDeliveryArea] = useState("");
+  const [DistanceRange, setDistanceRange] = useState("");
 
   const capabilityOptions = {
     options: constants.inventoryFeatures,
@@ -112,6 +113,9 @@ const PriceCalculator = (props) => {
       ...base,
       zIndex: 100,
     }),
+  };
+  const onDistanceChangeController = (event) => {
+    setDistanceRange(event.target.value);
   };
 
   useEffect(() => {
@@ -366,8 +370,8 @@ const PriceCalculator = (props) => {
       items.push({
         toPin: pickuppin,
         fromPin: destinationpin,
-        // productName:chosenProducts[i].value.productName,
-        // productType:chosenProducts[i].value.productType,
+        productName: chosenProducts[i].value.productName,
+        productType: chosenProducts[i].value.productType,
         length: chosenProducts[i].value.length,
         width: chosenProducts[i].value.width,
         height: chosenProducts[i].value.height,
@@ -504,7 +508,6 @@ const PriceCalculator = (props) => {
     setRedirect(true);
   };
   const handleChange = (newValue, i) => {
-    //console.log(newValue)
     var items = chosenProducts.slice();
     if (newValue === null) {
       items[i] = null;
@@ -1030,7 +1033,7 @@ const PriceCalculator = (props) => {
               spacing={3}
               style={{ padding: 50, paddingTop: 20, paddingBottom: 30 }}
             >
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   required
                   error={pickupZipValidator !== ""}
@@ -1051,9 +1054,8 @@ const PriceCalculator = (props) => {
                   autoComplete="Pickup postal-code"
                 />
               </Grid>
-            
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   required
                   error={deliverZipValidator !== ""}
@@ -1075,6 +1077,24 @@ const PriceCalculator = (props) => {
                   onChange={(event) => onDestinationZipChangeController(event)}
                   autoComplete="Destination postal-code"
                 />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="age-native-simple">Distance</InputLabel>
+                  <MaterialSelect
+                    native
+                    value={DistanceRange}
+                    onChange={(event) => onDistanceChangeController(event)}
+                    inputProps={{
+                      name: "age",
+                      id: "age-native-simple",
+                    }}
+                  >
+                    {constants.DistanceOptions.map((d) => (
+                      <option value={d.value}>{d.name}</option>
+                    ))}
+                  </MaterialSelect>
+                </FormControl>
               </Grid>
               {PickupData.length !== 0 ? (
                 <Grid item xs={12} sm={6}>

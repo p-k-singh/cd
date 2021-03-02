@@ -234,7 +234,7 @@ function ForwardedCheckout(props) {
           pickupdate: props.pickupDate,
           deliveryDate: props.deliveryDate,
           pickupSlot: props.pickupSlot,
-          additionalNote: props.additionalNote,
+          additionalNote: props.additionalNote, 
           items: items,
           estimatedPrice:estimatedPrice
         },

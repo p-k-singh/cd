@@ -427,7 +427,6 @@ const AntSwitch = withStyles((theme) => ({
 }))(Switch);
 const ProductDetails = (props) => {
   const classes = useStyles();
-
   const [user, setUser] = useState();
   const [allProducts, setAllProducts] = useState([]);
   const [paymentOption, setPaymentOption] = useState("fullPayment");
