@@ -103,7 +103,7 @@ const PriceCalculator = (props) => {
   const [DeliveryData, setDeliveryData] = useState([]);
   const [pickupArea, setPickupArea] = useState("");
   const [deliveryArea, setDeliveryArea] = useState("");
-  const [DistanceRange, setDistanceRange] = useState("");
+  const [distanceRange, setDistanceRange] = useState("");
 
   const capabilityOptions = {
     options: constants.inventoryFeatures,
@@ -115,7 +115,7 @@ const PriceCalculator = (props) => {
     }),
   };
   const onDistanceChangeController = (event) => {
-    setDistanceRange(event.target.value);
+    setDistanceRange(event);
   };
 
   useEffect(() => {
@@ -381,6 +381,7 @@ const PriceCalculator = (props) => {
         measurable: chosenProducts[i].value.measurable,
         density: chosenProducts[i].value.density,
         totalWeight: chosenProducts[i].totalWeight,
+        distanceRange: distanceRange.value,
       });
     }
     var params = JSON.stringify(items);
@@ -1050,6 +1051,8 @@ const PriceCalculator = (props) => {
                   id="pickupzip"
                   name="pickupzip"
                   label="Pickup Zip"
+                  variant="outlined"
+                  size="small"
                   fullWidth
                   value={pickuppin}
                   onChange={(event) => onPickupZipChangeController(event)}
@@ -1073,6 +1076,8 @@ const PriceCalculator = (props) => {
                   type="number"
                   id="destinationzip"
                   name="destinationzip"
+                  variant="outlined"
+                  size="small"
                   label="Destination Zip"
                   fullWidth
                   value={destinationpin}
@@ -1081,7 +1086,7 @@ const PriceCalculator = (props) => {
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <FormControl className={classes.formControl}>
+                {/* <FormControl className={classes.formControl}>
                   <InputLabel htmlFor="age-native-simple">Distance</InputLabel>
                   <MaterialSelect
                     native
@@ -1096,15 +1101,28 @@ const PriceCalculator = (props) => {
                       <option value={d.value}>{d.name}</option>
                     ))}
                   </MaterialSelect>
-                </FormControl>
+                </FormControl> */}
+                <Select
+                  styles={selectStyles}
+                  className="basic-single"
+                  classNamePrefix="Distance"
+                  isSearchable
+                  name="Distance"
+                  placeholder="Distance"
+                  value={distanceRange}
+                  onChange={(event) => onDistanceChangeController(event)}
+                  options={constants.DistanceOptions}
+                />
               </Grid>
               {PickupData.length !== 0 ? (
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={4}>
                   <FormControl className={classes.formControl} fullWidth>
                     <InputLabel htmlFor="age-native-simple">
                       Pickup Locality
                     </InputLabel>
                     <MaterialSelect
+                      autoWidth={true}
+                      fullWidth
                       native
                       onChange={(event) => onPickupAreaChangeController(event)}
                       value={pickupArea}
@@ -1129,7 +1147,6 @@ const PriceCalculator = (props) => {
                     <InputLabel htmlFor="age-native-simple">
                       Destination Locality
                     </InputLabel>
-
                     <MaterialSelect
                       native
                       onChange={(event) =>
