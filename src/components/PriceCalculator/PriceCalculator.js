@@ -16,9 +16,12 @@ import {
   TextField,
   Checkbox,
   Grid,
+  Select as MaterialSelect,
   Card,
   Button,
   IconButton,
+  FormControl,
+  InputLabel,
   Divider,
   FormControlLabel,
   Switch,
@@ -96,6 +99,11 @@ const PriceCalculator = (props) => {
   const [deliverZipValidator, setDeliverZipValidator] = useState("");
   const [negativeValueValidator, setnegativeValueValidator] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [PickupData, setPickupData] = useState([]);
+  const [DeliveryData, setDeliveryData] = useState([]);
+  const [pickupArea, setPickupArea] = useState("");
+  const [deliveryArea, setDeliveryArea] = useState("");
+  const [DistanceRange, setDistanceRange] = useState("");
 
   const capabilityOptions = {
     options: constants.inventoryFeatures,
@@ -105,6 +113,9 @@ const PriceCalculator = (props) => {
       ...base,
       zIndex: 100,
     }),
+  };
+  const onDistanceChangeController = (event) => {
+    setDistanceRange(event.target.value);
   };
 
   useEffect(() => {
@@ -155,10 +166,38 @@ const PriceCalculator = (props) => {
     var greater = 999999,
       smaller = 100000;
     var check = 1;
+    var count = 0,
+      temp = destinationPinCode;
+    while (temp > 0) {
+      count++;
+      temp = Math.floor(temp / 10);
+    }
+    if (count == 6) {
+      const api_url =
+        "https://api.postalpincode.in/pincode/" + destinationPinCode;
+
+      // Defining async function
+      async function getapi(url) {
+        // Storing response
+
+        const response = await fetch(url);
+
+        // Storing data in form of JSON
+        var data = await response.json();
+        console.log(data);
+        setDeliveryData(
+          data !== null && data[0].PostOffice !== null ? data[0].PostOffice : ""
+        );
+      }
+      // Calling that async function
+      getapi(api_url);
+    }
+
     if (destinationPinCode < smaller || destinationPinCode > greater) {
       setDeliverZipValidator("Must be of 6 digits");
       check = 0;
     }
+
     if (destinationPinCode < 0) {
       setDeliverZipValidator("Cannot be negative");
       check = 0;
@@ -174,6 +213,31 @@ const PriceCalculator = (props) => {
     var greater = 999999,
       smaller = 100000;
     var check = 1;
+    var count = 0,
+      temp = pickupPinCode;
+    while (temp > 0) {
+      count++;
+      temp = Math.floor(temp / 10);
+    }
+    if (count == 6) {
+      const api_url = "https://api.postalpincode.in/pincode/" + pickupPinCode;
+
+      // Defining async function
+      async function getapi(url) {
+        // Storing response
+
+        const response = await fetch(url);
+
+        // Storing data in form of JSON
+        var data = await response.json();
+        console.log(data);
+        setPickupData(
+          data !== null && data[0].PostOffice !== null ? data[0].PostOffice : ""
+        );
+      }
+      // Calling that async function
+      getapi(api_url);
+    }
     if (pickupPinCode < smaller || pickupPinCode > greater) {
       setPickupZipValidator("Must be of 6 digits");
       check = 0;
@@ -214,6 +278,12 @@ const PriceCalculator = (props) => {
     var items = chosenProducts.slice();
     items[i].value.measurable = !items[i].value.measurable;
     setChosenProducts(items);
+  };
+  const onPickupAreaChangeController = (event) => {
+    setPickupArea(event.target.value);
+  };
+  const onDeliveryAreaChangeController = (event) => {
+    setDeliveryArea(event.target.value);
   };
   const unitChangeController = (event, i) => {
     var items = chosenProducts.slice();
@@ -300,12 +370,13 @@ const PriceCalculator = (props) => {
       items.push({
         toPin: pickuppin,
         fromPin: destinationpin,
-        // productName:chosenProducts[i].value.productName,
-        // productType:chosenProducts[i].value.productType,
+        productName: chosenProducts[i].value.productName,
+        productType: chosenProducts[i].value.productType.value,
         length: chosenProducts[i].value.length,
         width: chosenProducts[i].value.width,
         height: chosenProducts[i].value.height,
         weightPerUnit: chosenProducts[i].value.weightPerUnit,
+        Unit: chosenProducts[i].value.unit.value,
         noOfUnits: chosenProducts[i].noOfUnits,
         measurable: chosenProducts[i].value.measurable,
         density: chosenProducts[i].value.density,
@@ -315,6 +386,7 @@ const PriceCalculator = (props) => {
     var params = JSON.stringify(items);
     // alert(`/pricing?items=`+params)
     // return
+    console.log(params);
     var exactParam = `?items=${params}&useCase=price`;
     //console.log(exactParam)
     //return
@@ -438,7 +510,6 @@ const PriceCalculator = (props) => {
     setRedirect(true);
   };
   const handleChange = (newValue, i) => {
-    //console.log(newValue)
     var items = chosenProducts.slice();
     if (newValue === null) {
       items[i] = null;
@@ -964,12 +1035,16 @@ const PriceCalculator = (props) => {
               spacing={3}
               style={{ padding: 50, paddingTop: 20, paddingBottom: 30 }}
             >
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   required
                   error={pickupZipValidator !== ""}
                   helperText={
-                    pickupZipValidator === "" ? " " : pickupZipValidator
+                    pickupZipValidator === ""
+                      ? PickupData == ""
+                        ? ""
+                        : PickupData[0].District + ", " + PickupData[0].State
+                      : pickupZipValidator
                   }
                   type="number"
                   id="pickupzip"
@@ -982,12 +1057,18 @@ const PriceCalculator = (props) => {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <TextField
                   required
                   error={deliverZipValidator !== ""}
                   helperText={
-                    deliverZipValidator === "" ? " " : deliverZipValidator
+                    deliverZipValidator === ""
+                      ? DeliveryData == ""
+                        ? ""
+                        : DeliveryData[0].District +
+                          ", " +
+                          DeliveryData[0].State
+                      : deliverZipValidator
                   }
                   type="number"
                   id="destinationzip"
@@ -999,6 +1080,76 @@ const PriceCalculator = (props) => {
                   autoComplete="Destination postal-code"
                 />
               </Grid>
+              <Grid item xs={12} sm={4}>
+                <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="age-native-simple">Distance</InputLabel>
+                  <MaterialSelect
+                    native
+                    value={DistanceRange}
+                    onChange={(event) => onDistanceChangeController(event)}
+                    inputProps={{
+                      name: "age",
+                      id: "age-native-simple",
+                    }}
+                  >
+                    {constants.DistanceOptions.map((d) => (
+                      <option value={d.value}>{d.name}</option>
+                    ))}
+                  </MaterialSelect>
+                </FormControl>
+              </Grid>
+              {PickupData.length !== 0 ? (
+                <Grid item xs={12} sm={6}>
+                  <FormControl className={classes.formControl} fullWidth>
+                    <InputLabel htmlFor="age-native-simple">
+                      Pickup Locality
+                    </InputLabel>
+                    <MaterialSelect
+                      native
+                      onChange={(event) => onPickupAreaChangeController(event)}
+                      value={pickupArea}
+                      inputProps={{
+                        name: "age",
+                        id: "age-native-simple",
+                      }}
+                    >
+                      {PickupData.map((d) => (
+                        <option>{d.Name}</option>
+                      ))}
+                    </MaterialSelect>
+                  </FormControl>
+                </Grid>
+              ) : (
+                <p></p>
+              )}
+
+              {DeliveryData.length !== 0 ? (
+                <Grid item xs={12} sm={6}>
+                  <FormControl className={classes.formControl} fullWidth>
+                    <InputLabel htmlFor="age-native-simple">
+                      Destination Locality
+                    </InputLabel>
+
+                    <MaterialSelect
+                      native
+                      onChange={(event) =>
+                        onDeliveryAreaChangeController(event)
+                      }
+                      value={deliveryArea}
+                      inputProps={{
+                        name: "age",
+                        id: "age-native-simple",
+                      }}
+                    >
+                      {DeliveryData.map((d) => (
+                        <option>{d.Name}</option>
+                      ))}
+                    </MaterialSelect>
+                  </FormControl>
+                </Grid>
+              ) : (
+                <p></p>
+              )}
             </Grid>
           </form>
           <Typography className={classes.formHeadings}>

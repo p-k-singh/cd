@@ -127,6 +127,43 @@ const constants = {
     { name: "4PM-8PM", value: "16-20" },
     { name: "8PM-12Midnight", value: "20-00" },
   ],
+  DistanceOptions: [
+    {
+      name: "0 - 50 Kms",
+      value: {
+        lowRange: 0,
+        highRange: 50,
+      },
+    },
+    {
+      name: "50 - 200 Kms",
+      value: {
+        lowRange: 50,
+        highRange: 200,
+      },
+    },
+    {
+      name: "200 - 400 Kms",
+      value: {
+        lowRange: 200,
+        highRange: 400,
+      },
+    },
+    {
+      name: "400 - 800 Kms",
+      value: {
+        lowRange: 400,
+        highRange: 800,
+      },
+    },
+    {
+      name: "800+ Kms",
+      value: {
+        lowRange: 800,
+        highRange: 2000,
+      },
+    },
+  ],
   vas: [
     { name: "Onloading", value: "Onloading", id: 1 },
     { name: "Offloading", value: "offloading", id: 2 },

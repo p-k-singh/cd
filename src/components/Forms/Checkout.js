@@ -86,7 +86,6 @@ function SimpleCard(props) {
     }
     if (emptyStringValidator(props.pickupAddress) === false) {
       alert("Pickup Address cannot be empty");
-      
 
       return;
     }
@@ -227,16 +226,16 @@ function SimpleCard(props) {
         (item.value.measurable == null || item.value.measurable == false) &&
         (item.value.density == 0 || item.value.density == null)
       ) {
-        msg = "Weight Per Cubic meter cannot be empty";
+        msg = "Total Weight cannot be empty";
         return;
       }
-      if (
-        (item.value.measurable == null || item.value.measurable == false) &&
-        item.totalWeight == 0
-      ) {
-        msg = "Total Weight cannot be 0";
-        return;
-      }
+      // if (
+      //   (item.value.measurable == null || item.value.measurable == false) &&
+      //   item.totalWeight == 0
+      // ) {
+      //   msg = "Total Weight cannot be 0";
+      //   return;
+      // }
       if (item.value.productType == null) {
         msg = "Product Type cannot be empty";
         return;

@@ -32,7 +32,7 @@ export default function CollapsibleTable(props) {
   const classes = useRowStyles();
   const [openedPages, setOpenedPages] = useState([]);
   const [checkedBoxes, setCheckedBoxes] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
   const [toEdit, setToEdit] = useState(false);
   // useEffect(async () => {

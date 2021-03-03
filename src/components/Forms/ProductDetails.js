@@ -427,7 +427,6 @@ const AntSwitch = withStyles((theme) => ({
 }))(Switch);
 const ProductDetails = (props) => {
   const classes = useStyles();
-
   const [user, setUser] = useState();
   const [allProducts, setAllProducts] = useState([]);
   const [paymentOption, setPaymentOption] = useState("fullPayment");
@@ -657,7 +656,20 @@ const ProductDetails = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={9}></Grid>
-
+        <Grid item xs={12} sm={2}>
+          <Select
+            styles={selectStyles}
+            className="basic-single"
+            classNamePrefix="Unit"
+            isSearchable
+            name="unit"
+            placeholder="Unit"
+            value={props.chosenProducts[i].value.unit}
+            onChange={(event) => unitChangeController(event, i)}
+            options={constants.lengthDimensions}
+          />
+          {/* </FormControl> */}
+        </Grid>
         <Grid item xs={12} sm={3}>
           <TextField
             type="number"
@@ -718,20 +730,6 @@ const ProductDetails = (props) => {
             autoComplete="Length"
           />
         </Grid>
-        <Grid item xs={12} sm={2}>
-          <Select
-            styles={selectStyles}
-            className="basic-single"
-            classNamePrefix="Unit"
-            isSearchable
-            name="unit"
-            placeholder="Unit"
-            value={props.chosenProducts[i].value.unit}
-            onChange={(event) => unitChangeController(event, i)}
-            options={constants.lengthDimensions}
-          />
-          {/* </FormControl> */}
-        </Grid>
       </Grid>
     </React.Fragment>
   );
@@ -750,7 +748,7 @@ const ProductDetails = (props) => {
               type="number"
               id="density"
               name="density"
-              label="Weight in Kg"
+              label="Total Weight in Kg"
               fullWidth
               onInput={(e) => {
                 e.target.value = Math.max(0, parseInt(e.target.value))
@@ -781,26 +779,7 @@ const ProductDetails = (props) => {
           paddingTop: 30,
         }}
       >
-        <Grid item xs={12} sm={4}>
-          <TextField
-            type="text"
-            onInput={(e) => {
-              e.target.value = Math.max(0, parseInt(e.target.value))
-                .toString()
-                .slice(0, 5);
-            }}
-            id="unit"
-            name="unit"
-            label="Unit"
-            fullWidth
-            disabled
-            value={props.chosenProducts[i].value.unit.label}
-            variant="outlined"
-            size="small"
-            style={{ backgroundColor: "#fff" }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="text"
             id="weightPerunit"
@@ -814,7 +793,8 @@ const ProductDetails = (props) => {
             style={{ backgroundColor: "#fff" }}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={8}></Grid>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="text"
             id="length"
@@ -828,7 +808,7 @@ const ProductDetails = (props) => {
             style={{ backgroundColor: "#fff" }}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="text"
             id="width"
@@ -842,7 +822,7 @@ const ProductDetails = (props) => {
             style={{ backgroundColor: "#fff" }}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="text"
             id="height"
@@ -851,6 +831,25 @@ const ProductDetails = (props) => {
             fullWidth
             disabled
             value={props.chosenProducts[i].value.height}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            type="text"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            id="unit"
+            name="unit"
+            label="Unit"
+            fullWidth
+            disabled
+            value={props.chosenProducts[i].value.unit.label}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
@@ -974,7 +973,7 @@ const ProductDetails = (props) => {
           </Grid>
         ) : (
           <Grid item xs={12} sm={4}>
-            <TextField
+            {/* <TextField
               fullWidth
               type="number"
               size="small"
@@ -988,7 +987,7 @@ const ProductDetails = (props) => {
               variant="outlined"
               value={props.chosenProducts[i].totalWeight}
               onChange={(event) => onTotalWeightChange(event, i)}
-            />
+            /> */}
           </Grid>
         )}
         <Grid item xs={12} sm={12}>

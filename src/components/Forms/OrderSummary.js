@@ -308,23 +308,36 @@ const OrderSummary = (props) => {
                     <td>{each.value.productName}</td>
                   </tr>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <tr>
-                    <th scope="row">{"No. of Units : "}</th>
-                    <td>{each.noOfUnits}</td>
-                  </tr>
-                </Grid>
-                {each.value.measurable === false ? (
+                {each.value.measurable === true ? (
                   <Grid item xs={12} sm={6}>
                     <tr>
-                      <th scope="row">{"Weight per Unit : "}</th>
-                      <td>{each.value.weightPerUnit}</td>
+                      <th scope="row">{"No. of Units : "}</th>
+                      <td>{each.noOfUnits}</td>
                     </tr>
                   </Grid>
                 ) : (
                   <p></p>
                 )}
-
+                {/* {each.value.measurable === false ? (
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">{"Total Weight : "}</th>
+                      <td>{each.totalWeight}Kg</td>
+                    </tr>
+                  </Grid>
+                ) : (
+                  <p></p>
+                )} */}
+                {each.value.measurable === false ? (
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">{"Weight per Unit : "}</th>
+                      <td>{each.value.density}Kg</td>
+                    </tr>
+                  </Grid>
+                ) : (
+                  <p></p>
+                )}
                 <Grid item xs={12} sm={6}>
                   <tr>
                     <th scope="row">{"Product Type : "}</th>
@@ -344,7 +357,6 @@ const OrderSummary = (props) => {
                 ) : (
                   <p></p>
                 )}
-
                 <Grid item xs={12} sm={6}>
                   <tr>
                     <th scope="row">{"Category: "}</th>
