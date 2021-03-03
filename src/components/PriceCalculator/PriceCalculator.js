@@ -371,11 +371,12 @@ const PriceCalculator = (props) => {
         toPin: pickuppin,
         fromPin: destinationpin,
         productName: chosenProducts[i].value.productName,
-        productType: chosenProducts[i].value.productType,
+        productType: chosenProducts[i].value.productType.value,
         length: chosenProducts[i].value.length,
         width: chosenProducts[i].value.width,
         height: chosenProducts[i].value.height,
         weightPerUnit: chosenProducts[i].value.weightPerUnit,
+        Unit: chosenProducts[i].value.unit.value,
         noOfUnits: chosenProducts[i].noOfUnits,
         measurable: chosenProducts[i].value.measurable,
         density: chosenProducts[i].value.density,
@@ -385,6 +386,7 @@ const PriceCalculator = (props) => {
     var params = JSON.stringify(items);
     // alert(`/pricing?items=`+params)
     // return
+    console.log(params);
     var exactParam = `?items=${params}&useCase=price`;
     //console.log(exactParam)
     //return
