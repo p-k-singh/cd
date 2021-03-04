@@ -243,8 +243,8 @@ function SimpleCard(props) {
         msg = "Product Type cannot be empty";
         return;
       }
-      if (item.value.productType == null) {
-        msg = "Product Type cannot be empty";
+      if (item.value.categories == null) {
+        msg = "Product Category cannot be empty";
         return;
       }
     });
@@ -513,7 +513,7 @@ const mapStateToProps = (state) => {
     pickupSlot: state.order.pickupSlot,
     additionalNote: state.order.additionalNote,
     chosenProducts: state.order.chosenProducts,
-    distanceRange: state.order.distanceRange
+    distanceRange: state.order.distanceRange,
   };
 };
 const mapDispatchToProps = (dispatch) => {

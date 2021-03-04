@@ -51,17 +51,18 @@ const OrderSummary = (props) => {
       items.push({
         toPin: props.pickupPin,
         fromPin: props.destinationPin,
-        // productName:props.chosenProducts[i].value.productName,
-        // productType:props.chosenProducts[i].value.productType,
+        productName: props.chosenProducts[i].value.productName,
+        productType: props.chosenProducts[i].value.productType.value,
         length: props.chosenProducts[i].value.length,
         width: props.chosenProducts[i].value.width,
         height: props.chosenProducts[i].value.height,
         weightPerUnit: props.chosenProducts[i].value.weightPerUnit,
         noOfUnits: props.chosenProducts[i].noOfUnits,
+        Unit: props.chosenProducts[i].value.unit.value,
         measurable: props.chosenProducts[i].value.measurable,
         density: props.chosenProducts[i].value.density,
         totalWeight: props.chosenProducts[i].totalWeight,
-        distanceRange: props.distanceRange,
+        distanceRange: props.distanceRange.value,
       });
     }
 

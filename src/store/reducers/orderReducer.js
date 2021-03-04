@@ -18,7 +18,6 @@ const initialState = {
   deliveryDate: "",
   pickupSlot: "",
   additionalNote: "",
-
   measureable: true,
   totalWeight: "",
   density: "",
