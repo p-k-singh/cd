@@ -27,22 +27,33 @@ const AccountInfoForm = (props) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [submit, setSubmit] = useState(false);
+  const [IfscValidator, setIfscValidator] = useState("");
+  const [AccountNameValidator, setAccountNameValidator] = useState("");
+  const [AccountNoValidator, setAccountNoValidator] = useState("");
   const [myState, setMyState] = useState({
     accountHolderName: "",
     accountNumber: "",
     ifscCode: "",
   });
   const submitKYC = () => {
+    if (
+      AccountNameValidator !== "" ||
+      IfscValidator !== "" ||
+      AccountNoValidator !== ""
+    ) {
+      return;
+    }
+
     if (myState.accountHolderName == "") {
-      alert("Account Holder's Name cannot be empty");
+      setAccountNameValidator("Account Holder's Name cannot be empty");
       return;
     }
     if (myState.accountNumber == "") {
-      alert("Account Number cannot be empty");
+      setAccountNoValidator("Account Number cannot be empty");
       return;
     }
     if (myState.ifscCode == "") {
-      alert("IFS code cannot be empty");
+      setIfscValidator("IFS code cannot be empty");
       return;
     }
 
@@ -79,13 +90,31 @@ const AccountInfoForm = (props) => {
         console.log(err);
         setSubmit(false);
       });
-   
   };
   const fun = () => {
     //alert(JSON.stringify(props))
     props.loadData();
   };
   const fieldsChange = (event) => {
+    var count = 0,
+      temp = event.target.value;
+    while (temp > 0) {
+      count++;
+      temp = Math.floor(temp / 10);
+    }
+    setIfscValidator("");
+    setAccountNameValidator("");
+    setAccountNoValidator("");
+    //  if (
+    //    event.target.name == "accountNumber" &&
+    //    event.target.value.length < 18
+    //  ) {
+    //    setAccountNoValidator("PAN Number should be of 10 Digits");
+    //  }
+    if (event.target.name == "ifscCode" && event.target.value.length < 11) {
+      setIfscValidator("IFS Code should be of 11 Digits");
+    }
+
     setMyState({ ...myState, [event.target.name]: event.target.value });
   };
   if (loading === true) {
@@ -110,9 +139,12 @@ const AccountInfoForm = (props) => {
               type="text"
               id="accountHolderName"
               name="accountHolderName"
+              helperText={AccountNameValidator}
+              error={AccountNameValidator !== ""}
               value={myState.accountHolderName}
               onChange={(event) => fieldsChange(event)}
               label="Account Holder's Name"
+              inputProps={{ maxLength: 50 }}
               fullWidth
             />
           </Grid>
@@ -123,6 +155,8 @@ const AccountInfoForm = (props) => {
               inputProps={{ maxLength: 18 }}
               name="accountNumber"
               label="Account Number"
+              helperText={AccountNoValidator}
+              error={AccountNoValidator !== ""}
               value={myState.accountNumber}
               onChange={(event) => fieldsChange(event)}
               fullWidth
@@ -134,6 +168,8 @@ const AccountInfoForm = (props) => {
               inputProps={{ maxLength: 11 }}
               id="ifscCode"
               name="ifscCode"
+              error={IfscValidator !== ""}
+              helperText={IfscValidator}
               value={myState.ifscCode}
               onChange={(event) => fieldsChange(event)}
               label="IFSC Code"
@@ -141,17 +177,18 @@ const AccountInfoForm = (props) => {
             />
           </Grid>
         </Grid>
- {submit == true ? (
+        {submit == true ? (
           <Spinner />
         ) : (
-        <Button
-          onClick={submitKYC}
-          className="row AllButtons"
-          variant="contained"
-          style={{ float: "right", marginBottom: "10px" }}
-        >
-          Submit KYC
-        </Button>)}
+          <Button
+            onClick={submitKYC}
+            className="row AllButtons"
+            variant="contained"
+            style={{ float: "right", marginBottom: "10px" }}
+          >
+            Submit KYC
+          </Button>
+        )}
       </form>
     </div>
   );
