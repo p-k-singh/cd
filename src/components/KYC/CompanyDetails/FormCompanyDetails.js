@@ -31,6 +31,7 @@ const CompanyKYC = (props) => {
   const [registrationDoc, setRegistrationDoc] = useState();
   const [PhoneValidator, setPhoneValidator] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submit, setSubmit] = useState(false);
   const [myState, setMyState] = useState({
     registeredName: "",
     registeredAddress: "",
@@ -71,8 +72,7 @@ const CompanyKYC = (props) => {
       alert(" Please upload the Registration Certificate");
       return;
     }
-
-    setLoading(true);
+    setSubmit(true);
     var docLink;
     const metaData = {
       contentType: registrationDoc.type,
@@ -124,14 +124,25 @@ const CompanyKYC = (props) => {
                     console.log(resp);
                     fun();
                   })
-                  .catch((err) => console.log(err));
+                  .catch((err) => {
+                    console.log(err);
+                    setSubmit(false);
+                  });
               })
-              .catch((err) => console.log(err));
+              .catch((err) => {
+                console.log(err);
+                setSubmit(false);
+              });
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            console.log(err);
+            setSubmit(false);
+          });
       })
-      .catch((err) => console.log(err));
-    setLoading(false);
+      .catch((err) => {
+        console.log(err);
+        setSubmit(false);
+      });
   };
   const fun = () => {
     //alert(JSON.stringify(props))
@@ -195,7 +206,6 @@ const CompanyKYC = (props) => {
               id="registeredContactNo"
               name="registeredContactNo"
               label="Contact number"
-           
               value={myState.registeredContactNo}
               error={PhoneValidator !== ""}
               helperText={PhoneValidator === "" ? "" : PhoneValidator}
@@ -230,7 +240,9 @@ const CompanyKYC = (props) => {
             </Grid>
           </Grid>
         </Grid>
-
+ {submit == true ? (
+          <Spinner />
+        ) : (
         <Button
           onClick={submitKYC}
           className="row AllButtons"
@@ -238,7 +250,7 @@ const CompanyKYC = (props) => {
           style={{ float: "right", marginBottom: "10px" }}
         >
           Next
-        </Button>
+        </Button>)}
       </form>
     </div>
   );

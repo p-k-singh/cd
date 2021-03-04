@@ -42,6 +42,7 @@ const CompanyKYC = (props) => {
   const [aadharProof, setAadharProof] = useState();
   const [panProof, setPanProof] = useState();
   const [gstinProof, setGSTINProof] = useState();
+  const [submit, setSubmit] = useState(false);
 
   const submitKYC = () => {
     setLoading(true);

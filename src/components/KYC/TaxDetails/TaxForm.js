@@ -33,6 +33,7 @@ const CompanyKYC = (props) => {
   const [PanValidator, setPanValidator] = useState("");
   const [GstValidator, setGstValidator] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submit, setSubmit] = useState(false);
   const [myState, setMyState] = useState({
     pan: "",
     gstin: "",
@@ -51,7 +52,7 @@ const CompanyKYC = (props) => {
     } else {
       setPanValidator("");
     }
-    if (event.target.name == "gstin" || gstcount > 15) {
+    if (event.target.name == "gstin" && gstcount > 15) {
       setGstValidator("Gst Number cannot exceed 15 Digits");
     } else {
       setGstValidator("");
@@ -60,9 +61,11 @@ const CompanyKYC = (props) => {
   };
   const submitKYC = () => {
     if (PanValidator !== "") {
+      alert(PanValidator);
       return;
     }
     if (GstValidator !== "") {
+      alert(GstValidator);
       return;
     }
     if (myState.pan == "") {
@@ -83,7 +86,7 @@ const CompanyKYC = (props) => {
       return;
     }
 
-    setLoading(true);
+    setSubmit(true);
     var panLink, gstinLink;
     const metaData = {
       contentType: panDoc.type,
@@ -158,18 +161,35 @@ const CompanyKYC = (props) => {
                             console.log(resp);
                             fun();
                           })
-                          .catch((err) => console.log(err));
+                          .catch((err) => {
+                            console.log(err);
+                            setSubmit(false);
+                          });
                       })
-                      .catch((err) => console.log(err));
+                      .catch((err) => {
+                        console.log(err);
+                        setSubmit(false);
+                      });
                   })
-                  .catch((err) => console.log(err));
+                  .catch((err) => {
+                    console.log(err);
+                    setSubmit(false);
+                  });
               })
-              .catch((err) => console.log(err));
+              .catch((err) => {
+                console.log(err);
+                setSubmit(false);
+              });
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            console.log(err);
+            setSubmit(false);
+          });
       })
-      .catch((err) => console.log(err));
-    setLoading(false);
+      .catch((err) => {
+        console.log(err);
+        setSubmit(false);
+      });
   };
   const fun = () => {
     //alert(JSON.stringify(props))
@@ -258,15 +278,18 @@ const CompanyKYC = (props) => {
             />
           </Grid>
         </Grid>
-
-        <Button
-          onClick={submitKYC}
-          className="row AllButtons"
-          variant="contained"
-          style={{ float: "right", marginBottom: "10px" }}
-        >
-          Next
-        </Button>
+        {submit == true ? (
+          <Spinner />
+        ) : (
+          <Button
+            onClick={submitKYC}
+            className="row AllButtons"
+            variant="contained"
+            style={{ float: "right", marginBottom: "10px" }}
+          >
+            Next
+          </Button>
+        )}
       </form>
     </div>
   );

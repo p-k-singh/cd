@@ -26,6 +26,7 @@ const useStyles = makeStyles({
 const AccountInfoForm = (props) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const [submit, setSubmit] = useState(false);
   const [myState, setMyState] = useState({
     accountHolderName: "",
     accountNumber: "",
@@ -45,7 +46,7 @@ const AccountInfoForm = (props) => {
       return;
     }
 
-    setLoading(true);
+    setSubmit(true);
     Auth.currentUserInfo()
       .then((userDetails) => {
         const payload = {
@@ -67,12 +68,18 @@ const AccountInfoForm = (props) => {
           payload
         )
           .then((resp) => console.log(resp))
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            console.log(err);
+            setSubmit(false);
+          });
 
         fun();
       })
-      .catch((err) => console.log(err));
-    setLoading(false);
+      .catch((err) => {
+        console.log(err);
+        setSubmit(false);
+      });
+   
   };
   const fun = () => {
     //alert(JSON.stringify(props))
@@ -134,7 +141,9 @@ const AccountInfoForm = (props) => {
             />
           </Grid>
         </Grid>
-
+ {submit == true ? (
+          <Spinner />
+        ) : (
         <Button
           onClick={submitKYC}
           className="row AllButtons"
@@ -142,7 +151,7 @@ const AccountInfoForm = (props) => {
           style={{ float: "right", marginBottom: "10px" }}
         >
           Submit KYC
-        </Button>
+        </Button>)}
       </form>
     </div>
   );
