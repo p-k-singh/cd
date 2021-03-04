@@ -60,13 +60,9 @@ const CompanyKYC = (props) => {
       ) === false
     ) {
       setEmailValidator("Enter a Valid Email Address");
-    } else {
-      setEmailValidator("");
     }
     if (event.target.name == "registeredContactNo" && count < 10) {
       setPhoneValidator("Phone Number should contain 10 Digits");
-    } else {
-      setPhoneValidator("");
     }
     if (event.target.name == "registeredContactNo" && event.target.value < 0) {
       event.target.value = 0;
@@ -74,16 +70,12 @@ const CompanyKYC = (props) => {
     setMyState({ ...myState, [event.target.name]: event.target.value });
   };
   const submitKYC = () => {
-    if (PhoneValidator !== "") {
-      return;
-    }
-    if (EmailValidator !== "") {
-      return;
-    }
-    if (NameValidator !== "") {
-      return;
-    }
-    if (AddressValidator !== "") {
+    if (
+      PhoneValidator !== "" ||
+      EmailValidator !== "" ||
+      NameValidator !== "" ||
+      AddressValidator !== ""
+    ) {
       return;
     }
 
@@ -223,6 +215,8 @@ const CompanyKYC = (props) => {
             <TextField
               type="text"
               id="registeredAddress"
+              helperText={AddressValidator}
+              error={AddressValidator !== ""}
               name="registeredAddress"
               label="Registered Address"
               value={myState.registeredAddress}

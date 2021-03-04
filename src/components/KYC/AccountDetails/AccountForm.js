@@ -96,12 +96,7 @@ const AccountInfoForm = (props) => {
     props.loadData();
   };
   const fieldsChange = (event) => {
-    var count = 0,
-      temp = event.target.value;
-    while (temp > 0) {
-      count++;
-      temp = Math.floor(temp / 10);
-    }
+   
     setIfscValidator("");
     setAccountNameValidator("");
     setAccountNoValidator("");

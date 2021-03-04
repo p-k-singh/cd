@@ -50,12 +50,10 @@ const CompanyKYC = (props) => {
     setMyState({ ...myState, [event.target.name]: event.target.value });
   };
   const submitKYC = () => {
-    if (PanValidator !== "") {
+    if (PanValidator !== "" || GstValidator !== "") {
       return;
     }
-    if (GstValidator !== "") {
-      return;
-    }
+
     if (myState.pan == "") {
       setPanValidator("PAN Details cannot be empty");
       return;
