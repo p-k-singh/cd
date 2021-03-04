@@ -121,11 +121,10 @@ const constants = {
   /**Forms */
 
   timeSlots: [
-    { name: "", value: "" },
-    { name: "8AM-12Noon", value: "08-12" },
-    { name: "12Noon-4PM", value: "12-16" },
-    { name: "4PM-8PM", value: "16-20" },
-    { name: "8PM-12Midnight", value: "20-00" },
+    { label: "8AM-12Noon", value: "08-12" },
+    { label: "12Noon-4PM", value: "12-16" },
+    { label: "4PM-8PM", value: "16-20" },
+    { label: "8PM-12Midnight", value: "20-00" },
   ],
   DistanceOptions: [
     {

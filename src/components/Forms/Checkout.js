@@ -11,7 +11,7 @@ import * as actions from "../../store/actions/index";
 import Spinner from "../UI/Spinner";
 import { Auth } from "aws-amplify";
 // /serviceorder/acceptance?orderId=""&providerId=""
-
+import PaymentPromise from "./PaymentPromise";
 import { API } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
@@ -64,9 +64,9 @@ function SimpleCard(props) {
             setChosenProducts={setChosenProducts}
           />
         );
-      // case 2:
-      //      return <CustomerDetails/>
       case 2:
+        return <PaymentPromise />;
+      case 3:
         return <OrderSummary setEstimatedPrice={setEstimatedPrice} />;
       default:
         throw new Error("Unknown step");
@@ -115,6 +115,9 @@ function SimpleCard(props) {
 
       return;
     }
+    setactiveStep(activeStep + 1);
+  };
+  const handleNext2Click = () => {
     setactiveStep(activeStep + 1);
   };
   const handleBackClick = () => {
@@ -449,11 +452,20 @@ function SimpleCard(props) {
             color="primary"
             onClick={handlePreOrderClick}
           >
+            Next
+          </Button>
+        )}
+        {activeStep === 2 && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handlePreOrderClick}
+          >
             Order
           </Button>
         )}
         {/* Button for placing order */}
-        {activeStep === 2 && (
+        {activeStep === 3 && (
           <Button
             variant="contained"
             color="primary"
@@ -501,6 +513,7 @@ const mapStateToProps = (state) => {
     pickupSlot: state.order.pickupSlot,
     additionalNote: state.order.additionalNote,
     chosenProducts: state.order.chosenProducts,
+    distanceRange: state.order.distanceRange
   };
 };
 const mapDispatchToProps = (dispatch) => {

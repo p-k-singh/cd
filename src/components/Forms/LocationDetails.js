@@ -32,7 +32,6 @@ const BuyerDetails = (props) => {
   const [deliveryDateValidator, setDeliveryDateValidator] = useState("");
   const [PickupData, setPickupData] = useState([]);
   const [DeliveryData, setDeliveryData] = useState([]);
-  const [DistanceRange, setDistanceRange] = useState("");
 
   useEffect(() => {
     //alert('topin'+props.pickupPin+'from pin'+props.destinationPin)
@@ -210,10 +209,11 @@ const BuyerDetails = (props) => {
   };
 
   const onTimeSlotChangeController = (event) => {
-    props.setPickupSlotDispatcher(event.target.value);
+    props.setPickupSlotDispatcher(event);
   };
   const onDistanceChangeController = (event) => {
-    setDistanceRange(event.target.value);
+    props.setDistanceRange(event);
+   
   };
   const onPickupAreaChangeController = (event) => {
     setPickupArea(event.target.value);
@@ -252,6 +252,8 @@ const BuyerDetails = (props) => {
               id="pickupaddress"
               name="pickupaddress"
               label="Pick up address"
+              variant="outlined"
+              size="small"
               fullWidth
               value={props.pickupAddress}
               onChange={(event) => onPickupChangeController(event)}
@@ -261,6 +263,8 @@ const BuyerDetails = (props) => {
           <Grid item xs={12} sm={2}>
             <TextField
               required
+              variant="outlined"
+              size="small"
               error={pickupZipValidator !== ""}
               helperText={
                 pickupZipValidator === ""
@@ -272,6 +276,7 @@ const BuyerDetails = (props) => {
               type="number"
               id="pickupzip"
               name="pickupzip"
+              InputLabelProps={{ shrink: true }}
               label="Pickup Zip"
               fullWidth
               value={props.pickupPin}
@@ -313,6 +318,8 @@ const BuyerDetails = (props) => {
               name="pickupdate"
               label="Pickup Date(mm/dd/yyyy)"
               fullWidth
+              variant="outlined"
+              size="small"
               type="date"
               // defaultValue='2021-01-01'
               value={props.pickupDate}
@@ -329,6 +336,8 @@ const BuyerDetails = (props) => {
               name="destinationaddress"
               label="Destination address*"
               fullWidth
+              variant="outlined"
+              size="small"
               value={props.destinationAddress}
               onChange={(event) => onDestinationChangeController(event)}
               autoComplete="shipping address-line2"
@@ -338,6 +347,8 @@ const BuyerDetails = (props) => {
           <Grid item xs={12} sm={2}>
             <TextField
               required
+              variant="outlined"
+              size="small"
               error={deliverZipValidator !== ""}
               helperText={
                 deliverZipValidator === ""
@@ -351,6 +362,7 @@ const BuyerDetails = (props) => {
               name="destinationzip"
               label="Destination Zip"
               fullWidth
+              InputLabelProps={{ shrink: true }}
               value={props.destinationPin}
               onChange={(event) => onDestinationZipChangeController(event)}
               autoComplete="Destination postal-code"
@@ -358,23 +370,37 @@ const BuyerDetails = (props) => {
           </Grid>
           {DeliveryData.length !== 0 ? (
             <Grid item xs={12} sm={2}>
-              <FormControl className={classes.formControl} fullWidth>
-                <InputLabel htmlFor="age-native-simple">Locality</InputLabel>
-
-                <MaterialSelect
-                  native
-                  onChange={(event) => onDeliveryAreaChangeController(event)}
-                  value={deliveryArea}
-                  inputProps={{
-                    name: "age",
-                    id: "age-native-simple",
-                  }}
-                >
-                  {DeliveryData.map((d) => (
-                    <option>{d.Name}</option>
-                  ))}
-                </MaterialSelect>
-              </FormControl>
+              {/* <Select
+                className="basic-single"
+                classNamePrefix="Distance"
+                isSearchable
+                value={deliveryArea}
+                name="Distance"
+                defaultValue={({
+                  value: DeliveryData[0].Name,
+                  label: DeliveryData[0].Name,
+                })}
+                placeholder="Distance"
+                onChange={(event) => onDeliveryAreaChangeController(event)}
+                options={DeliveryData.map((d) => ({
+                  value: d.Name,
+                  label: d.Name,
+                }))}
+              /> */}
+              <MaterialSelect
+                native
+                size="small"
+                onChange={(event) => onDeliveryAreaChangeController(event)}
+                value={deliveryArea}
+                inputProps={{
+                  name: "age",
+                  id: "age-native-simple",
+                }}
+              >
+                {DeliveryData.map((d) => (
+                  <option>{d.Name}</option>
+                ))}
+              </MaterialSelect>
             </Grid>
           ) : (
             <p></p>
@@ -382,6 +408,8 @@ const BuyerDetails = (props) => {
           <Grid item xs={12} sm={3}>
             <TextField
               error={deliveryDateValidator !== ""}
+              variant="outlined"
+              size="small"
               helperText={
                 deliveryDateValidator === "" ? " " : deliveryDateValidator
               }
@@ -396,40 +424,28 @@ const BuyerDetails = (props) => {
             />
           </Grid>
           <Grid item xs={12} sm={3}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="age-native-simple">Pickup Slot</InputLabel>
-              <MaterialSelect
-                native
-                value={props.pickupSlot}
-                onChange={(event) => onTimeSlotChangeController(event)}
-                inputProps={{
-                  name: "age",
-                  id: "age-native-simple",
-                }}
-              >
-                {constants.timeSlots.map((d) => (
-                  <option value={d.value}>{d.name}</option>
-                ))}
-              </MaterialSelect>
-            </FormControl>
+            <Select
+              className="basic-single"
+              classNamePrefix="Pickup Slot"
+              isSearchable
+              name="Pickup Slot"
+              placeholder="Pickup Slot"
+              value={props.pickupSlot}
+              onChange={(event) => onTimeSlotChangeController(event)}
+              options={constants.timeSlots}
+            />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="age-native-simple">Distance</InputLabel>
-              <MaterialSelect
-                native
-                value={DistanceRange}
-                onChange={(event) => onDistanceChangeController(event)}
-                inputProps={{
-                  name: "age",
-                  id: "age-native-simple",
-                }}
-              >
-                {constants.DistanceOptions.map((d) => (
-                  <option value={d.value}>{d.name}</option>
-                ))}
-              </MaterialSelect>
-            </FormControl>
+            <Select
+              className="basic-single"
+              classNamePrefix="Distance"
+              isSearchable
+              name="Distance"
+              placeholder="Distance"
+              value={props.distanceRange}
+              onChange={(event) => onDistanceChangeController(event)}
+              options={constants.DistanceOptions}
+            />
           </Grid>
         </Grid>
         <Typography className={classes.formHeadings}>
@@ -469,6 +485,7 @@ const mapStateToProps = (state) => {
     pickupSlot: state.order.pickupSlot,
     additionalNote: state.order.additionalNote,
     chosenProducts: state.order.chosenProducts,
+    distanceRange: state.order.distanceRange,
   };
 };
 
@@ -485,7 +502,8 @@ const mapDispatchToProps = (dispatch) => {
     setDeliveryDateDispatcher: (ddate) =>
       dispatch(actions.setDeliveryDate(ddate)),
     setPickupSlotDispatcher: (slot) => dispatch(actions.setPickupSlot(slot)),
-    // setDeliveryRange: (range) => dispatch(actions.setDeliveryRange(range)),
+    setDistanceRange: (distanceRange) =>
+      dispatch(actions.setDistanceRange(distanceRange)),
     setAdditionalNoteDispatcher: (note) =>
       dispatch(actions.setAdditionalNote(note)),
   };

@@ -158,3 +158,9 @@ export const setChosenProducts = (chosenProducts) => {
         chosenProducts:chosenProducts
     }
 };
+export const setDistanceRange = (distanceRange) => {
+  return {
+    type: actionTypes.SET_DISTANCE_RANGE,
+    distanceRange: distanceRange,
+  };
+};

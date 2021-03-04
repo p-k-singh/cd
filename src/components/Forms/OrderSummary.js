@@ -61,6 +61,7 @@ const OrderSummary = (props) => {
         measurable: props.chosenProducts[i].value.measurable,
         density: props.chosenProducts[i].value.density,
         totalWeight: props.chosenProducts[i].totalWeight,
+        distanceRange: props.distanceRange,
       });
     }
 
@@ -152,6 +153,15 @@ const OrderSummary = (props) => {
               <tr>
                 <th scope="row">Pickup Date :</th>
                 <td>{props.pickupDate}</td>
+              </tr>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <tr>
+                <th scope="row">Distance :</th>
+                <td>
+                  {props.distanceRange.value.lowRange}-
+                  {props.distanceRange.value.highRange}Kms
+                </td>
               </tr>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -396,6 +406,7 @@ const mapStateToProps = (state) => {
     totalWeight: state.order.totalWeight,
     density: state.order.density,
     chosenProducts: state.order.chosenProducts,
+    distanceRange: state.order.distanceRange,
   };
 };
 

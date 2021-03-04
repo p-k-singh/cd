@@ -429,7 +429,7 @@ const ProductDetails = (props) => {
   const classes = useStyles();
   const [user, setUser] = useState();
   const [allProducts, setAllProducts] = useState([]);
-  const [paymentOption, setPaymentOption] = useState("fullPayment");
+ 
   const [calculating, setCalculating] = useState(false);
 
   const capabilityOptions = {
@@ -441,10 +441,7 @@ const ProductDetails = (props) => {
       zIndex: 100,
     }),
   };
-  const handlePaymentOptionChange = (event) => {
-    setPaymentOption(event.target.value);
-    //alert(event.target.value);
-  };
+ 
 
   useEffect(() => {
     Auth.currentUserInfo()
@@ -1127,32 +1124,6 @@ const ProductDetails = (props) => {
           </Button>
           <Divider style={{ margin: 20 }} />
         </form>
-        <Typography className={classes.formHeadings}>
-          Value Added Services
-        </Typography>
-        <Grid
-          container
-          spacing={3}
-          style={{ padding: 50, paddingTop: 20, paddingBottom: 30 }}
-        >
-          {constants.vas.map((vas) => {
-            return (
-              <Grid item xs={12} sm={4}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      //checked={state.checkedB}
-                      //onChange={handleChange}
-                      name={vas.name}
-                      color="primary"
-                    />
-                  }
-                  label={vas.name}
-                />
-              </Grid>
-            );
-          })}
-        </Grid>
       </CardContent>
       <div
         style={{
@@ -1162,56 +1133,6 @@ const ProductDetails = (props) => {
           margin: 20,
         }}
       ></div>
-      <CardContent style={{ padding: 30 }}>
-        <Typography fullWidth className={classes.title} gutterBottom>
-          Payments
-        </Typography>
-        <form style={{ padding: 10 }}>
-          <FormControl component="fieldset">
-            <RadioGroup
-              row
-              style={{ width: "auto" }}
-              aria-label="position"
-              name="position"
-              onChange={(event) => handlePaymentOptionChange(event)}
-              value={paymentOption}
-            >
-              <FormLabel component="legend">
-                Choose your payment Promise:
-              </FormLabel>
-              <Grid
-                container
-                spacing={0}
-                style={{ padding: 20, paddingBottom: 30 }}
-              >
-                <Grid item xs={12} sm={6}>
-                  <FormControlLabel
-                    value="ImmediatePayment"
-                    control={<Radio color="primary" />}
-                    label="Immediate Payment"
-                  />
-                  {paymentOption === "ImmediatePayment" && (
-                    <FormHelperText>
-                      For Immediate Payment, We will do negotitation on your
-                      behalf to give you a discounted price.
-                    </FormHelperText>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <FormControlLabel
-                    value="30DaysCycle"
-                    control={<Radio color="primary" />}
-                    label="30 Days Cycle"
-                  />
-                  {paymentOption === "30DaysCycle" && (
-                    <FormHelperText>Pay in 30 Days.</FormHelperText>
-                  )}
-                </Grid>
-              </Grid>
-            </RadioGroup>
-          </FormControl>
-        </form>
-      </CardContent>
     </div>
   );
 };
