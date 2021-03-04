@@ -96,7 +96,6 @@ const AccountInfoForm = (props) => {
     props.loadData();
   };
   const fieldsChange = (event) => {
-   
     setIfscValidator("");
     setAccountNameValidator("");
     setAccountNoValidator("");
@@ -124,11 +123,6 @@ const AccountInfoForm = (props) => {
           spacing={3}
           style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
         >
-          {/* <Grid item xs={12} sm={12}>
-            <Typography className={classes.formHeadings} fullWidth>
-              Company Details=
-            </Typography>
-          </Grid> */}
           <Grid item xs={12} sm={6}>
             <TextField
               type="text"
@@ -139,7 +133,7 @@ const AccountInfoForm = (props) => {
               value={myState.accountHolderName}
               onChange={(event) => fieldsChange(event)}
               label="Account Holder's Name"
-              inputProps={{ maxLength: 50 }}
+              inputProps={{ maxLength: 30 }}
               fullWidth
             />
           </Grid>
