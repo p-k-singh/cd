@@ -354,14 +354,14 @@ function SimpleCard(props) {
     for (var i = 0; i < item.length; i++) {
       var temp = {
         productName: item[i].value.productName,
-        productType: item[i].value.productType,
-        unit: item[i].value.unit,
+        productType: item[i].value.productType.value,
+        unit: item[i].value.unit.value,
         height: item[i].value.height,
         width: item[i].value.width,
         length: item[i].value.length,
         weightPerUnit: item[i].value.weightPerUnit,
         measurable: item[i].value.measurable,
-        categories: item[i].value.categories,
+        categories: item[i].value.categories.value,
         density: item[i].value.density,
         noOfUnits: item[i].noOfUnits,
         totalWeight: item[i].totalWeight,
@@ -395,6 +395,7 @@ function SimpleCard(props) {
     const payload = {
       body: data,
     };
+    console.log(data);
     API.post("GoFlexeOrderPlacement", `/customerorder`, payload)
       .then((response) => {
         setOrderId(response[0].OrderId);
@@ -514,6 +515,7 @@ const mapStateToProps = (state) => {
     additionalNote: state.order.additionalNote,
     chosenProducts: state.order.chosenProducts,
     distanceRange: state.order.distanceRange,
+    estimatedPrice: state.order.estimatedPrice,
   };
 };
 const mapDispatchToProps = (dispatch) => {
