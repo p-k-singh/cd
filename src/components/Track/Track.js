@@ -28,6 +28,7 @@ import ErrorIcon from "@material-ui/icons/Error";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Checkbox from "@material-ui/core/Checkbox";
 import { API, Auth } from "aws-amplify";
+import Feedback from "react-bootstrap/esm/Feedback";
 
 const useStyles = makeStyles({
   table: {
@@ -81,10 +82,28 @@ const Track = (props) => {
   }
 
   const steps = getSteps();
-  const [value, setValue] = React.useState(2);
-  const [hover, setHover] = React.useState(-1);
   const [ProductDamaged, setProductDamaged] = React.useState(false);
   const [ProductPilferage, setProductPilferage] = React.useState(false);
+  const [ProductSafety, setProductSafety] = React.useState(0);
+  const [Safetyhover, setSafetyHover] = React.useState(-1);
+  const [ShipmentTime, setShipmentTime] = React.useState(0);
+  const [ShipmentTimehover, setShipmentTimeHover] = React.useState(-1);
+  const [OverallExperience, setOverallExperience] = React.useState(0);
+  const [OverallExperiencehover, setOverallExperienceHover] = React.useState(
+    -1
+  );
+  const [NoOfDamagedProducts, setNoOfDamagedProducts] = React.useState("");
+  const onNoOfDamagedProductsChangeController = (event) => {
+    setNoOfDamagedProducts(event.target.value);
+  };
+  const [NoOfMissingProducts, setNoOfMissingProducts] = React.useState("");
+  const onNoOfMissingProductsChangeController = (event) => {
+    setNoOfMissingProducts(event.target.value);
+  };
+  const [Feedback, setFeedback] = React.useState("");
+  const onFeedbackChangeController = (event) => {
+    setFeedback(event.target.value);
+  };
   useEffect(() => {
     console.log(props);
 
@@ -205,30 +224,37 @@ const Track = (props) => {
   const handleReset = () => {
     setActiveStep(0);
   };
-   const getTrackingIds = (TrackingData, TaskName) => {
-     let details = null;
-     TrackingData.stages.forEach((stage) => {
-       // console.log(stage);
-       stage.tasks.forEach((task) => {
-         // alert(task.name + TaskName);
-         if (task.name == TaskName) {
-           details = {
-             stageId: stage.stageId,
-             taskId: task.taskId,
-           };
-         }
-       });
-     });
-     return details;
-   };
-  const PickupChecklistData = async () => {
+  const getTrackingIds = (TrackingData, TaskName) => {
+    let details = null;
+    TrackingData.stages.forEach((stage) => {
+      stage.tasks.forEach((task) => {
+        if (task.name == TaskName) {
+          details = {
+            stageId: stage.stageId,
+            taskId: task.taskId,
+          };
+        }
+      });
+    });
+    return details;
+  };
+  const SendFeedbackData = async () => {
     let details = getTrackingIds(TrackingData, "CUSTOMER_FEEDBACK");
     const data = {
       trackingId: TrackingData.processId,
       stageId: details.stageId,
       taskId: details.taskId,
       custom: {
-        data: {},
+        data: {
+          ProductDamaged: ProductDamaged,
+          ProductPilferage: ProductPilferage,
+          NoOfDamagedProducts: NoOfDamagedProducts,
+          NoOfMissingProducts: NoOfMissingProducts,
+          ProductSafety: ProductSafety,
+          ShipmentTime: ShipmentTime,
+          OverallExperience: OverallExperience,
+          Feedback: Feedback,
+        },
         attachments: {},
       },
     };
@@ -347,6 +373,10 @@ const Track = (props) => {
               <TextField
                 type="number"
                 required
+                value={NoOfDamagedProducts}
+                onChange={(event) =>
+                  onNoOfDamagedProductsChangeController(event)
+                }
                 label="Number of Damaged Products"
                 fullWidth
               />
@@ -359,6 +389,10 @@ const Track = (props) => {
               <TextField
                 type="number"
                 required
+                value={NoOfMissingProducts}
+                onChange={(event) =>
+                  onNoOfMissingProductsChangeController(event)
+                }
                 label="Number of Missing Products"
                 fullWidth
               />
@@ -380,20 +414,26 @@ const Track = (props) => {
             {" "}
             <Rating
               name="hover-feedback"
-              value={value}
+              value={ShipmentTime}
               precision={0.5}
               onChange={(event, newValue) => {
-                setValue(newValue);
+                setShipmentTime(newValue);
               }}
               onChangeActive={(event, newHover) => {
-                setHover(newHover);
+                setShipmentTimeHover(newHover);
               }}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
             {" "}
-            {value !== null && (
-              <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>
+            {ShipmentTime !== null && (
+              <Box ml={2}>
+                {
+                  labels[
+                    ShipmentTimehover !== -1 ? ShipmentTimehover : ShipmentTime
+                  ]
+                }
+              </Box>
             )}
           </Grid>
           <Grid item xs={12} sm={3}></Grid>
@@ -405,20 +445,22 @@ const Track = (props) => {
             {" "}
             <Rating
               name="hover-feedback"
-              value={value}
+              value={ProductSafety}
               precision={0.5}
               onChange={(event, newValue) => {
-                setValue(newValue);
+                setProductSafety(newValue);
               }}
               onChangeActive={(event, newHover) => {
-                setHover(newHover);
+                setSafetyHover(newHover);
               }}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
             {" "}
-            {value !== null && (
-              <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>
+            {ProductSafety !== null && (
+              <Box ml={2}>
+                {labels[Safetyhover !== -1 ? Safetyhover : ProductSafety]}
+              </Box>
             )}
           </Grid>
           <Grid item xs={12} sm={3}></Grid>
@@ -430,20 +472,28 @@ const Track = (props) => {
             {" "}
             <Rating
               name="hover-feedback"
-              value={value}
+              value={OverallExperience}
               precision={0.5}
               onChange={(event, newValue) => {
-                setValue(newValue);
+                setOverallExperience(newValue);
               }}
               onChangeActive={(event, newHover) => {
-                setHover(newHover);
+                setOverallExperienceHover(newHover);
               }}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
             {" "}
-            {value !== null && (
-              <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>
+            {OverallExperience !== null && (
+              <Box ml={2}>
+                {
+                  labels[
+                    OverallExperiencehover !== -1
+                      ? OverallExperiencehover
+                      : OverallExperience
+                  ]
+                }
+              </Box>
             )}
           </Grid>
           <Grid item xs={12} sm={3}></Grid>
@@ -453,6 +503,8 @@ const Track = (props) => {
               style={{ minWidth: 375 }}
               aria-label="minimum height"
               rowsMin={6}
+              value={Feedback}
+              onChange={(event) => onFeedbackChangeController(event)}
               rowsMax={12}
               placeholder="Share if Any..."
             />
@@ -464,6 +516,7 @@ const Track = (props) => {
               variant="contained"
               color="primary"
               className={classes.button}
+              onClick={SendFeedbackData()}
             >
               Submit
             </Button>
