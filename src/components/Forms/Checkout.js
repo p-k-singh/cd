@@ -115,6 +115,10 @@ function SimpleCard(props) {
 
       return;
     }
+    if (props.distanceRange.length == 0) {
+      alert("Please Specify Distance Range");
+      return;
+    }
     setactiveStep(activeStep + 1);
   };
   const handleNext2Click = () => {
