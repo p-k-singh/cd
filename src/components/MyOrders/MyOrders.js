@@ -163,7 +163,7 @@ const MyOrders = () => {
                           marginBottom: 7,
                         }}
                         component={Link}
-                        to="/tracking"
+                        to={`/tracking/${eachOrder.OrderId}`}
                         variant="contained"
                         color="default"
                         //   className={classes.allocationButton}

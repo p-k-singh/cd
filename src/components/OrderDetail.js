@@ -83,7 +83,7 @@ function Details(props, id) {
         <PaymentIndex orderId={id} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Track />
+        <Track orderId={id} />
       </TabPanel>
       <TabPanel value={value} index={3}>
         <CompleteDetails orderId={id} />

@@ -27,6 +27,7 @@ import StepContent from "@material-ui/core/StepContent";
 import ErrorIcon from "@material-ui/icons/Error";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Checkbox from "@material-ui/core/Checkbox";
+import { API, Auth } from "aws-amplify";
 
 const useStyles = makeStyles({
   table: {
@@ -59,94 +60,139 @@ const labels = {
   5: "Excellent+",
 };
 
-function getSteps() {
-  return [
-    "Order Placed",
-    "Order Accepted",
-    "Pickup in Transit",
-    "Arrived at Pickup Location",
-    "Pickup Completed",
-    "Arrived at Drop Location",
-    "Shipment Delivered",
-  ];
-}
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return `Your Order is placed successfully and is waiting to be accepted by the Service Provider.`;
-    case 1:
-      return `Your Order has been accepted by the Service Provider,You will get notified once the Driver has left for Pickup.`;
-    case 2:
-      return (
-        <div>
-          <p>
-            <br />
-            The Driver has left for pickup and will arrive at pickup location on
-            26-02-2021.
-          </p>
-          <p>
-            Driver Name: Satyam Khatri
-            <br />
-            Contact Number: 9288274529
-            <br />
-            Truck Number: RJ02 349533
-          </p>
-        </div>
-      );
-
-    case 3:
-      return (
-        <div>
-          <p>
-            <br />
-            Share the below OTP with Driver to Complete Pickup and Start
-            Dispatch.
-          </p>
-          <p>OTP: 394830</p>
-        </div>
-      );
-    case 4:
-      return (
-        <div>
-          <p>
-            <br />
-            Driver has left for Delivery and will arrive at pickup location on
-            28-02-2021.
-          </p>
-        </div>
-      );
-    case 5:
-      return (
-        <div>
-          <p>
-            <br />
-            Share the below OTP with Driver to complete the Shipment.
-          </p>
-          <p>OTP: 394830</p>
-        </div>
-      );
-    case 6:
-      return (
-        <div>
-          <p style={{ fontSize: 20 }}>Shipment Delivered Successfully</p>
-        </div>
-      );
-    default:
-      return "";
-  }
-}
-
 const Track = (props) => {
   const classes = useStyles();
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [NewRatings, setRatings] = React.useState(false);
   const [Issue, setIssue] = React.useState(false);
+  const [Loading, setLoading] = React.useState(false);
+  const [TrackingData, setTrackingData] = React.useState([]);
+  let params = null;
+  if (props.orderId) {
+    params = {
+      id: props.orderId,
+    };
+  } else {
+    console.log(props);
+    params = {
+      id: props.match.params.id,
+    };
+  }
+
   const steps = getSteps();
   const [value, setValue] = React.useState(2);
   const [hover, setHover] = React.useState(-1);
   const [ProductDamaged, setProductDamaged] = React.useState(false);
   const [ProductPilferage, setProductPilferage] = React.useState(false);
+  useEffect(() => {
+    console.log(props);
+
+    getTrackingId();
+  }, []);
+
+  function getTrackingId() {
+    API.get(
+      "GoFlexeOrderPlacement",
+      `/tracking?type=getProcessByCustomerOrderId&customerOrderId=${params.id}`
+    )
+      .then((resp) => {
+        console.log(resp);
+        setTrackingData(resp);
+        getTrackingStage(resp);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading("false");
+      });
+  }
+
+  function getTrackingStage(resp) {
+    var count = 0;
+    var i;
+    for (i = 0; i < resp.stages.length; i++) {
+      if (resp.stages[i].status === "COMPLETED") {
+        count++;
+      }
+      setActiveStep(count);
+    }
+  }
+  function getSteps() {
+    return [
+      "Order Placed",
+      "Order Accepted",
+      "Pickup in Transit",
+      //"Arrived at Pickup Location",
+      "Pickup Completed",
+      // "Arrived at Drop Location",
+      "Shipment Delivered",
+    ];
+  }
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return `Your Order is placed successfully and is waiting to be accepted by the Service Provider.`;
+      case 1:
+        return `Your Order has been accepted by the Service Provider,You will get notified once the Driver has left for Pickup.`;
+      case 2:
+        return (
+          <div>
+            <p>
+              <br />
+              The Driver has left for pickup and will arrive at pickup location
+              on 26-02-2021.
+            </p>
+            <p>
+              Driver Name: Satyam Khatri
+              <br />
+              Contact Number: 9288274529
+              <br />
+              Truck Number: RJ02 349533
+            </p>
+          </div>
+        );
+
+      // case 3:
+      //   return (
+      //     <div>
+      //       <p>
+      //         <br />
+      //         Share the below OTP with Driver to Complete Pickup and Start
+      //         Dispatch.
+      //       </p>
+      //       <p>OTP: 394830</p>
+      //     </div>
+      //   );
+      case 3:
+        return (
+          <div>
+            <p>
+              <br />
+              Driver has left for Delivery and will arrive at drop location on
+              28-02-2021.
+            </p>
+          </div>
+        );
+      // case :
+      //   return (
+      //     <div>
+      //       <p>
+      //         <br />
+      //         Share the below OTP with Driver to complete the Shipment.
+      //       </p>
+      //       <p>OTP: 394830</p>
+      //     </div>
+      //   );
+      case 4:
+        return (
+          <div>
+            <p style={{ fontSize: 20 }}>Shipment Delivered Successfully</p>
+          </div>
+        );
+      default:
+        return "";
+    }
+  }
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -158,6 +204,49 @@ const Track = (props) => {
 
   const handleReset = () => {
     setActiveStep(0);
+  };
+   const getTrackingIds = (TrackingData, TaskName) => {
+     let details = null;
+     TrackingData.stages.forEach((stage) => {
+       // console.log(stage);
+       stage.tasks.forEach((task) => {
+         // alert(task.name + TaskName);
+         if (task.name == TaskName) {
+           details = {
+             stageId: stage.stageId,
+             taskId: task.taskId,
+           };
+         }
+       });
+     });
+     return details;
+   };
+  const PickupChecklistData = async () => {
+    let details = getTrackingIds(TrackingData, "CUSTOMER_FEEDBACK");
+    const data = {
+      trackingId: TrackingData.processId,
+      stageId: details.stageId,
+      taskId: details.taskId,
+      custom: {
+        data: {},
+        attachments: {},
+      },
+    };
+    const payload = {
+      body: data,
+    };
+
+    API.patch(
+      "GoFlexeOrderPlacement",
+      `/tracking?type=updateCustomFields`,
+      payload
+    )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   };
 
   if (NewRatings == true) {
@@ -174,7 +263,18 @@ const Track = (props) => {
             marginBottom: "20px",
           }}
         >
-          Rating / Feedback
+          Shipment Delivered Successfully
+        </Typography>
+        <Typography
+          style={{
+            fontSize: 18,
+            height: 50,
+            padding: 10,
+            paddingLeft: 55,
+            marginBottom: "20px",
+          }}
+        >
+          Please Share your Experience:
         </Typography>
 
         <Grid
@@ -414,7 +514,7 @@ const Track = (props) => {
         >
           Back
         </Button>
-        {activeStep === steps.length ? (
+        {activeStep === steps.length - 1 ? (
           <Button
             style={{
               padding: 5,
@@ -429,14 +529,15 @@ const Track = (props) => {
             Rate Experience
           </Button>
         ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleNext}
-            className={classes.button}
-          >
-            {activeStep === steps.length - 1 ? " Rate Experience" : "Next"}
-          </Button>
+          // <Button
+          //   variant="contained"
+          //   color="primary"
+          //   onClick={handleNext}
+          //   className={classes.button}
+          // >
+          //   {activeStep === steps.length - 1 ? " Rate Experience" : "Next"}
+          // </Button>
+          <br />
         )}
       </div>
     </div>
