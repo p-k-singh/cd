@@ -79,13 +79,12 @@ const ShowDetails = (props) => {
   const [nameOfPayer, setNameOfPayer] = useState();
   const [phoneOfPayer, setPhoneOfPayer] = useState();
 
-  
-
   const PaidfullPayToAccountDashboard = (
     <React.Fragment>
       <Card style={{ padding: 10 }}>
         <Typography style={{ fontSize: 20, marginBottom: 20 }}>
-          Total Amount paid: {props.data !== null ? props.data.totalAmount : "x"} INR
+          Total Amount paid:{" "}
+          {props.data !== null ? props.data.totalAmount : "x"} INR
         </Typography>
         {/* <HelpIcon /> */}
         <Typography style={{ fontSize: 18, marginBottom: 8 }}>
@@ -207,7 +206,17 @@ const ShowDetails = (props) => {
         </Typography>
         {/* <HelpIcon /> */}
         Proof of Payment :
-        <a href={props.data !== null && props.data.paymentMode == "others" ?props.data.paymentModeDetails.chequeLink : ""}>Check here</a>
+        <a
+          href={
+            "https://goflexe-kyc.s3.ap-south-1.amazonaws.com/" +
+            (props.data !== null && props.data.paymentMode == "Others"
+              ? props.data.paymentModeDetails.chequeLink
+              : "")
+          }
+          target={"_blank"}
+        >
+          (Open)
+        </a>
         <Divider style={{ marginBottom: 20, marginTop: 50 }} />
       </Card>
     </React.Fragment>

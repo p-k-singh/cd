@@ -104,9 +104,11 @@ const Track = (props) => {
   const onFeedbackChangeController = (event) => {
     setFeedback(event.target.value);
   };
+  const [DriverDetails, setDriverDetails] = React.useState([]);
+  const [TruckNo, setTruckNo] = React.useState("");
+
   useEffect(() => {
     console.log(props);
-
     getTrackingId();
   }, []);
 
@@ -119,12 +121,25 @@ const Track = (props) => {
         console.log(resp);
         setTrackingData(resp);
         getTrackingStage(resp);
+        getDriverDetails(resp);
       })
       .catch((err) => {
         console.log(err);
         setLoading("false");
       });
   }
+
+  const getDriverDetails = (resp) => {
+    resp.stages.forEach((stage) => {
+      stage.tasks.forEach((task) => {
+        if (task.name == "ASSET_ALLOCATION" && task.status == "COMPLETED") {
+          setDriverDetails(task.customFields.data.allotedDrivers);
+          setTruckNo(task.customFields.data.allotedTrucks.value.assetNumber);
+          return;
+        }
+      });
+    });
+  };
 
   function getTrackingStage(resp) {
     var count = 0;
@@ -159,14 +174,16 @@ const Track = (props) => {
             <p>
               <br />
               The Driver has left for pickup and will arrive at pickup location
-              on 26-02-2021.
+              soon.
             </p>
             <p>
-              Driver Name: Satyam Khatri
+              Driver Name:{" "}
+              {DriverDetails.length !== 0 ? DriverDetails.label : "x"}
               <br />
-              Contact Number: 9288274529
+              Contact Number:{" "}
+              {DriverDetails.length !== 0 ? DriverDetails.phone : "x"}
               <br />
-              Truck Number: RJ02 349533
+              Truck Number: {TruckNo !== "" ? TruckNo : "x"}
             </p>
           </div>
         );
@@ -187,8 +204,7 @@ const Track = (props) => {
           <div>
             <p>
               <br />
-              Driver has left for Delivery and will arrive at drop location on
-              28-02-2021.
+              Driver has left for Delivery and will arrive at drop location soon.
             </p>
           </div>
         );
