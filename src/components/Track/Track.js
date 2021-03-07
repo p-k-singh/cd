@@ -29,7 +29,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Checkbox from "@material-ui/core/Checkbox";
 import { API, Auth } from "aws-amplify";
 import Feedback from "react-bootstrap/esm/Feedback";
-import { Spinner } from "react-bootstrap";
+import Spinner from "../UI/Spinner";
 
 const useStyles = makeStyles({
   table: {
@@ -123,6 +123,9 @@ const Track = (props) => {
     // alert(temp);
     setCount(temp);
   }
+  function refreshPage() {
+    window.location.reload(false);
+  }
 
   useEffect(() => {
     console.log(props);
@@ -163,6 +166,7 @@ const Track = (props) => {
     };
     ApiRequest(payload);
     setLoading(false);
+    refreshPage();
   };
 
   function ApiRequest(payload) {
