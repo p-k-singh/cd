@@ -29,6 +29,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Checkbox from "@material-ui/core/Checkbox";
 import { API, Auth } from "aws-amplify";
 import Feedback from "react-bootstrap/esm/Feedback";
+import { Spinner } from "react-bootstrap";
 
 const useStyles = makeStyles({
   table: {
@@ -106,6 +107,22 @@ const Track = (props) => {
   };
   const [DriverDetails, setDriverDetails] = React.useState([]);
   const [TruckNo, setTruckNo] = React.useState("");
+  const [count, setCount] = useState(0);
+  function FindStage(resp) {
+    var temp = 0;
+    var i;
+    for (i = 0; i < resp.stages.length; i++) {
+      if (
+        resp.stages[i].status === "INACTIVE" ||
+        resp.stages[i].status === "PENDING"
+      ) {
+        break;
+      }
+      temp++;
+    }
+    // alert(temp);
+    setCount(temp);
+  }
 
   useEffect(() => {
     console.log(props);
@@ -113,6 +130,7 @@ const Track = (props) => {
   }, []);
 
   function getTrackingId() {
+    setLoading(true);
     API.get(
       "GoFlexeOrderPlacement",
       `/tracking?type=getProcessByCustomerOrderId&customerOrderId=${params.id}`
@@ -122,10 +140,46 @@ const Track = (props) => {
         setTrackingData(resp);
         getTrackingStage(resp);
         getDriverDetails(resp);
+
+        FindStage(resp);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
-        setLoading("false");
+        setLoading(false);
+      });
+  }
+  const CompleteDeliveryFeeback = async () => {
+    setLoading(true);
+    let details = getTrackingIds(TrackingData, "CUSTOMER_FEEDBACK");
+    const data = {
+      trackingId: TrackingData.processId,
+      stageId: details.stageId,
+      taskId: details.taskId,
+      status: "NEXT",
+    };
+    const payload = {
+      body: data,
+    };
+    ApiRequest(payload);
+    setLoading(false);
+  };
+
+  function ApiRequest(payload) {
+    setLoading(true);
+    API.patch(
+      "GoFlexeOrderPlacement",
+      `/tracking?type=changeTaskStatus`,
+      payload
+    )
+      .then((response) => {
+        console.log(response);
+        setTrackingData(response);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        setLoading(false);
       });
   }
 
@@ -133,8 +187,8 @@ const Track = (props) => {
     resp.stages.forEach((stage) => {
       stage.tasks.forEach((task) => {
         if (task.name == "ASSET_ALLOCATION" && task.status == "COMPLETED") {
-          setDriverDetails(task.customFields.data.allotedDrivers);
-          setTruckNo(task.customFields.data.allotedTrucks.value.assetNumber);
+          setDriverDetails(task.customFields.data.allotedDrivers[0]);
+          setTruckNo(task.customFields.data.allotedTrucks[0].value.assetNumber);
           return;
         }
       });
@@ -178,7 +232,7 @@ const Track = (props) => {
             </p>
             <p>
               Driver Name:{" "}
-              {DriverDetails.length !== 0 ? DriverDetails.label : "x"}
+              {DriverDetails.length !== 0 ? DriverDetails.value : "x"}
               <br />
               Contact Number:{" "}
               {DriverDetails.length !== 0 ? DriverDetails.phone : "x"}
@@ -204,7 +258,8 @@ const Track = (props) => {
           <div>
             <p>
               <br />
-              Driver has left for Delivery and will arrive at drop location soon.
+              Driver has left for Delivery and will arrive at drop location
+              soon.
             </p>
           </div>
         );
@@ -255,6 +310,7 @@ const Track = (props) => {
     return details;
   };
   const SendFeedbackData = async () => {
+    setLoading(true);
     let details = getTrackingIds(TrackingData, "CUSTOMER_FEEDBACK");
     const data = {
       trackingId: TrackingData.processId,
@@ -285,12 +341,20 @@ const Track = (props) => {
     )
       .then((response) => {
         console.log(response);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error.response);
+        setLoading(false);
       });
+    CompleteDeliveryFeeback();
   };
-
+  if (Loading == true) {
+    return <Spinner />;
+  }
+  if (count == 5) {
+    return <h1>Shipment Delivered Successfully</h1>;
+  }
   if (NewRatings == true) {
     return (
       <div style={{ overflow: "hidden", marginTop: "20px" }}>
@@ -429,7 +493,7 @@ const Track = (props) => {
           <Grid item xs={12} sm={3}>
             {" "}
             <Rating
-              name="hover-feedback"
+              name="ShipmentTime"
               value={ShipmentTime}
               precision={0.5}
               onChange={(event, newValue) => {
@@ -460,7 +524,7 @@ const Track = (props) => {
           <Grid item xs={12} sm={3}>
             {" "}
             <Rating
-              name="hover-feedback"
+              name="ProductSafety"
               value={ProductSafety}
               precision={0.5}
               onChange={(event, newValue) => {
@@ -487,7 +551,7 @@ const Track = (props) => {
           <Grid item xs={12} sm={3}>
             {" "}
             <Rating
-              name="hover-feedback"
+              name="OverallExperience"
               value={OverallExperience}
               precision={0.5}
               onChange={(event, newValue) => {
@@ -532,7 +596,7 @@ const Track = (props) => {
               variant="contained"
               color="primary"
               className={classes.button}
-              onClick={SendFeedbackData()}
+              onClick={SendFeedbackData}
             >
               Submit
             </Button>
@@ -541,6 +605,7 @@ const Track = (props) => {
       </div>
     );
   }
+
   return (
     <div style={{ overflow: "hidden", marginTop: "20px" }}>
       <Typography
