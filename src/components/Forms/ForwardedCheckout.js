@@ -45,7 +45,7 @@ function ForwardedCheckout(props) {
   const [failure, setFailure] = useState(false);
   const [loading, setLoading] = useState(false);
   const [estimatedPrice, setEstimatedPrice] = useState(0);
-   const [OrderId, setOrderId] = useState(0);
+  const [OrderId, setOrderId] = useState(0);
 
   function getStepContent(step) {
     switch (step) {
@@ -236,6 +236,7 @@ function ForwardedCheckout(props) {
           additionalNote: props.additionalNote,
           items: items,
           estimatedPrice: estimatedPrice,
+          distanceRange: props.distanceRange,
         },
       ],
     };
@@ -244,7 +245,7 @@ function ForwardedCheckout(props) {
     };
     API.post("GoFlexeOrderPlacement", `/customerorder`, payload)
       .then((response) => {
-         setOrderId(response[0].OrderId);
+        setOrderId(response[0].OrderId);
         console.log(response);
         setLoading(false);
         setSuccess(true);
@@ -341,6 +342,7 @@ const mapStateToProps = (state) => {
     pickupSlot: state.order.pickupSlot,
     additionalNote: state.order.additionalNote,
     chosenProducts: state.order.chosenProducts,
+    distanceRange: state.order.distanceRange,
   };
 };
 const mapDispatchToProps = (dispatch) => {

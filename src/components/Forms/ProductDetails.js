@@ -637,6 +637,7 @@ const ProductDetails = (props) => {
             id="weightPerUnit"
             name="weightPerUnit"
             label="Weight Per Unit(in Kg)"
+            InputLabelProps={{ shrink: true }}
             onInput={(e) => {
               e.target.value = Math.max(0, parseInt(e.target.value))
                 .toString()
@@ -652,20 +653,7 @@ const ProductDetails = (props) => {
           />
         </Grid>
         <Grid item xs={12} sm={9}></Grid>
-        <Grid item xs={12} sm={2}>
-          <Select
-            styles={selectStyles}
-            className="basic-single"
-            classNamePrefix="Unit"
-            isSearchable
-            name="unit"
-            placeholder="Unit"
-            value={props.chosenProducts[i].value.unit}
-            onChange={(event) => unitChangeController(event, i)}
-            options={constants.lengthDimensions}
-          />
-          {/* </FormControl> */}
-        </Grid>
+
         <Grid item xs={12} sm={3}>
           <TextField
             type="number"
@@ -726,6 +714,20 @@ const ProductDetails = (props) => {
             autoComplete="Length"
           />
         </Grid>
+        <Grid item xs={12} sm={2}>
+          <Select
+            styles={selectStyles}
+            className="basic-single"
+            classNamePrefix="Unit"
+            isSearchable
+            name="unit"
+            placeholder="Unit"
+            value={props.chosenProducts[i].value.unit}
+            onChange={(event) => unitChangeController(event, i)}
+            options={constants.lengthDimensions}
+          />
+          {/* </FormControl> */}
+        </Grid>
       </Grid>
     </React.Fragment>
   );
@@ -741,10 +743,11 @@ const ProductDetails = (props) => {
         <Grid item xs={12} sm={6}>
           <TextField
             type="number"
-            id="density"
-            name="density"
+            id="TotalWeight"
+            name="TotalWeight"
             label="Total Weight in Kg"
             fullWidth
+            InputLabelProps={{ shrink: true }}
             onInput={(e) => {
               e.target.value = Math.max(0, parseInt(e.target.value))
                 .toString()
@@ -782,6 +785,7 @@ const ProductDetails = (props) => {
             label="Weight Per Unit"
             fullWidth
             disabled
+            InputLabelProps={{ shrink: true }}
             value={props.chosenProducts[i].value.weightPerUnit}
             variant="outlined"
             size="small"
@@ -864,12 +868,13 @@ const ProductDetails = (props) => {
         <Grid item xs={12} sm={4}>
           <TextField
             type="text"
-            id="density"
-            name="density"
-            label="Density"
+            id="Total Weight"
+            name="Total Weight"
+            label="Total Weight"
+            InputLabelProps={{ shrink: true }}
             fullWidth
             disabled
-            value={`${props.chosenProducts[i].value.density} kg per cubic meter`}
+            value={`${props.chosenProducts[i].totalWeight} kg`}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}

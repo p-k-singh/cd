@@ -179,6 +179,7 @@ const Track = (props) => {
       .then((response) => {
         console.log(response);
         setTrackingData(response);
+        setActiveStep(7);
         setLoading(false);
       })
       .catch((error) => {

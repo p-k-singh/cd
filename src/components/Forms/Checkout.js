@@ -229,20 +229,20 @@ function SimpleCard(props) {
         msg = "Measurement unit cannot be empty";
         return;
       }
-      if (
-        (item.value.measurable == null || item.value.measurable == false) &&
-        (item.value.density == 0 || item.value.density == null)
-      ) {
-        msg = "Total Weight cannot be empty";
-        return;
-      }
       // if (
       //   (item.value.measurable == null || item.value.measurable == false) &&
-      //   item.totalWeight == 0
+      //   (item.value.density == 0 || item.value.density == null)
       // ) {
-      //   msg = "Total Weight cannot be 0";
+      //   msg = "Total Weight cannot be empty";
       //   return;
       // }
+      if (
+        (item.value.measurable == null || item.value.measurable == false) &&
+        item.totalWeight == 0
+      ) {
+        msg = "Total Weight cannot be 0";
+        return;
+      }
       if (item.value.productType == null) {
         msg = "Product Type cannot be empty";
         return;
@@ -331,7 +331,8 @@ function SimpleCard(props) {
           owner: owner,
           productName: item[i].value.productName,
           productType: item[i].value.productType,
-          unit: item[i].value.unit,
+          unit:
+            item[i].value.measurable == true ? item[i].value.unit.value : "",
           height: item[i].value.height,
           width: item[i].value.width,
           length: item[i].value.length,
@@ -342,7 +343,6 @@ function SimpleCard(props) {
           density: item[i].value.density,
           pincode: "-",
         };
-
         const payload = {
           body: data,
         };
@@ -359,7 +359,7 @@ function SimpleCard(props) {
       var temp = {
         productName: item[i].value.productName,
         productType: item[i].value.productType.value,
-        unit: item[i].value.unit.value,
+        unit: item[i].value.measurable == true ? item[i].value.unit.value : "",
         height: item[i].value.height,
         width: item[i].value.width,
         length: item[i].value.length,
@@ -393,6 +393,7 @@ function SimpleCard(props) {
           additionalNote: props.additionalNote,
           items: items,
           estimatedPrice: estimatedPrice,
+          distanceRange: props.distanceRange,
         },
       ],
     };
