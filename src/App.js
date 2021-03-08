@@ -145,7 +145,7 @@ function App(props) {
             <Route exact path="/" component={Home} />
             {/* Order Form */}
             <Route exact path="/orders" component={Form} />
-            <Route exact path="/tracking" component={Track} />
+
             <Route exact path="/ordersRedir" component={RedirForm} />
             <Route exact path="/myorders" component={MyOrders} />
             <Route exact path="/orderSuccess" component={Success} />
@@ -175,6 +175,12 @@ function App(props) {
               path="/order/:id"
               render={(props) => {
                 return <OrderDetail {...props} />;
+              }}
+            />
+            <Route
+              path="/tracking/:id"
+              render={(props) => {
+                return <Track {...props} />;
               }}
             />
             <Route

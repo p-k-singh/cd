@@ -132,24 +132,25 @@ const SignUp = (props) => {
       <div className="container">
         <div className="row mt-4 align-items-center">
           <div className="col-md-5 pr-lg-5 mb-5 mb-md-0">
+            <center style={{ marginBottom: 20, paddingRight: 30 }}>
+              <a href="https://partner.goflexe.com/#/signup">
+                <Button
+                  style={{
+                    backgroundColor: "orange",
+                  }}
+                  variant="contained"
+                  color="primary"
+                >
+                  Serivce Provider Signup
+                </Button>
+              </a>
+            </center>
             <img
               src="https://res.cloudinary.com/mhmd/image/upload/v1569543678/form_d9sh6m.svg"
               alt=""
               className="img-fluid mb-3 d-none d-md-block"
             />
             <h1>Create an Account</h1>
-
-            <a href="https://partner.goflexe.com/#/signup">
-              <Button
-                style={{
-                  backgroundColor: "orange",
-                }}
-                variant="contained"
-                color="primary"
-              >
-                Serivce Provider Signup
-              </Button>
-            </a>
           </div>
 
           <div className="col-md-7 col-lg-6 ml-auto">

@@ -8,6 +8,7 @@ import Spinner from "../UI/Spinner";
 import CreatableSelect from "react-select/creatable";
 import Select from "react-select";
 import { connect } from "react-redux";
+import { InputAdornment } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Redirect, withRouter } from "react-router-dom";
 import * as actions from "../../store/actions/index";
@@ -103,7 +104,6 @@ const PriceCalculator = (props) => {
   const [DeliveryData, setDeliveryData] = useState([]);
   const [pickupArea, setPickupArea] = useState("");
   const [deliveryArea, setDeliveryArea] = useState("");
-  const [distanceRange, setDistanceRange] = useState("");
 
   const capabilityOptions = {
     options: constants.inventoryFeatures,
@@ -115,7 +115,7 @@ const PriceCalculator = (props) => {
     }),
   };
   const onDistanceChangeController = (event) => {
-    setDistanceRange(event);
+    props.setDistanceRange(event);
   };
 
   useEffect(() => {
@@ -361,8 +361,6 @@ const PriceCalculator = (props) => {
     }
     setCalculating(true);
 
-    //do something
-
     var items = [];
 
     for (var i = 0; i < chosenProducts.length; i++) {
@@ -376,12 +374,15 @@ const PriceCalculator = (props) => {
         width: chosenProducts[i].value.width,
         height: chosenProducts[i].value.height,
         weightPerUnit: chosenProducts[i].value.weightPerUnit,
-        Unit: chosenProducts[i].value.unit.value,
+        Unit:
+          chosenProducts[i].value.measurable == true
+            ? chosenProducts[i].value.unit.value
+            : "",
         noOfUnits: chosenProducts[i].noOfUnits,
         measurable: chosenProducts[i].value.measurable,
-        density: chosenProducts[i].value.density,
+        //density: chosenProducts[i].value.density,
         totalWeight: chosenProducts[i].totalWeight,
-        distanceRange: distanceRange.value,
+        distanceRange: props.distanceRange.value,
       });
     }
     var params = JSON.stringify(items);
@@ -400,12 +401,9 @@ const PriceCalculator = (props) => {
       })
       .catch((err) => {
         setCalculating(false);
-        setShowPrice(true);
+        alert("Error calculating price, Try again Later");
         console.log(err);
       });
-
-    setShowPrice(true);
-    setCalculating(false);
   };
 
   const myValidator = (arr) => {
@@ -458,13 +456,14 @@ const PriceCalculator = (props) => {
         msg = "Measurement unit cannot be empty";
         return;
       }
-      if (
-        (item.value.measurable == null || item.value.measurable == false) &&
-        (item.value.density == 0 || item.value.density == null)
-      ) {
-        msg = "Weight Per Cubic meter cannot be empty";
-        return;
-      }
+
+      // if (
+      //   (item.value.measurable == null || item.value.measurable == false) &&
+      //   (item.value.density == 0 || item.value.density == null)
+      // ) {
+      //   msg = "Weight Per Cubic meter cannot be empty";
+      //   return;
+      // }
       if (
         (item.value.measurable == null || item.value.measurable == false) &&
         item.totalWeight == 0
@@ -478,6 +477,10 @@ const PriceCalculator = (props) => {
       }
       if (item.value.productType == null) {
         msg = "Product Type cannot be empty";
+        return;
+      }
+       if (item.value.categories == null) {
+        msg = "Product Category cannot be empty";
         return;
       }
     });
@@ -670,28 +673,26 @@ const PriceCalculator = (props) => {
         style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
       >
         <Grid item xs={12} sm={6}>
-          <Tooltip title="Product mass / Volume">
-            <TextField
-              type="number"
-              id="density"
-              name="density"
-              onInput={(e) => {
-                e.target.value = Math.max(0, parseInt(e.target.value))
-                  .toString()
-                  .slice(0, 5);
-              }}
-              label="Weight (in Kg)"
-              fullWidth
-              value={chosenProducts[i].value.density}
-              variant="outlined"
-              size="small"
-              style={{ backgroundColor: "#fff" }}
-              onChange={(event) => onDensityChangeController(event, i)}
-              // InputProps={{
-              //   endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
-              // }}
-            />
-          </Tooltip>
+          <TextField
+            type="number"
+            id="density"
+            name="density"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            label="Total Weight"
+            fullWidth
+            value={chosenProducts[i].totalWeight}
+            onChange={(event) => onTotalWeightChange(event, i)}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+            }}
+          />
         </Grid>
       </Grid>
     </React.Fragment>
@@ -891,7 +892,7 @@ const PriceCalculator = (props) => {
           </Grid>
         ) : (
           <Grid item xs={12} sm={4}>
-            <TextField
+            {/* <TextField
               fullWidth
               type="number"
               size="small"
@@ -905,7 +906,7 @@ const PriceCalculator = (props) => {
               variant="outlined"
               value={chosenProducts[i].totalWeight}
               onChange={(event) => onTotalWeightChange(event, i)}
-            />
+            /> */}
           </Grid>
         )}
         <Grid item xs={12} sm={11}>
@@ -1109,7 +1110,7 @@ const PriceCalculator = (props) => {
                   isSearchable
                   name="Distance"
                   placeholder="Distance"
-                  value={distanceRange}
+                  value={props.distanceRange}
                   onChange={(event) => onDistanceChangeController(event)}
                   options={constants.DistanceOptions}
                 />
@@ -1249,6 +1250,7 @@ const PriceCalculator = (props) => {
 };
 const mapStateToProps = (state) => {
   return {
+    distanceRange: state.order.distanceRange,
     // height:state.order.height,
     // width:state.order.width,
     // length:state.order.length,
@@ -1274,6 +1276,8 @@ const mapDispatchToProps = (dispatch) => {
     setPickupPinDispatcher: (pPin) => dispatch(actions.setPickupPin(pPin)),
     setDestinationPinDispatcher: (dPin) =>
       dispatch(actions.setDestinationPin(dPin)),
+    setDistanceRange: (distanceRange) =>
+      dispatch(actions.setDistanceRange(distanceRange)),
     // setMeasureable:(isMeasureable)=>dispatch(actions.setMeasureable(isMeasureable)),
     // setTotalWeight:(totalWeight)=>dispatch(actions.setTotalWeight(totalWeight)),
     // setDensity:(density)=>dispatch(actions.setDensity(density)),

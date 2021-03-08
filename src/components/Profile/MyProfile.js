@@ -39,10 +39,10 @@ const useStyles = makeStyles((theme) => ({
   const [expanded, setExpanded] = React.useState(false);
   const { userHasAuthenticated } = useAppContext();
   const [details,setDetails] = useState({
-      name:'guest',
-      email:'guest@guest.com',
-      contactNo:'99999',
-      address:'somewhere'
+      name:'',
+      email:'',
+      contactNo:'',
+      address:''
   });
   const [tempName,setTempName] = useState('');
   const [tempEmail,setTempEmail] = useState('');

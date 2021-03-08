@@ -124,9 +124,7 @@ const MyOrders = () => {
                       </h6>
                     </Grid>
                     <Grid itemsm={12} xs={6}>
-                      <h6>
-                        Total Amount : {Math.floor(Math.random() * 100000)}
-                      </h6>
+                      <h6>Total Amount : {eachOrder.estimatedPrice}</h6>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -163,7 +161,7 @@ const MyOrders = () => {
                           marginBottom: 7,
                         }}
                         component={Link}
-                        to="/tracking"
+                        to={`/tracking/${eachOrder.OrderId}`}
                         variant="contained"
                         color="default"
                         //   className={classes.allocationButton}

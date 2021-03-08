@@ -26,26 +26,38 @@ const useStyles = makeStyles({
 const AccountInfoForm = (props) => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const [submit, setSubmit] = useState(false);
+  const [IfscValidator, setIfscValidator] = useState("");
+  const [AccountNameValidator, setAccountNameValidator] = useState("");
+  const [AccountNoValidator, setAccountNoValidator] = useState("");
   const [myState, setMyState] = useState({
     accountHolderName: "",
     accountNumber: "",
     ifscCode: "",
   });
   const submitKYC = () => {
-    if (myState.accountHolderName == "") {
-      alert("Account Holder's Name cannot be empty");
-      return;
-    }
-    if (myState.accountNumber == "") {
-      alert("Account Number cannot be empty");
-      return;
-    }
-    if (myState.ifscCode == "") {
-      alert("IFS code cannot be empty");
+    if (
+      AccountNameValidator !== "" ||
+      IfscValidator !== "" ||
+      AccountNoValidator !== ""
+    ) {
       return;
     }
 
-    setLoading(true);
+    if (myState.accountHolderName == "") {
+      setAccountNameValidator("Account Holder's Name cannot be empty");
+      return;
+    }
+    if (myState.accountNumber == "") {
+      setAccountNoValidator("Account Number cannot be empty");
+      return;
+    }
+    if (myState.ifscCode == "") {
+      setIfscValidator("IFS code cannot be empty");
+      return;
+    }
+
+    setSubmit(true);
     Auth.currentUserInfo()
       .then((userDetails) => {
         const payload = {
@@ -67,18 +79,36 @@ const AccountInfoForm = (props) => {
           payload
         )
           .then((resp) => console.log(resp))
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            console.log(err);
+            setSubmit(false);
+          });
 
         fun();
       })
-      .catch((err) => console.log(err));
-    setLoading(false);
+      .catch((err) => {
+        console.log(err);
+        setSubmit(false);
+      });
   };
   const fun = () => {
     //alert(JSON.stringify(props))
     props.loadData();
   };
   const fieldsChange = (event) => {
+    setIfscValidator("");
+    setAccountNameValidator("");
+    setAccountNoValidator("");
+    //  if (
+    //    event.target.name == "accountNumber" &&
+    //    event.target.value.length < 18
+    //  ) {
+    //    setAccountNoValidator("PAN Number should be of 10 Digits");
+    //  }
+    if (event.target.name == "ifscCode" && event.target.value.length < 11) {
+      setIfscValidator("IFS Code should be of 11 Digits");
+    }
+
     setMyState({ ...myState, [event.target.name]: event.target.value });
   };
   if (loading === true) {
@@ -93,19 +123,17 @@ const AccountInfoForm = (props) => {
           spacing={3}
           style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
         >
-          {/* <Grid item xs={12} sm={12}>
-            <Typography className={classes.formHeadings} fullWidth>
-              Company Details=
-            </Typography>
-          </Grid> */}
           <Grid item xs={12} sm={6}>
             <TextField
               type="text"
               id="accountHolderName"
               name="accountHolderName"
+              helperText={AccountNameValidator}
+              error={AccountNameValidator !== ""}
               value={myState.accountHolderName}
               onChange={(event) => fieldsChange(event)}
               label="Account Holder's Name"
+              inputProps={{ maxLength: 30 }}
               fullWidth
             />
           </Grid>
@@ -116,6 +144,8 @@ const AccountInfoForm = (props) => {
               inputProps={{ maxLength: 18 }}
               name="accountNumber"
               label="Account Number"
+              helperText={AccountNoValidator}
+              error={AccountNoValidator !== ""}
               value={myState.accountNumber}
               onChange={(event) => fieldsChange(event)}
               fullWidth
@@ -127,6 +157,8 @@ const AccountInfoForm = (props) => {
               inputProps={{ maxLength: 11 }}
               id="ifscCode"
               name="ifscCode"
+              error={IfscValidator !== ""}
+              helperText={IfscValidator}
               value={myState.ifscCode}
               onChange={(event) => fieldsChange(event)}
               label="IFSC Code"
@@ -134,15 +166,18 @@ const AccountInfoForm = (props) => {
             />
           </Grid>
         </Grid>
-
-        <Button
-          onClick={submitKYC}
-          className="row AllButtons"
-          variant="contained"
-          style={{ float: "right", marginBottom: "10px" }}
-        >
-          Submit KYC
-        </Button>
+        {submit == true ? (
+          <Spinner />
+        ) : (
+          <Button
+            onClick={submitKYC}
+            className="row AllButtons"
+            variant="contained"
+            style={{ float: "right", marginBottom: "10px" }}
+          >
+            Submit KYC
+          </Button>
+        )}
       </form>
     </div>
   );

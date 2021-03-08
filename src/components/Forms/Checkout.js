@@ -11,7 +11,7 @@ import * as actions from "../../store/actions/index";
 import Spinner from "../UI/Spinner";
 import { Auth } from "aws-amplify";
 // /serviceorder/acceptance?orderId=""&providerId=""
-
+import PaymentPromise from "./PaymentPromise";
 import { API } from "aws-amplify";
 
 const useStyles = makeStyles((theme) => ({
@@ -64,9 +64,9 @@ function SimpleCard(props) {
             setChosenProducts={setChosenProducts}
           />
         );
-      // case 2:
-      //      return <CustomerDetails/>
       case 2:
+        return <PaymentPromise />;
+      case 3:
         return <OrderSummary setEstimatedPrice={setEstimatedPrice} />;
       default:
         throw new Error("Unknown step");
@@ -115,6 +115,13 @@ function SimpleCard(props) {
 
       return;
     }
+    if (props.distanceRange.length == 0) {
+      alert("Please Specify Distance Range");
+      return;
+    }
+    setactiveStep(activeStep + 1);
+  };
+  const handleNext2Click = () => {
     setactiveStep(activeStep + 1);
   };
   const handleBackClick = () => {
@@ -240,8 +247,8 @@ function SimpleCard(props) {
         msg = "Product Type cannot be empty";
         return;
       }
-      if (item.value.productType == null) {
-        msg = "Product Type cannot be empty";
+      if (item.value.categories == null) {
+        msg = "Product Category cannot be empty";
         return;
       }
     });
@@ -351,14 +358,14 @@ function SimpleCard(props) {
     for (var i = 0; i < item.length; i++) {
       var temp = {
         productName: item[i].value.productName,
-        productType: item[i].value.productType,
-        unit: item[i].value.unit,
+        productType: item[i].value.productType.value,
+        unit: item[i].value.unit.value,
         height: item[i].value.height,
         width: item[i].value.width,
         length: item[i].value.length,
         weightPerUnit: item[i].value.weightPerUnit,
         measurable: item[i].value.measurable,
-        categories: item[i].value.categories,
+        categories: item[i].value.categories.value,
         density: item[i].value.density,
         noOfUnits: item[i].noOfUnits,
         totalWeight: item[i].totalWeight,
@@ -392,6 +399,7 @@ function SimpleCard(props) {
     const payload = {
       body: data,
     };
+    console.log(data);
     API.post("GoFlexeOrderPlacement", `/customerorder`, payload)
       .then((response) => {
         setOrderId(response[0].OrderId);
@@ -449,11 +457,20 @@ function SimpleCard(props) {
             color="primary"
             onClick={handlePreOrderClick}
           >
+            Next
+          </Button>
+        )}
+        {activeStep === 2 && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handlePreOrderClick}
+          >
             Order
           </Button>
         )}
         {/* Button for placing order */}
-        {activeStep === 2 && (
+        {activeStep === 3 && (
           <Button
             variant="contained"
             color="primary"
@@ -501,6 +518,8 @@ const mapStateToProps = (state) => {
     pickupSlot: state.order.pickupSlot,
     additionalNote: state.order.additionalNote,
     chosenProducts: state.order.chosenProducts,
+    distanceRange: state.order.distanceRange,
+    estimatedPrice: state.order.estimatedPrice,
   };
 };
 const mapDispatchToProps = (dispatch) => {

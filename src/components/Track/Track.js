@@ -27,6 +27,9 @@ import StepContent from "@material-ui/core/StepContent";
 import ErrorIcon from "@material-ui/icons/Error";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Checkbox from "@material-ui/core/Checkbox";
+import { API, Auth } from "aws-amplify";
+import Feedback from "react-bootstrap/esm/Feedback";
+import Spinner from "../UI/Spinner";
 
 const useStyles = makeStyles({
   table: {
@@ -59,94 +62,256 @@ const labels = {
   5: "Excellent+",
 };
 
-function getSteps() {
-  return [
-    "Order Placed",
-    "Order Accepted",
-    "Pickup in Transit",
-    "Arrived at Pickup Location",
-    "Pickup Completed",
-    "Arrived at Drop Location",
-    "Shipment Delivered",
-  ];
-}
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return `Your Order is placed successfully and is waiting to be accepted by the Service Provider.`;
-    case 1:
-      return `Your Order has been accepted by the Service Provider,You will get notified once the Driver has left for Pickup.`;
-    case 2:
-      return (
-        <div>
-          <p>
-            <br />
-            The Driver has left for pickup and will arrive at pickup location on
-            26-02-2021.
-          </p>
-          <p>
-            Driver Name: Satyam Khatri
-            <br />
-            Contact Number: 9288274529
-            <br />
-            Truck Number: RJ02 349533
-          </p>
-        </div>
-      );
-
-    case 3:
-      return (
-        <div>
-          <p>
-            <br />
-            Share the below OTP with Driver to Complete Pickup and Start
-            Dispatch.
-          </p>
-          <p>OTP: 394830</p>
-        </div>
-      );
-    case 4:
-      return (
-        <div>
-          <p>
-            <br />
-            Driver has left for Delivery and will arrive at pickup location on
-            28-02-2021.
-          </p>
-        </div>
-      );
-    case 5:
-      return (
-        <div>
-          <p>
-            <br />
-            Share the below OTP with Driver to complete the Shipment.
-          </p>
-          <p>OTP: 394830</p>
-        </div>
-      );
-    case 6:
-      return (
-        <div>
-          <p style={{ fontSize: 20 }}>Shipment Delivered Successfully</p>
-        </div>
-      );
-    default:
-      return "";
-  }
-}
-
 const Track = (props) => {
   const classes = useStyles();
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [NewRatings, setRatings] = React.useState(false);
   const [Issue, setIssue] = React.useState(false);
+  const [Loading, setLoading] = React.useState(false);
+  const [TrackingData, setTrackingData] = React.useState([]);
+  let params = null;
+  if (props.orderId) {
+    params = {
+      id: props.orderId,
+    };
+  } else {
+    console.log(props);
+    params = {
+      id: props.match.params.id,
+    };
+  }
+
   const steps = getSteps();
-  const [value, setValue] = React.useState(2);
-  const [hover, setHover] = React.useState(-1);
   const [ProductDamaged, setProductDamaged] = React.useState(false);
   const [ProductPilferage, setProductPilferage] = React.useState(false);
+  const [ProductSafety, setProductSafety] = React.useState(0);
+  const [Safetyhover, setSafetyHover] = React.useState(-1);
+  const [ShipmentTime, setShipmentTime] = React.useState(0);
+  const [ShipmentTimehover, setShipmentTimeHover] = React.useState(-1);
+  const [OverallExperience, setOverallExperience] = React.useState(0);
+  const [OverallExperiencehover, setOverallExperienceHover] = React.useState(
+    -1
+  );
+  const [NoOfDamagedProducts, setNoOfDamagedProducts] = React.useState("");
+  const onNoOfDamagedProductsChangeController = (event) => {
+    setNoOfDamagedProducts(event.target.value);
+  };
+  const [NoOfMissingProducts, setNoOfMissingProducts] = React.useState("");
+  const onNoOfMissingProductsChangeController = (event) => {
+    setNoOfMissingProducts(event.target.value);
+  };
+  const [Feedback, setFeedback] = React.useState("");
+  const onFeedbackChangeController = (event) => {
+    setFeedback(event.target.value);
+  };
+  const [DriverDetails, setDriverDetails] = React.useState([]);
+  const [TruckNo, setTruckNo] = React.useState("");
+  const [count, setCount] = useState(0);
+  // function FindStage(resp) {
+  //   var temp = 0;
+  //   var i;
+  //   for (i = 0; i < resp.stages.length; i++) {
+  //     if (
+  //       resp.stages[i].status === "INACTIVE" ||
+  //       resp.stages[i].status === "PENDING"
+  //     ) {
+  //       break;
+  //     }
+  //     temp++;
+  //   }
+  //   // alert(temp);
+  //   setCount(temp);
+  // }
+  // function refreshPage() {
+  //   window.location.reload(false);
+  // }
+
+  useEffect(() => {
+    console.log(props);
+    getTrackingId();
+  }, []);
+
+  function getTrackingId() {
+    setLoading(true);
+    API.get(
+      "GoFlexeOrderPlacement",
+      `/tracking?type=getProcessByCustomerOrderId&customerOrderId=${params.id}`
+    )
+      .then((resp) => {
+        console.log(resp);
+        setTrackingData(resp);
+        getTrackingStage(resp);
+        getDriverDetails(resp);
+
+        //  FindStage(resp);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }
+  const CompleteDeliveryFeeback = async () => {
+    setLoading(true);
+    let details = getTrackingIds(TrackingData, "CUSTOMER_FEEDBACK");
+    const data = {
+      trackingId: TrackingData.processId,
+      stageId: details.stageId,
+      taskId: details.taskId,
+      status: "NEXT",
+    };
+    const payload = {
+      body: data,
+    };
+    ApiRequest(payload);
+    setLoading(false);
+    //  refreshPage();
+  };
+
+  function ApiRequest(payload) {
+    setLoading(true);
+    API.patch(
+      "GoFlexeOrderPlacement",
+      `/tracking?type=changeTaskStatus`,
+      payload
+    )
+      .then((response) => {
+        console.log(response);
+        setTrackingData(response);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        setLoading(false);
+      });
+  }
+
+  const getDriverDetails = (resp) => {
+    resp.stages.forEach((stage) => {
+      stage.tasks.forEach((task) => {
+        if (task.name == "ASSET_ALLOCATION" && task.status == "COMPLETED") {
+          setDriverDetails(task.customFields.data.allotedDrivers[0]);
+          setTruckNo(task.customFields.data.allotedTrucks[0].value.assetNumber);
+          return;
+        }
+      });
+    });
+  };
+  function getTrackingStage(resp) {
+    var count = 0;
+    resp.stages.forEach((stage) => {
+      stage.tasks.forEach((task) => {
+        if (task.status == "COMPLETED") {
+          count++;
+        }
+      });
+    });
+    setActiveStep(count);
+  }
+
+  // function getTrackingStage(resp) {
+  //
+  //   var i;
+  //   for (i = 0; i < resp.stages.length; i++) {
+  //     if (resp.stages[i].status === "COMPLETED") {
+  //       count++;
+  //     }
+  //   }
+  // }
+  function getSteps() {
+    return [
+      "Order Placed",
+      "Order Accepted",
+      "Pickup in Transit",
+      "Arrived at Pickup Location",
+      "Pickup Completed",
+      "Arrived at Drop Location",
+      "Shipment Delivered",
+    ];
+  }
+
+  const getTrackingIds = (TrackingData, TaskName) => {
+    let details = null;
+    TrackingData.stages.forEach((stage) => {
+      stage.tasks.forEach((task) => {
+        if (task.name == TaskName) {
+          details = {
+            stageId: stage.stageId,
+            taskId: task.taskId,
+          };
+        }
+      });
+    });
+    return details;
+  };
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return `Your Order is placed successfully and is waiting to be accepted by the Service Provider.`;
+      case 1:
+        return `Your Order has been accepted by the Service Provider,You will get notified once the Driver has left for Pickup.`;
+      case 2:
+        return (
+          <div>
+            <p>
+              <br />
+              The Driver has left for pickup and will arrive at pickup location
+              soon.
+            </p>
+            <p>
+              Driver Name:{" "}
+              {DriverDetails.length !== 0 ? DriverDetails.value : "x"}
+              <br />
+              Contact Number:{" "}
+              {DriverDetails.length !== 0 ? DriverDetails.phone : "x"}
+              <br />
+              Truck Number: {TruckNo !== "" ? TruckNo : "x"}
+            </p>
+          </div>
+        );
+
+      case 3:
+        return (
+          <div>
+            <p>
+              <br />
+              Driver has arrived at pickup location.
+            </p>
+            {/* <p>OTP: 394830</p> */}
+          </div>
+        );
+      case 4:
+        return (
+          <div>
+            <p>
+              <br />
+              Driver has left for Delivery and will arrive at drop location
+              soon.
+            </p>
+          </div>
+        );
+      case 5:
+        return (
+          <div>
+            <p>
+              <br />
+              Driver has arrived at drop location
+            </p>
+            {/* <p>OTP: 394830</p> */}
+          </div>
+        );
+      case 6:
+        return (
+          <div>
+            <p style={{ fontSize: 20 }}>Shipment Delivered Successfully</p>
+          </div>
+        );
+      default:
+        return "";
+    }
+  }
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -159,7 +324,56 @@ const Track = (props) => {
   const handleReset = () => {
     setActiveStep(0);
   };
+  const SubmitButtonHandler = async () => {
+    await SendFeedbackData();
+    await CompleteDeliveryFeeback();
+  };
 
+  const SendFeedbackData = async () => {
+    setLoading(true);
+    let details = getTrackingIds(TrackingData, "CUSTOMER_FEEDBACK");
+    const data = {
+      trackingId: TrackingData.processId,
+      stageId: details.stageId,
+      taskId: details.taskId,
+      custom: {
+        data: {
+          ProductDamaged: ProductDamaged,
+          ProductPilferage: ProductPilferage,
+          NoOfDamagedProducts: NoOfDamagedProducts,
+          NoOfMissingProducts: NoOfMissingProducts,
+          ProductSafety: ProductSafety,
+          ShipmentTime: ShipmentTime,
+          OverallExperience: OverallExperience,
+          Feedback: Feedback,
+        },
+        attachments: {},
+      },
+    };
+    const payload = {
+      body: data,
+    };
+
+    API.patch(
+      "GoFlexeOrderPlacement",
+      `/tracking?type=updateCustomFields`,
+      payload
+    )
+      .then((response) => {
+        console.log(response);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        setLoading(false);
+      });
+  };
+  if (Loading == true) {
+    return <Spinner />;
+  }
+  if (activeStep == 7) {
+    return <h1>Shipment Delivered Successfully</h1>;
+  }
   if (NewRatings == true) {
     return (
       <div style={{ overflow: "hidden", marginTop: "20px" }}>
@@ -174,7 +388,18 @@ const Track = (props) => {
             marginBottom: "20px",
           }}
         >
-          Rating / Feedback
+          Shipment Delivered Successfully
+        </Typography>
+        <Typography
+          style={{
+            fontSize: 18,
+            height: 50,
+            padding: 10,
+            paddingLeft: 55,
+            marginBottom: "20px",
+          }}
+        >
+          Please Share your Experience:
         </Typography>
 
         <Grid
@@ -247,6 +472,10 @@ const Track = (props) => {
               <TextField
                 type="number"
                 required
+                value={NoOfDamagedProducts}
+                onChange={(event) =>
+                  onNoOfDamagedProductsChangeController(event)
+                }
                 label="Number of Damaged Products"
                 fullWidth
               />
@@ -259,6 +488,10 @@ const Track = (props) => {
               <TextField
                 type="number"
                 required
+                value={NoOfMissingProducts}
+                onChange={(event) =>
+                  onNoOfMissingProductsChangeController(event)
+                }
                 label="Number of Missing Products"
                 fullWidth
               />
@@ -279,21 +512,27 @@ const Track = (props) => {
           <Grid item xs={12} sm={3}>
             {" "}
             <Rating
-              name="hover-feedback"
-              value={value}
+              name="ShipmentTime"
+              value={ShipmentTime}
               precision={0.5}
               onChange={(event, newValue) => {
-                setValue(newValue);
+                setShipmentTime(newValue);
               }}
               onChangeActive={(event, newHover) => {
-                setHover(newHover);
+                setShipmentTimeHover(newHover);
               }}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
             {" "}
-            {value !== null && (
-              <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>
+            {ShipmentTime !== null && (
+              <Box ml={2}>
+                {
+                  labels[
+                    ShipmentTimehover !== -1 ? ShipmentTimehover : ShipmentTime
+                  ]
+                }
+              </Box>
             )}
           </Grid>
           <Grid item xs={12} sm={3}></Grid>
@@ -304,21 +543,23 @@ const Track = (props) => {
           <Grid item xs={12} sm={3}>
             {" "}
             <Rating
-              name="hover-feedback"
-              value={value}
+              name="ProductSafety"
+              value={ProductSafety}
               precision={0.5}
               onChange={(event, newValue) => {
-                setValue(newValue);
+                setProductSafety(newValue);
               }}
               onChangeActive={(event, newHover) => {
-                setHover(newHover);
+                setSafetyHover(newHover);
               }}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
             {" "}
-            {value !== null && (
-              <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>
+            {ProductSafety !== null && (
+              <Box ml={2}>
+                {labels[Safetyhover !== -1 ? Safetyhover : ProductSafety]}
+              </Box>
             )}
           </Grid>
           <Grid item xs={12} sm={3}></Grid>
@@ -329,21 +570,29 @@ const Track = (props) => {
           <Grid item xs={12} sm={3}>
             {" "}
             <Rating
-              name="hover-feedback"
-              value={value}
+              name="OverallExperience"
+              value={OverallExperience}
               precision={0.5}
               onChange={(event, newValue) => {
-                setValue(newValue);
+                setOverallExperience(newValue);
               }}
               onChangeActive={(event, newHover) => {
-                setHover(newHover);
+                setOverallExperienceHover(newHover);
               }}
             />
           </Grid>
           <Grid item xs={12} sm={3}>
             {" "}
-            {value !== null && (
-              <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>
+            {OverallExperience !== null && (
+              <Box ml={2}>
+                {
+                  labels[
+                    OverallExperiencehover !== -1
+                      ? OverallExperiencehover
+                      : OverallExperience
+                  ]
+                }
+              </Box>
             )}
           </Grid>
           <Grid item xs={12} sm={3}></Grid>
@@ -353,6 +602,8 @@ const Track = (props) => {
               style={{ minWidth: 375 }}
               aria-label="minimum height"
               rowsMin={6}
+              value={Feedback}
+              onChange={(event) => onFeedbackChangeController(event)}
               rowsMax={12}
               placeholder="Share if Any..."
             />
@@ -364,6 +615,7 @@ const Track = (props) => {
               variant="contained"
               color="primary"
               className={classes.button}
+              onClick={SubmitButtonHandler}
             >
               Submit
             </Button>
@@ -372,6 +624,7 @@ const Track = (props) => {
       </div>
     );
   }
+
   return (
     <div style={{ overflow: "hidden", marginTop: "20px" }}>
       <Typography
@@ -407,14 +660,14 @@ const Track = (props) => {
 
       <div className={classes.actionsContainer}></div>
       <div>
-        <Button
+        {/* <Button
           disabled={activeStep === 0}
           onClick={handleBack}
           className={classes.button}
         >
           Back
-        </Button>
-        {activeStep === steps.length ? (
+        </Button> */}
+        {activeStep === steps.length - 1 ? (
           <Button
             style={{
               padding: 5,
@@ -429,14 +682,15 @@ const Track = (props) => {
             Rate Experience
           </Button>
         ) : (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleNext}
-            className={classes.button}
-          >
-            {activeStep === steps.length - 1 ? " Rate Experience" : "Next"}
-          </Button>
+          // <Button
+          //   variant="contained"
+          //   color="primary"
+          //   onClick={handleNext}
+          //   className={classes.button}
+          // >
+          //   {activeStep === steps.length - 1 ? " Rate Experience" : "Next"}
+          // </Button>
+          <br />
         )}
       </div>
     </div>

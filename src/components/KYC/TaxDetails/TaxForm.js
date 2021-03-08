@@ -33,44 +33,33 @@ const CompanyKYC = (props) => {
   const [PanValidator, setPanValidator] = useState("");
   const [GstValidator, setGstValidator] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submit, setSubmit] = useState(false);
   const [myState, setMyState] = useState({
     pan: "",
     gstin: "",
   });
   const fieldsChange = (event) => {
-    var pancount = 0;
-    var gstcount = 0,
-      temp = event.target.value;
-    while (temp > 0) {
-      pancount++;
-      gstcount++;
-      temp = Math.floor(temp / 10);
+    setPanValidator("");
+    setGstValidator("");
+    if (event.target.name == "pan" && event.target.value.length < 10) {
+      setPanValidator("PAN Number should be of 10 Digits");
     }
-    if (event.target.name == "pan" && pancount > 10) {
-      setPanValidator("PAN Number cannot exceed 10 Digits");
-    } else {
-      setPanValidator("");
-    }
-    if (event.target.name == "gstin" || gstcount > 15) {
-      setGstValidator("Gst Number cannot exceed 15 Digits");
-    } else {
-      setGstValidator("");
+    if (event.target.name == "gstin" && event.target.value.length < 15) {
+      setGstValidator("Gst Number should be of 15 Digits");
     }
     setMyState({ ...myState, [event.target.name]: event.target.value });
   };
   const submitKYC = () => {
-    if (PanValidator !== "") {
+    if (PanValidator !== "" || GstValidator !== "") {
       return;
     }
-    if (GstValidator !== "") {
-      return;
-    }
+
     if (myState.pan == "") {
-      alert("PAN Details cannot be empty");
+      setPanValidator("PAN Details cannot be empty");
       return;
     }
-    if (myState.gst == "") {
-      alert("GSTIN cannot be empty");
+    if (myState.gstin == "") {
+      setGstValidator("GSTIN cannot be empty");
       return;
     }
 
@@ -83,7 +72,7 @@ const CompanyKYC = (props) => {
       return;
     }
 
-    setLoading(true);
+    setSubmit(true);
     var panLink, gstinLink;
     const metaData = {
       contentType: panDoc.type,
@@ -158,18 +147,35 @@ const CompanyKYC = (props) => {
                             console.log(resp);
                             fun();
                           })
-                          .catch((err) => console.log(err));
+                          .catch((err) => {
+                            console.log(err);
+                            setSubmit(false);
+                          });
                       })
-                      .catch((err) => console.log(err));
+                      .catch((err) => {
+                        console.log(err);
+                        setSubmit(false);
+                      });
                   })
-                  .catch((err) => console.log(err));
+                  .catch((err) => {
+                    console.log(err);
+                    setSubmit(false);
+                  });
               })
-              .catch((err) => console.log(err));
+              .catch((err) => {
+                console.log(err);
+                setSubmit(false);
+              });
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            console.log(err);
+            setSubmit(false);
+          });
       })
-      .catch((err) => console.log(err));
-    setLoading(false);
+      .catch((err) => {
+        console.log(err);
+        setSubmit(false);
+      });
   };
   const fun = () => {
     //alert(JSON.stringify(props))
@@ -204,8 +210,8 @@ const CompanyKYC = (props) => {
               type="text"
               id="pan"
               name="pan"
-              // error={PanValidator !== ""}
-              // helperText={PanValidator === "" ? "" : PanValidator}
+              error={PanValidator !== ""}
+              helperText={PanValidator === "" ? "" : PanValidator}
               value={myState.pan}
               onChange={(event) => fieldsChange(event)}
               label="Enter PAN Details"
@@ -219,8 +225,8 @@ const CompanyKYC = (props) => {
               type="text"
               id="gstin"
               name="gstin"
-              // error={GstValidator !== ""}
-              // helperText={GstValidator === "" ? "" : GstValidator}
+              error={GstValidator !== ""}
+              helperText={GstValidator}
               value={myState.gstin}
               inputProps={{ maxLength: 15 }}
               onChange={(event) => fieldsChange(event)}
@@ -258,15 +264,18 @@ const CompanyKYC = (props) => {
             />
           </Grid>
         </Grid>
-
-        <Button
-          onClick={submitKYC}
-          className="row AllButtons"
-          variant="contained"
-          style={{ float: "right", marginBottom: "10px" }}
-        >
-          Next
-        </Button>
+        {submit == true ? (
+          <Spinner />
+        ) : (
+          <Button
+            onClick={submitKYC}
+            className="row AllButtons"
+            variant="contained"
+            style={{ float: "right", marginBottom: "10px" }}
+          >
+            Next
+          </Button>
+        )}
       </form>
     </div>
   );
