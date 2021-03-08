@@ -429,7 +429,7 @@ const ProductDetails = (props) => {
   const classes = useStyles();
   const [user, setUser] = useState();
   const [allProducts, setAllProducts] = useState([]);
- 
+
   const [calculating, setCalculating] = useState(false);
 
   const capabilityOptions = {
@@ -441,7 +441,6 @@ const ProductDetails = (props) => {
       zIndex: 100,
     }),
   };
- 
 
   useEffect(() => {
     Auth.currentUserInfo()
@@ -740,28 +739,27 @@ const ProductDetails = (props) => {
         style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
       >
         <Grid item xs={12} sm={6}>
-          <Tooltip title="Product mass / Volume">
-            <TextField
-              type="number"
-              id="density"
-              name="density"
-              label="Total Weight in Kg"
-              fullWidth
-              onInput={(e) => {
-                e.target.value = Math.max(0, parseInt(e.target.value))
-                  .toString()
-                  .slice(0, 5);
-              }}
-              value={props.chosenProducts[i].value.density}
-              variant="outlined"
-              size="small"
-              style={{ backgroundColor: "#fff" }}
-              onChange={(event) => onDensityChangeController(event, i)}
-              // InputProps={{
-              //   endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
-              // }}
-            />
-          </Tooltip>
+          <TextField
+            type="number"
+            id="density"
+            name="density"
+            label="Total Weight in Kg"
+            fullWidth
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            value={props.chosenProducts[i].totalWeight}
+            onChange={(event) => onTotalWeightChange(event, i)}
+            variant="outlined"
+            size="small"
+            style={{ backgroundColor: "#fff" }}
+
+            // InputProps={{
+            //   endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+            // }}
+          />
         </Grid>
       </Grid>
     </React.Fragment>

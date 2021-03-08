@@ -25,16 +25,16 @@ const constants = {
 
   /*Price Calculator(same for inventory management)*/
   dimensionOptions: [
-    { name: "Centimeters", value: "centimeters" },
+    { name: "Centimeter", value: "centimeter" },
     { name: "Inches", value: "inches" },
-    { name: "Feets", value: "feets" },
+    { name: "Feet", value: "feet" },
     { name: "Millimeter", value: "millimeter" },
   ],
 
   lengthDimensions: [
-    { label: "Centimeters", value: "centimeters" },
+    { label: "Centimeter", value: "centimeter" },
     { label: "Inches", value: "inches" },
-    { label: "Feets", value: "feets" },
+    { label: "Feet", value: "feet" },
     { label: "Millimeter", value: "millimeter" },
   ],
 

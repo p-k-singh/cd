@@ -37,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function ForwardedCheckout(props) {
   const classes = useStyles();
   //Handle Page Change
@@ -45,7 +44,8 @@ function ForwardedCheckout(props) {
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [estimatedPrice,setEstimatedPrice] = useState(0)
+  const [estimatedPrice, setEstimatedPrice] = useState(0);
+   const [OrderId, setOrderId] = useState(0);
 
   function getStepContent(step) {
     switch (step) {
@@ -159,7 +159,6 @@ function ForwardedCheckout(props) {
   };
 
   const handlePlaceOrderClick = async () => {
-    
     setLoading(true);
     var currentUser = await Auth.currentUserInfo();
     var owner = currentUser.username;
@@ -234,9 +233,9 @@ function ForwardedCheckout(props) {
           pickupdate: props.pickupDate,
           deliveryDate: props.deliveryDate,
           pickupSlot: props.pickupSlot,
-          additionalNote: props.additionalNote, 
+          additionalNote: props.additionalNote,
           items: items,
-          estimatedPrice:estimatedPrice
+          estimatedPrice: estimatedPrice,
         },
       ],
     };
@@ -245,7 +244,7 @@ function ForwardedCheckout(props) {
     };
     API.post("GoFlexeOrderPlacement", `/customerorder`, payload)
       .then((response) => {
-        // Add your code here
+         setOrderId(response[0].OrderId);
         console.log(response);
         setLoading(false);
         setSuccess(true);
@@ -260,7 +259,7 @@ function ForwardedCheckout(props) {
 
   let redirect = null;
   if (success === true) {
-    redirect = <Redirect to="/orderSuccess"></Redirect>;
+    redirect = <Redirect to={`/orderSuccess/${OrderId}`}></Redirect>;
   } else if (failure === true) {
     redirect = <Redirect to="/orderFailure"></Redirect>;
   }

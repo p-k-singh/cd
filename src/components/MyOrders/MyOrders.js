@@ -124,9 +124,7 @@ const MyOrders = () => {
                       </h6>
                     </Grid>
                     <Grid itemsm={12} xs={6}>
-                      <h6>
-                        Total Amount : {Math.floor(Math.random() * 100000)}
-                      </h6>
+                      <h6>Total Amount : {eachOrder.estimatedPrice}</h6>
                     </Grid>
                   </Grid>
                 </Grid>

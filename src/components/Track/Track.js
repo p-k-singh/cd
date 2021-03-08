@@ -108,24 +108,24 @@ const Track = (props) => {
   const [DriverDetails, setDriverDetails] = React.useState([]);
   const [TruckNo, setTruckNo] = React.useState("");
   const [count, setCount] = useState(0);
-  function FindStage(resp) {
-    var temp = 0;
-    var i;
-    for (i = 0; i < resp.stages.length; i++) {
-      if (
-        resp.stages[i].status === "INACTIVE" ||
-        resp.stages[i].status === "PENDING"
-      ) {
-        break;
-      }
-      temp++;
-    }
-    // alert(temp);
-    setCount(temp);
-  }
-  function refreshPage() {
-    window.location.reload(false);
-  }
+  // function FindStage(resp) {
+  //   var temp = 0;
+  //   var i;
+  //   for (i = 0; i < resp.stages.length; i++) {
+  //     if (
+  //       resp.stages[i].status === "INACTIVE" ||
+  //       resp.stages[i].status === "PENDING"
+  //     ) {
+  //       break;
+  //     }
+  //     temp++;
+  //   }
+  //   // alert(temp);
+  //   setCount(temp);
+  // }
+  // function refreshPage() {
+  //   window.location.reload(false);
+  // }
 
   useEffect(() => {
     console.log(props);
@@ -144,7 +144,7 @@ const Track = (props) => {
         getTrackingStage(resp);
         getDriverDetails(resp);
 
-        FindStage(resp);
+        //  FindStage(resp);
         setLoading(false);
       })
       .catch((err) => {
@@ -166,7 +166,7 @@ const Track = (props) => {
     };
     ApiRequest(payload);
     setLoading(false);
-    refreshPage();
+    //  refreshPage();
   };
 
   function ApiRequest(payload) {
@@ -198,28 +198,54 @@ const Track = (props) => {
       });
     });
   };
-
   function getTrackingStage(resp) {
     var count = 0;
-    var i;
-    for (i = 0; i < resp.stages.length; i++) {
-      if (resp.stages[i].status === "COMPLETED") {
-        count++;
-      }
-      setActiveStep(count);
-    }
+    resp.stages.forEach((stage) => {
+      stage.tasks.forEach((task) => {
+        if (task.status == "COMPLETED") {
+          count++;
+        }
+      });
+    });
+    setActiveStep(count);
   }
+
+  // function getTrackingStage(resp) {
+  //
+  //   var i;
+  //   for (i = 0; i < resp.stages.length; i++) {
+  //     if (resp.stages[i].status === "COMPLETED") {
+  //       count++;
+  //     }
+  //   }
+  // }
   function getSteps() {
     return [
       "Order Placed",
       "Order Accepted",
       "Pickup in Transit",
-      //"Arrived at Pickup Location",
+      "Arrived at Pickup Location",
       "Pickup Completed",
-      // "Arrived at Drop Location",
+      "Arrived at Drop Location",
       "Shipment Delivered",
     ];
   }
+
+  const getTrackingIds = (TrackingData, TaskName) => {
+    let details = null;
+    TrackingData.stages.forEach((stage) => {
+      stage.tasks.forEach((task) => {
+        if (task.name == TaskName) {
+          details = {
+            stageId: stage.stageId,
+            taskId: task.taskId,
+          };
+        }
+      });
+    });
+    return details;
+  };
+
   function getStepContent(step) {
     switch (step) {
       case 0:
@@ -246,18 +272,17 @@ const Track = (props) => {
           </div>
         );
 
-      // case 3:
-      //   return (
-      //     <div>
-      //       <p>
-      //         <br />
-      //         Share the below OTP with Driver to Complete Pickup and Start
-      //         Dispatch.
-      //       </p>
-      //       <p>OTP: 394830</p>
-      //     </div>
-      //   );
       case 3:
+        return (
+          <div>
+            <p>
+              <br />
+              Driver has arrived at pickup location.
+            </p>
+            {/* <p>OTP: 394830</p> */}
+          </div>
+        );
+      case 4:
         return (
           <div>
             <p>
@@ -267,17 +292,17 @@ const Track = (props) => {
             </p>
           </div>
         );
-      // case :
-      //   return (
-      //     <div>
-      //       <p>
-      //         <br />
-      //         Share the below OTP with Driver to complete the Shipment.
-      //       </p>
-      //       <p>OTP: 394830</p>
-      //     </div>
-      //   );
-      case 4:
+      case 5:
+        return (
+          <div>
+            <p>
+              <br />
+              Driver has arrived at drop location
+            </p>
+            {/* <p>OTP: 394830</p> */}
+          </div>
+        );
+      case 6:
         return (
           <div>
             <p style={{ fontSize: 20 }}>Shipment Delivered Successfully</p>
@@ -299,20 +324,11 @@ const Track = (props) => {
   const handleReset = () => {
     setActiveStep(0);
   };
-  const getTrackingIds = (TrackingData, TaskName) => {
-    let details = null;
-    TrackingData.stages.forEach((stage) => {
-      stage.tasks.forEach((task) => {
-        if (task.name == TaskName) {
-          details = {
-            stageId: stage.stageId,
-            taskId: task.taskId,
-          };
-        }
-      });
-    });
-    return details;
+  const SubmitButtonHandler = async () => {
+    await SendFeedbackData();
+    await CompleteDeliveryFeeback();
   };
+
   const SendFeedbackData = async () => {
     setLoading(true);
     let details = getTrackingIds(TrackingData, "CUSTOMER_FEEDBACK");
@@ -351,12 +367,11 @@ const Track = (props) => {
         console.log(error.response);
         setLoading(false);
       });
-    CompleteDeliveryFeeback();
   };
   if (Loading == true) {
     return <Spinner />;
   }
-  if (count == 5) {
+  if (activeStep == 7) {
     return <h1>Shipment Delivered Successfully</h1>;
   }
   if (NewRatings == true) {
@@ -600,7 +615,7 @@ const Track = (props) => {
               variant="contained"
               color="primary"
               className={classes.button}
-              onClick={SendFeedbackData}
+              onClick={SubmitButtonHandler}
             >
               Submit
             </Button>
