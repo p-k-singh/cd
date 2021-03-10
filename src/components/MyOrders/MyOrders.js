@@ -62,7 +62,7 @@ const MyOrders = () => {
       "GoFlexeOrderPlacement",
       `/customerorder/customer/${currentUsername}`
     );
-    // const url='https://2n3n7swm8f.execute-api.ap-south-1.amazonaws.com/draft0/customerorder/customer/gaurav@gmail.com';
+    
     console.log(temp);
     setActiveOrders(temp);
     setLoading(false);

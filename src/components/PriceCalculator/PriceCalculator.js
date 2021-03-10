@@ -530,7 +530,7 @@ const PriceCalculator = (props) => {
             height: null,
             weightPerUnit: null,
             density: null,
-            unit: null,
+            unit: { label: "Inches", value: "inches" },
             location: "",
             pincode: "",
             productId: "",

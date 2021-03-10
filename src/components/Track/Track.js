@@ -107,6 +107,8 @@ const Track = (props) => {
   };
   const [DriverDetails, setDriverDetails] = React.useState([]);
   const [TruckNo, setTruckNo] = React.useState("");
+  const [PickupDate, setPickupDate] = React.useState("");
+  const [DeliveryDate, setDeliveryDate] = React.useState("");
   const [count, setCount] = useState(0);
   // function FindStage(resp) {
   //   var temp = 0;
@@ -179,7 +181,7 @@ const Track = (props) => {
       .then((response) => {
         console.log(response);
         setTrackingData(response);
-        setActiveStep(7);
+        getTrackingStage(response);
         setLoading(false);
       })
       .catch((error) => {
@@ -194,7 +196,9 @@ const Track = (props) => {
         if (task.name == "ASSET_ALLOCATION" && task.status == "COMPLETED") {
           setDriverDetails(task.customFields.data.allotedDrivers[0]);
           setTruckNo(task.customFields.data.allotedTrucks[0].value.assetNumber);
-          return;
+          setDeliveryDate(task.customFields.data.deliveryDate);
+           setPickupDate(task.customFields.data.pickupDate);
+           return
         }
       });
     });
@@ -246,7 +250,7 @@ const Track = (props) => {
     });
     return details;
   };
-
+ 
   function getStepContent(step) {
     switch (step) {
       case 0:
@@ -259,7 +263,7 @@ const Track = (props) => {
             <p>
               <br />
               The Driver has left for pickup and will arrive at pickup location
-              soon.
+              on {PickupDate.substring(0, 10)} 
             </p>
             <p>
               Driver Name:{" "}
@@ -289,7 +293,7 @@ const Track = (props) => {
             <p>
               <br />
               Driver has left for Delivery and will arrive at drop location
-              soon.
+              on {DeliveryDate.substring(0,10)}
             </p>
           </div>
         );

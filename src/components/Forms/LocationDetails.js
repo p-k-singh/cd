@@ -213,7 +213,6 @@ const BuyerDetails = (props) => {
   };
   const onDistanceChangeController = (event) => {
     props.setDistanceRange(event);
-   
   };
   const onPickupAreaChangeController = (event) => {
     setPickupArea(event.target.value);
@@ -277,6 +276,11 @@ const BuyerDetails = (props) => {
               id="pickupzip"
               name="pickupzip"
               InputLabelProps={{ shrink: true }}
+              onInput={(e) => {
+                e.target.value = Math.max(0, parseInt(e.target.value))
+                  .toString()
+                  .slice(0, 6);
+              }}
               label="Pickup Zip"
               fullWidth
               value={props.pickupPin}
@@ -349,6 +353,11 @@ const BuyerDetails = (props) => {
               required
               variant="outlined"
               size="small"
+              onInput={(e) => {
+                e.target.value = Math.max(0, parseInt(e.target.value))
+                  .toString()
+                  .slice(0, 6);
+              }}
               error={deliverZipValidator !== ""}
               helperText={
                 deliverZipValidator === ""

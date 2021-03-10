@@ -84,8 +84,7 @@ const Home = (props) => {
       .then((userDetails) => {
         const payload = {
           type: "customer",
-          customerId: "ff7675f7-ac42-43f7-91e3-599624f1661a",
-          // userDetails.username,
+          customerId: userDetails.username,
         };
         var params = JSON.stringify(payload);
 
@@ -322,7 +321,7 @@ const Home = (props) => {
                     fontWeight: 700,
                   }}
                 >
-                  ₹ {details.length !== 0 ? details.totalAmountSaved : 0}
+                  ₹ {details.length !== 0 ? Math.round(details.totalAmountSaved) : 0}
                 </Grid>
               </Grid>
             </Card>

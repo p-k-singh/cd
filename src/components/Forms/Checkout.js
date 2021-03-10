@@ -316,6 +316,9 @@ function SimpleCard(props) {
   // }
 
   const handlePlaceOrderClick = async () => {
+    if (estimatedPrice == 0) {
+      alert("There is some issue in getting the Price,Try Again Later");
+    }
     setLoading(true);
     var currentUser = await Auth.currentUserInfo();
     var owner = currentUser.username;

@@ -90,7 +90,7 @@ const AddProductForm = (props) => {
   const classes = useStyles();
   const [newProductName, setNewProductName] = useState("");
   const [newProductType, setNewProductType] = useState("");
-  const [unit, setUnit] = useState("");
+  const [unit, setUnit] = useState({ label: "Inches", value: "inches" });
   const [height, setHeight] = useState();
   const [width, setWidth] = useState();
   const [length, setLength] = useState();
@@ -207,39 +207,39 @@ const AddProductForm = (props) => {
       alert("Product Category can't be empty");
       return;
     }
-    // if (
-    //   (switchToggler === true && weightPerUnit == null) ||
-    //   (switchToggler === true && height == null) ||
-    //   (switchToggler === true && length == null) ||
-    //   (switchToggler === true && width == null)
-    // ) {
-    //   alert("Product Dimensions can't be empty");
-    //   return;
-    // }
-    // if (switchToggler === true && unit === "") {
-    //   alert("Select measurement Unit for your Product");
-    //   return;
-    // }
-    // if (switchToggler === false && density == null) {
+    if (
+      (fillDimensions === true && weightPerUnit == null) ||
+      (fillDimensions === true && height == null) ||
+      (fillDimensions === true && length == null) ||
+      (fillDimensions === true && width == null)
+    ) {
+      alert("Product Dimensions can't be empty");
+      return;
+    }
+    if (fillDimensions === true && unit === "") {
+      alert("Select measurement Unit for your Product");
+      return;
+    }
+    // if (fillDimensions === false && density == null) {
     //   alert("Density cannot be empty");
     //   return;
     // }
-    // if (lengthValidator !== "") {
-    //   alert(lengthValidator);
-    //   return;
-    // }
-    // if (widthValidator !== "") {
-    //   alert(widthValidator);
-    //   return;
-    // }
-    // if (heightValidator !== "") {
-    //   alert(heightValidator);
-    //   return;
-    // }
-    // if (weightPerUnitValidator !== "") {
-    //   alert(weightPerUnitValidator);
-    //   return;
-    // }
+    if (fillDimensions === true && lengthValidator !== "") {
+      alert(lengthValidator);
+      return;
+    }
+    if (fillDimensions === true && widthValidator !== "") {
+      alert(widthValidator);
+      return;
+    }
+    if (fillDimensions === true && heightValidator !== "") {
+      alert(heightValidator);
+      return;
+    }
+    if (fillDimensions === true && weightPerUnitValidator !== "") {
+      alert(weightPerUnitValidator);
+      return;
+    }
 
     setLoading(true);
     var currentUser = await Auth.currentUserInfo();
@@ -388,6 +388,7 @@ const AddProductForm = (props) => {
             classNamePrefix="Unit"
             isSearchable
             name="unit"
+            value={unit}
             placeholder="Unit"
             onChange={(event) => unitChangeController(event)}
             options={constants.lengthDimensions}
