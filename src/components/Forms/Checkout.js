@@ -229,20 +229,20 @@ function SimpleCard(props) {
         msg = "Measurement unit cannot be empty";
         return;
       }
-      if (
-        (item.value.measurable == null || item.value.measurable == false) &&
-        (item.value.density == 0 || item.value.density == null)
-      ) {
-        msg = "Total Weight cannot be empty";
-        return;
-      }
       // if (
       //   (item.value.measurable == null || item.value.measurable == false) &&
-      //   item.totalWeight == 0
+      //   (item.value.density == 0 || item.value.density == null)
       // ) {
-      //   msg = "Total Weight cannot be 0";
+      //   msg = "Total Weight cannot be empty";
       //   return;
       // }
+      if (
+        (item.value.measurable == null || item.value.measurable == false) &&
+        item.totalWeight == 0
+      ) {
+        msg = "Total Weight cannot be 0";
+        return;
+      }
       if (item.value.productType == null) {
         msg = "Product Type cannot be empty";
         return;
@@ -316,6 +316,9 @@ function SimpleCard(props) {
   // }
 
   const handlePlaceOrderClick = async () => {
+    if (estimatedPrice == 0) {
+      alert("There is some issue in getting the Price,Try Again Later");
+    }
     setLoading(true);
     var currentUser = await Auth.currentUserInfo();
     var owner = currentUser.username;
@@ -325,13 +328,15 @@ function SimpleCard(props) {
     //var newProductIds;
     /**Place New products in Inventory */
     var item = chosenProducts.slice();
+    
     for (var i = 0; i < item.length; i++) {
       if (item[i].isNew === true) {
         data = {
           owner: owner,
           productName: item[i].value.productName,
           productType: item[i].value.productType,
-          unit: item[i].value.unit,
+          unit:
+          item[i].value.measurable == true ? item[i].value.unit : "",
           height: item[i].value.height,
           width: item[i].value.width,
           length: item[i].value.length,
@@ -342,11 +347,36 @@ function SimpleCard(props) {
           density: item[i].value.density,
           pincode: "-",
         };
-
         const payload = {
           body: data,
         };
         API.post("GoFlexeOrderPlacement", `/inventory`, payload).catch(
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+      else{
+        data = {
+          owner: owner,
+          productId:item[i].productId,
+          productName: item[i].value.productName,
+          productType: item[i].value.productType,
+          unit:
+            item[i].value.measurable == true ? item[i].value.unit : "",
+          height: item[i].value.height,
+          width: item[i].value.width,
+          length: item[i].value.length,
+          weightPerUnit: item[i].value.weightPerUnit,
+          location: "-",
+          categories: item[i].value.categories,
+          measurable: item[i].value.measurable,
+          pincode: "-",
+        };
+        const payload = {
+          body: data,
+        };
+        API.put("GoFlexeOrderPlacement", `/inventory`, payload).catch(
           (error) => {
             console.log(error);
           }
@@ -359,7 +389,7 @@ function SimpleCard(props) {
       var temp = {
         productName: item[i].value.productName,
         productType: item[i].value.productType.value,
-        unit: item[i].value.unit.value,
+        unit: item[i].value.measurable == true ? item[i].value.unit.value : "",
         height: item[i].value.height,
         width: item[i].value.width,
         length: item[i].value.length,
@@ -372,11 +402,6 @@ function SimpleCard(props) {
       };
       items.push(temp);
     }
-
-    //var currentUser = await Auth.currentUserInfo()
-    // console.log('checking user details: '+JSON.stringify(currentUser))
-    //var currentUsername=currentUser.username
-
     var today = new Date();
     data = {
       customerOrders: [
@@ -387,14 +412,16 @@ function SimpleCard(props) {
           toPin: props.destinationPin,
           fromPin: props.pickupPin,
           customerEmail: owner,
-          pickupdate: props.pickupDate,
+          pickupDate: props.pickupDate,
           deliveryDate: props.deliveryDate,
           pickupSlot: props.pickupSlot,
           additionalNote: props.additionalNote,
           items: items,
           estimatedPrice: estimatedPrice,
+          distanceRange: props.distanceRange.value,
         },
       ],
+      
     };
     const payload = {
       body: data,

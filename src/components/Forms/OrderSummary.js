@@ -61,7 +61,10 @@ const OrderSummary = (props) => {
         height: props.chosenProducts[i].value.height,
         weightPerUnit: props.chosenProducts[i].value.weightPerUnit,
         noOfUnits: props.chosenProducts[i].noOfUnits,
-        Unit: props.chosenProducts[i].value.unit.value,
+        Unit:
+          props.chosenProducts[i].value.measurable == true
+            ? props.chosenProducts[i].value.unit.value
+            : "",
         measurable: props.chosenProducts[i].value.measurable,
         density: props.chosenProducts[i].value.density,
         totalWeight: props.chosenProducts[i].totalWeight,
@@ -78,7 +81,7 @@ const OrderSummary = (props) => {
       })
       .catch((err) => {
         setEstimatedMoney("Error: Try Later");
-        alert("Error calculating price, Try again Later")
+        alert("Error calculating price, Try again Later");
         setLoading(false);
         console.log(err);
       });
@@ -376,8 +379,8 @@ const OrderSummary = (props) => {
                 {each.value.measurable === false ? (
                   <Grid item xs={12} sm={6}>
                     <tr>
-                      <th scope="row">{"Weight per Unit : "}</th>
-                      <td>{each.value.density}Kg</td>
+                      <th scope="row">{"Total weight : "}</th>
+                      <td>{each.totalWeight}Kg</td>
                     </tr>
                   </Grid>
                 ) : (

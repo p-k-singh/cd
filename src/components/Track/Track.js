@@ -82,7 +82,6 @@ const Track = (props) => {
     };
   }
 
-  const steps = getSteps();
   const [ProductDamaged, setProductDamaged] = React.useState(false);
   const [ProductPilferage, setProductPilferage] = React.useState(false);
   const [ProductSafety, setProductSafety] = React.useState(0);
@@ -107,6 +106,10 @@ const Track = (props) => {
   };
   const [DriverDetails, setDriverDetails] = React.useState([]);
   const [TruckNo, setTruckNo] = React.useState("");
+  const [PickupDate, setPickupDate] = React.useState("");
+  const [DeliveryDate, setDeliveryDate] = React.useState("");
+  const [taskNames, setTaskNames] = React.useState([]);
+  const steps = getSteps();
   const [count, setCount] = useState(0);
   // function FindStage(resp) {
   //   var temp = 0;
@@ -140,10 +143,11 @@ const Track = (props) => {
     )
       .then((resp) => {
         console.log(resp);
+        getTaskNames(resp);
         setTrackingData(resp);
         getTrackingStage(resp);
         getDriverDetails(resp);
-
+      
         //  FindStage(resp);
         setLoading(false);
       })
@@ -152,6 +156,17 @@ const Track = (props) => {
         setLoading(false);
       });
   }
+
+  const getTaskNames = (resp) => {
+    var tempTaskNames = [];
+    resp.stages.forEach((stage) => {
+      stage.tasks.forEach((task) => {
+     
+        tempTaskNames.push(task.name);
+      });
+    });
+    setTaskNames(tempTaskNames);
+  };
   const CompleteDeliveryFeeback = async () => {
     setLoading(true);
     let details = getTrackingIds(TrackingData, "CUSTOMER_FEEDBACK");
@@ -179,6 +194,7 @@ const Track = (props) => {
       .then((response) => {
         console.log(response);
         setTrackingData(response);
+        getTrackingStage(response);
         setLoading(false);
       })
       .catch((error) => {
@@ -193,7 +209,9 @@ const Track = (props) => {
         if (task.name == "ASSET_ALLOCATION" && task.status == "COMPLETED") {
           setDriverDetails(task.customFields.data.allotedDrivers[0]);
           setTruckNo(task.customFields.data.allotedTrucks[0].value.assetNumber);
-          return;
+          setDeliveryDate(task.customFields.data.deliveryDate);
+           setPickupDate(task.customFields.data.pickupDate);
+           return
         }
       });
     });
@@ -220,15 +238,16 @@ const Track = (props) => {
   //   }
   // }
   function getSteps() {
-    return [
-      "Order Placed",
-      "Order Accepted",
-      "Pickup in Transit",
-      "Arrived at Pickup Location",
-      "Pickup Completed",
-      "Arrived at Drop Location",
-      "Shipment Delivered",
-    ];
+    return taskNames
+    // return [
+    //   "Order Placed",
+    //   "Order Accepted",
+    //   "Pickup in Transit",
+    //   "Arrived at Pickup Location",
+    //   "Pickup Completed",
+    //   "Arrived at Drop Location",
+    //   "Shipment Delivered",
+    // ];
   }
 
   const getTrackingIds = (TrackingData, TaskName) => {
@@ -245,7 +264,7 @@ const Track = (props) => {
     });
     return details;
   };
-
+ 
   function getStepContent(step) {
     switch (step) {
       case 0:
@@ -258,7 +277,7 @@ const Track = (props) => {
             <p>
               <br />
               The Driver has left for pickup and will arrive at pickup location
-              soon.
+              on {PickupDate.substring(0, 10)} 
             </p>
             <p>
               Driver Name:{" "}
@@ -288,7 +307,7 @@ const Track = (props) => {
             <p>
               <br />
               Driver has left for Delivery and will arrive at drop location
-              soon.
+              on {DeliveryDate.substring(0,10)}
             </p>
           </div>
         );

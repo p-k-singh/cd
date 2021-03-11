@@ -380,7 +380,7 @@ const PriceCalculator = (props) => {
             : "",
         noOfUnits: chosenProducts[i].noOfUnits,
         measurable: chosenProducts[i].value.measurable,
-        //density: chosenProducts[i].value.density,
+        density: chosenProducts[i].value.density,
         totalWeight: chosenProducts[i].totalWeight,
         distanceRange: props.distanceRange.value,
       });
@@ -479,7 +479,7 @@ const PriceCalculator = (props) => {
         msg = "Product Type cannot be empty";
         return;
       }
-       if (item.value.categories == null) {
+      if (item.value.categories == null) {
         msg = "Product Category cannot be empty";
         return;
       }
@@ -530,7 +530,7 @@ const PriceCalculator = (props) => {
             height: null,
             weightPerUnit: null,
             density: null,
-            unit: null,
+            unit: { label: "Inches", value: "inches" },
             location: "",
             pincode: "",
             productId: "",

@@ -10,10 +10,13 @@ import {
   FormControl,
   InputLabel,
   Button,
+  IconButton,
   Switch,
   InputAdornment,
 } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { Auth, API } from "aws-amplify";
 import Spinner from "../UI/Spinner";
 import Typography from "@material-ui/core/Typography";
@@ -87,7 +90,7 @@ const AddProductForm = (props) => {
   const classes = useStyles();
   const [newProductName, setNewProductName] = useState("");
   const [newProductType, setNewProductType] = useState("");
-  const [unit, setUnit] = useState("");
+  const [unit, setUnit] = useState({ label: "Inches", value: "inches" });
   const [height, setHeight] = useState();
   const [width, setWidth] = useState();
   const [length, setLength] = useState();
@@ -105,6 +108,7 @@ const AddProductForm = (props) => {
   const [widthValidator, setWidthValidator] = useState("");
   const [heightValidator, setHeightValidator] = useState("");
   const [weightPerUnitValidator, setWeightPerUnitValidator] = useState("");
+  const [fillDimensions, setFillDimensions] = useState(false);
 
   const selectStyles = {
     menu: (base) => ({
@@ -182,15 +186,15 @@ const AddProductForm = (props) => {
   const onLocationChangeController = (event) => {
     setLocation(event.target.value);
   };
-  const onDensityChangeController = (event) => {
-    if (event.target.value < 0) {
-      setDensity(0);
-    } else {
-      setDensity(event.target.value);
-    }
-  };
+  // const onDensityChangeController = (event) => {
+  //   if (event.target.value < 0) {
+  //     setDensity(0);
+  //   } else {
+  //     setDensity(event.target.value);
+  //   }
+  // };
 
-  const submitTruck = async () => {
+  const submit = async () => {
     if (newProductName == "") {
       alert("Product Name can't be empty");
       return;
@@ -204,35 +208,35 @@ const AddProductForm = (props) => {
       return;
     }
     if (
-      (switchToggler === true && weightPerUnit == null) ||
-      (switchToggler === true && height == null) ||
-      (switchToggler === true && length == null) ||
-      (switchToggler === true && width == null)
+      (fillDimensions === true && weightPerUnit == null) ||
+      (fillDimensions === true && height == null) ||
+      (fillDimensions === true && length == null) ||
+      (fillDimensions === true && width == null)
     ) {
       alert("Product Dimensions can't be empty");
       return;
     }
-    if (switchToggler === true && unit === "") {
+    if (fillDimensions === true && unit === "") {
       alert("Select measurement Unit for your Product");
       return;
     }
-    if (switchToggler === false && density == null) {
-      alert("Density cannot be empty");
-      return;
-    }
-    if (lengthValidator !== "") {
+    // if (fillDimensions === false && density == null) {
+    //   alert("Density cannot be empty");
+    //   return;
+    // }
+    if (fillDimensions === true && lengthValidator !== "") {
       alert(lengthValidator);
       return;
     }
-    if (widthValidator !== "") {
+    if (fillDimensions === true && widthValidator !== "") {
       alert(widthValidator);
       return;
     }
-    if (heightValidator !== "") {
+    if (fillDimensions === true && heightValidator !== "") {
       alert(heightValidator);
       return;
     }
-    if (weightPerUnitValidator !== "") {
+    if (fillDimensions === true && weightPerUnitValidator !== "") {
       alert(weightPerUnitValidator);
       return;
     }
@@ -285,22 +289,8 @@ const AddProductForm = (props) => {
   /*IF the product is measureable with length width height */
   var measureablePerUnit = (
     <React.Fragment>
-      <Grid container spacing={3} style={{ padding: 50, paddingTop: 10 }}>
-        <Grid item xs={12} sm={2}>
-          <Select
-            styles={selectStyles}
-            className="basic-single"
-            classNamePrefix="Unit"
-            isSearchable
-            name="unit"
-            placeholder="Unit"
-            onChange={(event) => unitChangeController(event)}
-            options={constants.lengthDimensions}
-          />
-          {/* </FormControl> */}
-        </Grid>
-        <Grid item xs={12} sm={4}></Grid>
-        <Grid item xs={12} sm={6}>
+      <Grid container spacing={3} style={{ padding: 50, paddingTop: 20 }}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="number"
             error={weightPerUnitValidator !== ""}
@@ -314,17 +304,18 @@ const AddProductForm = (props) => {
             }}
             id="weightPerUnit"
             name="weightPerUnit"
-            label="Weight Per Unit(in Kg)"
+            label="Weight Per Unit(Kg)"
             fullWidth
             value={weightPerUnit}
             variant="outlined"
             size="small"
-            // style={{backgroundColor:'#fff'}}
+            // endAdornment={<InputAdornment position="end">Kg</InputAdornment>}
             autoComplete="weightPerUnit"
             onChange={(event) => onWeightPerUnitChangeController(event)}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={9}></Grid>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="number"
             error={heightValidator !== ""}
@@ -346,7 +337,7 @@ const AddProductForm = (props) => {
             onChange={(event) => onHeightChangeController(event)}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="number"
             error={widthValidator !== ""}
@@ -368,7 +359,7 @@ const AddProductForm = (props) => {
             onChange={(event) => onWidthChangeController(event)}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="number"
             error={lengthValidator !== ""}
@@ -390,54 +381,66 @@ const AddProductForm = (props) => {
             autoComplete="Length"
           />
         </Grid>
-      </Grid>
-    </React.Fragment>
-  );
-  var notMeasureable = (
-    <React.Fragment>
-      {/*test*/}
-      <Grid
-        container
-        spacing={3}
-        style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
-      >
-        {/* <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            type="number"
-            id="totalWeight"
-            name="totalWeight"
-            label="Total Weight(in Tons)"
-            value={totalWeight}
-            onChange={(event) => onTotalWeightChangeController(event)}
-            fullWidth
-          />
-        </Grid> */}
-        <Grid item xs={12} sm={6}>
-          <TextField
-            type="number"
-            id="density"
-            name="density"
-            onInput={(e) => {
-              e.target.value = Math.max(0, parseInt(e.target.value))
-                .toString()
-                .slice(0, 5);
-            }}
-            label="Weight per cubic meter"
-            fullWidth
-            value={density}
-            variant="outlined"
-            size="small"
-            // style={{backgroundColor:'#fff'}}
-            onChange={(event) => onDensityChangeController(event)}
-            InputProps={{
-              endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
-            }}
+        <Grid item xs={12} sm={2}>
+          <Select
+            styles={selectStyles}
+            className="basic-single"
+            classNamePrefix="Unit"
+            isSearchable
+            name="unit"
+            value={unit}
+            placeholder="Unit"
+            onChange={(event) => unitChangeController(event)}
+            options={constants.lengthDimensions}
           />
         </Grid>
       </Grid>
     </React.Fragment>
   );
+  // var notMeasureable = (
+  //   <React.Fragment>
+  //     {/*test*/}
+  //     <Grid
+  //       container
+  //       spacing={3}
+  //       style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
+  //     >
+  //       {/* <Grid item xs={12} sm={6}>
+  //         <TextField
+  //           required
+  //           type="number"
+  //           id="totalWeight"
+  //           name="totalWeight"
+  //           label="Total Weight(in Tons)"
+  //           value={totalWeight}
+  //           onChange={(event) => onTotalWeightChangeController(event)}
+  //           fullWidth
+  //         />
+  //       </Grid> */}
+  //       <Grid item xs={12} sm={6}>
+  //         <TextField
+  //           type="number"
+  //           id="TotalWeight"
+  //           name="TotalWeight"
+  //           onInput={(e) => {
+  //             e.target.value = Math.max(0, parseInt(e.target.value))
+  //               .toString()
+  //               .slice(0, 5);
+  //           }}
+  //           label="Total Weight"
+  //           fullWidth
+  //           value={density}
+  //           variant="outlined"
+  //           size="small"
+  //           onChange={(event) => onDensityChangeController(event)}
+  //           InputProps={{
+  //             endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+  //           }}
+  //         />
+  //       </Grid>
+  //     </Grid>
+  //   </React.Fragment>
+  // );
   return (
     <div style={{ overflow: "hidden" }}>
       <Typography
@@ -451,7 +454,11 @@ const AddProductForm = (props) => {
         <Grid
           container
           spacing={3}
-          style={{ paddingLeft: 50, paddingRight: 50, paddingTop: 20 }}
+          style={{
+            paddingLeft: 50,
+            paddingRight: 50,
+            paddingTop: 20,
+          }}
         >
           <Grid item xs={12} sm={6}>
             <TextField
@@ -508,6 +515,34 @@ const AddProductForm = (props) => {
             />
           </Grid>
         </Grid>
+        <Grid
+          container
+          spacing={3}
+          style={{
+            paddingLeft: 50,
+            paddingRight: 50,
+            paddingTop: 40,
+          }}
+        ></Grid>
+        <IconButton
+          style={{ padding: 0, marginLeft: 40, outline: "none" }}
+          aria-label="expand row"
+          size="small"
+          onClick={() =>
+            fillDimensions == true
+              ? setFillDimensions(false)
+              : setFillDimensions(true)
+          }
+        >
+          Add Dimensions (optional){" "}
+          {fillDimensions == true ? (
+            <KeyboardArrowUpIcon />
+          ) : (
+            <KeyboardArrowDownIcon />
+          )}
+        </IconButton>
+
+        {fillDimensions == true ? measureablePerUnit : <br />}
         {/* <Typography className={classes.formHeadings}>Dimensions</Typography> */}
         {/* <FormControlLabel
           style={{ margin: 20 }}
@@ -521,14 +556,14 @@ const AddProductForm = (props) => {
           }
           label="(Measureable Dimensions)"
         /> */}
-        <Typography
+        {/* <Typography
           fullWidth
           style={{ paddingTop: 30, fontSize: 17, paddingLeft: 30 }}
           gutterBottom
         >
           Dimensions
-        </Typography>
-        <Grid
+        </Typography> */}
+        {/* <Grid
           component="label"
           container
           style={{
@@ -549,53 +584,10 @@ const AddProductForm = (props) => {
             />
           </Grid>
           <Grid item>No. Of Units</Grid>
-        </Grid>
-        {switchToggler === true ? measureablePerUnit : notMeasureable}
-
-        {/* <Typography
-          className={classes.formHeadings}
-          style={{ paddingLeft: 20 }}
-        >
-          Other Details{" "}
-        </Typography>
-        <Grid container spacing={3} style={{ padding: 50, paddingTop: 10 }}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              type="number"
-              error={pinValidator !== ""}
-              helperText={pinValidator === "" ? " " : pinValidator}
-              id="pinCode"
-              name="pinCode"
-              label="Pin"
-              value={pinCode}
-              fullWidth
-              onChange={(event) => onPinChangeController(event)}
-              variant="outlined"
-              size="small"
-              // style={{backgroundColor:'#fff'}}
-              autoComplete="pinCode"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              type="text"
-              id="location"
-              name="location"
-              label="Location"
-              value={location}
-              fullWidth
-              onChange={(event) => onLocationChangeController(event)}
-              variant="outlined"
-              size="small"
-              // style={{backgroundColor:'#fff'}}
-              autoComplete="Location"
-            />
-          </Grid>
         </Grid> */}
+
         <Button
-          onClick={submitTruck}
+          onClick={submit}
           className="row AllButtons"
           variant="contained"
           style={{
@@ -614,7 +606,7 @@ const AddProductForm = (props) => {
           style={{
             float: "right",
             marginRight: "10px",
-            marginBottom: "10px",
+            marginBottom: "50px",
           }}
         >
           Cancel
