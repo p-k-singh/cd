@@ -82,7 +82,6 @@ const Track = (props) => {
     };
   }
 
-  
   const [ProductDamaged, setProductDamaged] = React.useState(false);
   const [ProductPilferage, setProductPilferage] = React.useState(false);
   const [ProductSafety, setProductSafety] = React.useState(0);
@@ -162,7 +161,7 @@ const Track = (props) => {
     var tempTaskNames = [];
     resp.stages.forEach((stage) => {
       stage.tasks.forEach((task) => {
-        alert(tempTaskNames)
+     
         tempTaskNames.push(task.name);
       });
     });
@@ -239,7 +238,6 @@ const Track = (props) => {
   //   }
   // }
   function getSteps() {
-    alert(taskNames)
     return taskNames
     // return [
     //   "Order Placed",

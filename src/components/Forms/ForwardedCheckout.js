@@ -230,7 +230,7 @@ function ForwardedCheckout(props) {
           toPin: props.destinationPin,
           fromPin: props.pickupPin,
           customerEmail: owner,
-          pickupdate: props.pickupDate,
+          pickupDate: props.pickupDate,
           deliveryDate: props.deliveryDate,
           pickupSlot: props.pickupSlot,
           additionalNote: props.additionalNote,

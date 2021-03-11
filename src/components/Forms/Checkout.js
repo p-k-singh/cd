@@ -328,6 +328,7 @@ function SimpleCard(props) {
     //var newProductIds;
     /**Place New products in Inventory */
     var item = chosenProducts.slice();
+    
     for (var i = 0; i < item.length; i++) {
       if (item[i].isNew === true) {
         data = {
@@ -335,7 +336,7 @@ function SimpleCard(props) {
           productName: item[i].value.productName,
           productType: item[i].value.productType,
           unit:
-            item[i].value.measurable == true ? item[i].value.unit.value : "",
+          item[i].value.measurable == true ? item[i].value.unit : "",
           height: item[i].value.height,
           width: item[i].value.width,
           length: item[i].value.length,
@@ -350,6 +351,32 @@ function SimpleCard(props) {
           body: data,
         };
         API.post("GoFlexeOrderPlacement", `/inventory`, payload).catch(
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+      else{
+        data = {
+          owner: owner,
+          productId:item[i].productId,
+          productName: item[i].value.productName,
+          productType: item[i].value.productType,
+          unit:
+            item[i].value.measurable == true ? item[i].value.unit : "",
+          height: item[i].value.height,
+          width: item[i].value.width,
+          length: item[i].value.length,
+          weightPerUnit: item[i].value.weightPerUnit,
+          location: "-",
+          categories: item[i].value.categories,
+          measurable: item[i].value.measurable,
+          pincode: "-",
+        };
+        const payload = {
+          body: data,
+        };
+        API.put("GoFlexeOrderPlacement", `/inventory`, payload).catch(
           (error) => {
             console.log(error);
           }
@@ -375,11 +402,6 @@ function SimpleCard(props) {
       };
       items.push(temp);
     }
-
-    //var currentUser = await Auth.currentUserInfo()
-    // console.log('checking user details: '+JSON.stringify(currentUser))
-    //var currentUsername=currentUser.username
-
     var today = new Date();
     data = {
       customerOrders: [
@@ -390,7 +412,7 @@ function SimpleCard(props) {
           toPin: props.destinationPin,
           fromPin: props.pickupPin,
           customerEmail: owner,
-          pickupdate: props.pickupDate,
+          pickupDate: props.pickupDate,
           deliveryDate: props.deliveryDate,
           pickupSlot: props.pickupSlot,
           additionalNote: props.additionalNote,

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
@@ -53,7 +54,6 @@ const MyOrders = () => {
   const [loading, setLoading] = useState(false);
   useEffect(async () => {
     setLoading(true);
-
     var currentUser = await Auth.currentUserInfo();
     var currentUsername = currentUser.username;
     console.log(currentUsername);
@@ -62,8 +62,33 @@ const MyOrders = () => {
       "GoFlexeOrderPlacement",
       `/customerorder/customer/${currentUsername}`
     );
-    
     console.log(temp);
+
+     var i;
+      var tempTaskName = "";
+     for (i = 0; i < temp.length; i++) {
+       await API.get(
+         "GoFlexeOrderPlacement",
+         `/tracking?type=getProcessByCustomerOrderId&customerOrderId=${temp[i].OrderId}`
+       // eslint-disable-next-line no-loop-func
+       ).then((resp) => {
+         console.log(resp);
+         if(resp!== null){
+           if(resp.stages !== null){
+             resp.stages.forEach((stage) => {
+               stage.tasks.forEach((task) => {
+                 if (task.status == "PENDING") {
+                   tempTaskName = task.name;
+                   return;
+                 }
+               });
+             });
+           }  }
+       });
+       temp[i].currentTaskName = tempTaskName;
+     }
+   
+console.log(temp)
     setActiveOrders(temp);
     setLoading(false);
   }, []);
@@ -108,15 +133,19 @@ const MyOrders = () => {
                   }}
                 >
                   <Grid container spacing={0}>
-                    <Grid item sm={12} xs={12} style={{}}>
+                    <Grid item sm={6} xs={6} style={{}}>
                       <h6
                         style={{
                           marginBottom: 25,
                           marginRight: 40,
                         }}
                       >
-                        Order Id : <span>{eachOrder.OrderId}</span>
+                        Product Name :{" "}
+                        <span>{eachOrder.items[0].productName}</span>
                       </h6>
+                    </Grid>
+                    <Grid itemsm={12} xs={6}>
+                      <h6>Type : {eachOrder.items[0].productType}</h6>
                     </Grid>
                     <Grid itemsm={12} xs={6}>
                       <h6>
@@ -168,6 +197,8 @@ const MyOrders = () => {
                         startIcon={<LocalShippingIcon />}
                       >
                         Track
+                        {/* {eachOrder.currentTaskName !== null ||
+                          eachOrder.currentTaskName !== "" ? eachOrder.currentTaskName:"Waiting For Allocation"} */}
                       </Button>
                       <Button
                         style={{
