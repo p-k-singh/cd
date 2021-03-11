@@ -396,9 +396,10 @@ function SimpleCard(props) {
           additionalNote: props.additionalNote,
           items: items,
           estimatedPrice: estimatedPrice,
-          distanceRange: props.distanceRange,
+          distanceRange: props.distanceRange.value,
         },
       ],
+      
     };
     const payload = {
       body: data,

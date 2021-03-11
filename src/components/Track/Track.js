@@ -82,7 +82,7 @@ const Track = (props) => {
     };
   }
 
-  const steps = getSteps();
+  
   const [ProductDamaged, setProductDamaged] = React.useState(false);
   const [ProductPilferage, setProductPilferage] = React.useState(false);
   const [ProductSafety, setProductSafety] = React.useState(0);
@@ -109,6 +109,8 @@ const Track = (props) => {
   const [TruckNo, setTruckNo] = React.useState("");
   const [PickupDate, setPickupDate] = React.useState("");
   const [DeliveryDate, setDeliveryDate] = React.useState("");
+  const [taskNames, setTaskNames] = React.useState([]);
+  const steps = getSteps();
   const [count, setCount] = useState(0);
   // function FindStage(resp) {
   //   var temp = 0;
@@ -142,10 +144,11 @@ const Track = (props) => {
     )
       .then((resp) => {
         console.log(resp);
+        getTaskNames(resp);
         setTrackingData(resp);
         getTrackingStage(resp);
         getDriverDetails(resp);
-
+      
         //  FindStage(resp);
         setLoading(false);
       })
@@ -154,6 +157,17 @@ const Track = (props) => {
         setLoading(false);
       });
   }
+
+  const getTaskNames = (resp) => {
+    var tempTaskNames = [];
+    resp.stages.forEach((stage) => {
+      stage.tasks.forEach((task) => {
+        alert(tempTaskNames)
+        tempTaskNames.push(task.name);
+      });
+    });
+    setTaskNames(tempTaskNames);
+  };
   const CompleteDeliveryFeeback = async () => {
     setLoading(true);
     let details = getTrackingIds(TrackingData, "CUSTOMER_FEEDBACK");
@@ -225,15 +239,17 @@ const Track = (props) => {
   //   }
   // }
   function getSteps() {
-    return [
-      "Order Placed",
-      "Order Accepted",
-      "Pickup in Transit",
-      "Arrived at Pickup Location",
-      "Pickup Completed",
-      "Arrived at Drop Location",
-      "Shipment Delivered",
-    ];
+    alert(taskNames)
+    return taskNames
+    // return [
+    //   "Order Placed",
+    //   "Order Accepted",
+    //   "Pickup in Transit",
+    //   "Arrived at Pickup Location",
+    //   "Pickup Completed",
+    //   "Arrived at Drop Location",
+    //   "Shipment Delivered",
+    // ];
   }
 
   const getTrackingIds = (TrackingData, TaskName) => {

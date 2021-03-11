@@ -140,13 +140,41 @@ const Login = (props) => {
                 </div>
               )}
 
+              {!getOTP && (
+                <Button
+                
+                  onClick={submitLogin}
+                  variant="contained"
+                  color="primary"
+                  className="btn btn-primary btn-block"
+                >
+                  Submit
+                </Button>
+              )}
+
+              <div className="form-group" style={{marginTop:10}}>
+                <div className="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    className="custom-control-input"
+                    id="customCheck1"
+                  />
+                  <label
+                    className="custom-control-label"
+                    htmlFor="customCheck1"
+                  >
+                    Remember me
+                  </label>
+                </div>
+              </div>
               <div className="row">
                 {!getOTP && (
-                  <Button
+                  <Button size="small"
                     onClick={handleGetOTP}
                     className="col col-sm-3 ml-3"
-                    variant="contained"
-                    style={{ marginBottom: "20px" }}
+                   style={{margin:0}}
+                   
+                   
                     color="primary"
                   >
                     Login by OTP
@@ -188,22 +216,6 @@ const Login = (props) => {
                   </div>
                 )}
               </div>
-
-              <div className="form-group">
-                <div className="custom-control custom-checkbox">
-                  <input
-                    type="checkbox"
-                    className="custom-control-input"
-                    id="customCheck1"
-                  />
-                  <label
-                    className="custom-control-label"
-                    htmlFor="customCheck1"
-                  >
-                    Remember me
-                  </label>
-                </div>
-              </div>
               {getOTP && (
                 <Button
                   onClick={submitOTPLogin}
@@ -214,16 +226,7 @@ const Login = (props) => {
                   Submit
                 </Button>
               )}
-              {!getOTP && (
-                <Button
-                  onClick={submitLogin}
-                  variant="contained"
-                  color="primary"
-                  className="btn btn-primary btn-block"
-                >
-                  Submit
-                </Button>
-              )}
+
               {/* <button onClick={submitLogin} type="submit" className="btn btn-primary btn-block">Submit</button> */}
               <p className="forgot-password text-right">
                 <Link to="/resetPassword">Forgot Password?</Link>

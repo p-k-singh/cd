@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link,withRouter } from 'react-router-dom';
-
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
+import AssignmentIcon from "@material-ui/icons/Assignment";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
@@ -138,16 +138,33 @@ const useStyles = makeStyles((theme) => ({
 
 function Dashboard() {
     const list = [
-        { title: 'Dashboard', to: '/', icon: <DashboardIcon/> },
-        { title: 'My Orders', to: '/myorders', icon: <AddShoppingCartIcon/> },
-        {title: 'Price Calculator', to: '/price-calculator', icon: <LocalAtmSharpIcon/>},
-        {title: 'Inventory Manager', to: '/inventory-manager', icon: <OpenInBrowserIcon/>},
-        { title: 'User Manager', to: '/userManager', icon: <GroupIcon/> },
-        // {title:'KYC', to : '/kyc' , icon:<InfoIcon />},
-        {title:'KYC', to : '/kycPanel' , icon:<InfoIcon />},
-        {title:'Preference', to : '/preference' , icon:<LabelImportantIcon />},
-        {title: 'Help', to: '/help', icon: <Help/>}
-    ]
+      { title: "Dashboard", to: "/", icon: <DashboardIcon /> },
+      {
+        title: "My WorkList",
+        to: "/TaskManager",
+        icon: (
+          // <Badge badgeContent={5} color="secondary">
+          <AssignmentIcon />
+          // </Badge>
+        ),
+      },
+      { title: "My Orders", to: "/myorders", icon: <AddShoppingCartIcon /> },
+      {
+        title: "Price Calculator",
+        to: "/price-calculator",
+        icon: <LocalAtmSharpIcon />,
+      },
+      {
+        title: "Inventory Manager",
+        to: "/inventory-manager",
+        icon: <OpenInBrowserIcon />,
+      },
+      { title: "User Manager", to: "/userManager", icon: <GroupIcon /> },
+      // {title:'KYC', to : '/kyc' , icon:<InfoIcon />},
+      { title: "KYC", to: "/kycPanel", icon: <InfoIcon /> },
+      { title: "Preference", to: "/preference", icon: <LabelImportantIcon /> },
+      { title: "Help", to: "/help", icon: <Help /> },
+    ];
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [menuOpen,setMenuOpen] = React.useState(false);

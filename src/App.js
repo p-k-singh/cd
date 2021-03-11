@@ -38,6 +38,7 @@ import { useEffect, useState } from "react";
 import Spinner from "./components/UI/Spinner";
 import * as actions from "./store/actions/index";
 import { AppContext } from "./libs/contextLibs";
+import TaskManager from "./components/Track/TaskManager"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -171,6 +172,7 @@ function App(props) {
             <Route exact path="/kycPanel" component={KYCPanel} />
             <Route exact path="/preference" component={Preference} />
             <Route exact path="/payment" component={PaymentIndex} />
+            <Route path="/TaskManager" component={TaskManager} />
             <Route
               path="/order/:id"
               render={(props) => {
