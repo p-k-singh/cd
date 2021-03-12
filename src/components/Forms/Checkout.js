@@ -331,12 +331,13 @@ function SimpleCard(props) {
     
     for (var i = 0; i < item.length; i++) {
       if (item[i].isNew === true) {
+          if(item[i].value.measurable == true){
         data = {
           owner: owner,
           productName: item[i].value.productName,
-          productType: item[i].value.productType,
+          productType: item[i].value.productType.value,
           unit:
-          item[i].value.measurable == true ? item[i].value.unit : "",
+            item[i].value.measurable == true ? item[i].value.unit.value : "",
           height: item[i].value.height,
           width: item[i].value.width,
           length: item[i].value.length,
@@ -354,16 +355,17 @@ function SimpleCard(props) {
           (error) => {
             console.log(error);
           }
-        );
+        );}
       }
       else{
+          if(item[i].value.measurable == true){
         data = {
           owner: owner,
-          productId:item[i].productId,
+          productId: item[i].productId,
           productName: item[i].value.productName,
           productType: item[i].value.productType,
           unit:
-            item[i].value.measurable == true ? item[i].value.unit : "",
+            item[i].value.measurable == true ? item[i].value.unit.value : "",
           height: item[i].value.height,
           width: item[i].value.width,
           length: item[i].value.length,
@@ -381,7 +383,7 @@ function SimpleCard(props) {
             console.log(error);
           }
         );
-      }
+      }}
     }
 
     var items = [];
@@ -395,7 +397,7 @@ function SimpleCard(props) {
         length: item[i].value.length,
         weightPerUnit: item[i].value.weightPerUnit,
         measurable: item[i].value.measurable,
-        categories: item[i].value.categories.value,
+        categories: item[i].value.categories,
         density: item[i].value.density,
         noOfUnits: item[i].noOfUnits,
         totalWeight: item[i].totalWeight,

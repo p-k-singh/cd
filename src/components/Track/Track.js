@@ -227,7 +227,6 @@ const Track = (props) => {
     });
     setActiveStep(count);
   }
-
   // function getTrackingStage(resp) {
   //
   //   var i;

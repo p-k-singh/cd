@@ -251,8 +251,8 @@ const AddProductForm = (props) => {
     data = {
       owner: owner,
       productName: newProductName,
-      productType: newProductType,
-      unit: unit,
+      productType: newProductType.value,
+      unit: unit.value,
       height: height,
       width: width,
       length: length,

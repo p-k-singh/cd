@@ -179,7 +179,7 @@ export default function CollapsibleTable(props) {
                   <TableCell component="th" scope="row">
                     {row.productName}
                   </TableCell>
-                  <TableCell>{row.productType.label}</TableCell>
+                  <TableCell>{row.productType}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell
@@ -196,7 +196,7 @@ export default function CollapsibleTable(props) {
                           <td>
                             {" "}
                             {row.categories.map(
-                              (category) => category.label + " ."
+                              (category) => category.label + " ,"
                             )}
                           </td>
                           {/* //{console.log(row.features)} */}
@@ -219,7 +219,7 @@ export default function CollapsibleTable(props) {
                               <th>Unit Of Measurement: </th>
                               <td>
                                 {" "}
-                                {row.unit === null ? "-" : row.unit.label}{" "}
+                                {row.unit === null ? "-" : row.unit}{" "}
                               </td>
                             </TableRow>
                           </React.Fragment>

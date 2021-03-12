@@ -170,11 +170,13 @@ function ForwardedCheckout(props) {
     var item = props.chosenProducts.slice();
     for (var i = 0; i < item.length; i++) {
       if (item[i].isNew === true) {
+
+         if(item[i].value.measurable == true){
         data = {
           owner: owner,
           productName: item[i].value.productName,
-          productType: item[i].value.productType,
-          unit: item[i].value.unit,
+          productType: item[i].value.productType.value,
+          unit: item[i].value.unit.value,
           height: item[i].value.height,
           width: item[i].value.width,
           length: item[i].value.length,
@@ -193,16 +195,42 @@ function ForwardedCheckout(props) {
           (error) => {
             console.log(error);
           }
-        );
+        );}
+      } else {
+
+        if(item[i].value.measurable == true){
+        data = {
+          owner: owner,
+          productId: item[i].productId,
+          productName: item[i].value.productName,
+          productType: item[i].value.productType,
+          unit:
+            item[i].value.measurable == true ? item[i].value.unit.value : "",
+          height: item[i].value.height,
+          width: item[i].value.width,
+          length: item[i].value.length,
+          weightPerUnit: item[i].value.weightPerUnit,
+          location: "-",
+          categories: item[i].value.categories,
+          measurable: item[i].value.measurable,
+          pincode: "-",
+        };
+        const payload = {
+          body: data,
+        };
+         API.put("GoFlexeOrderPlacement", `/inventory`, payload).catch(
+          (error) => {
+            console.log(error);
+          }
+        );}
       }
     }
-
     var items = [];
     for (var i = 0; i < item.length; i++) {
       var temp = {
         productName: item[i].value.productName,
-        productType: item[i].value.productType,
-        unit: item[i].value.unit,
+        productType: item[i].value.productType.value,
+        unit: item[i].value.unit.value,
         height: item[i].value.height,
         width: item[i].value.width,
         length: item[i].value.length,
@@ -236,7 +264,7 @@ function ForwardedCheckout(props) {
           additionalNote: props.additionalNote,
           items: items,
           estimatedPrice: estimatedPrice,
-          distanceRange: props.distanceRange,
+          distanceRange: props.distanceRange.value,
         },
       ],
     };

@@ -149,7 +149,7 @@ console.log(temp)
                     </Grid>
                     <Grid itemsm={12} xs={6}>
                       <h6>
-                        Order Date : <span>{eachOrder.pickupdate}</span>
+                        Order Date : <span>{eachOrder.pickupDate}</span>
                       </h6>
                     </Grid>
                     <Grid itemsm={12} xs={6}>
