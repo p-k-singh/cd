@@ -153,7 +153,7 @@ console.log(temp)
                       </h6>
                     </Grid>
                     <Grid itemsm={12} xs={6}>
-                      <h6>Total Amount : {eachOrder.estimatedPrice}</h6>
+                      <h6>Total Amount : {Math.round(Number(eachOrder.estimatedPrice))}</h6>
                     </Grid>
                   </Grid>
                 </Grid>
