@@ -335,9 +335,12 @@ function SimpleCard(props) {
         data = {
           owner: owner,
           productName: item[i].value.productName,
-          productType: item[i].value.productType.value,
+          productType:
+            item[i].value.productType.value || item[i].value.productType,
           unit:
-            item[i].value.measurable == true ? item[i].value.unit.value : "",
+            item[i].value.measurable == true
+              ? item[i].value.unit.value || item[i].value.unit
+              : "",
           height: item[i].value.height,
           width: item[i].value.width,
           length: item[i].value.length,
@@ -363,9 +366,11 @@ function SimpleCard(props) {
           owner: owner,
           productId: item[i].productId,
           productName: item[i].value.productName,
-          productType: item[i].value.productType,
+          productType:
+            item[i].value.productType.value || item[i].value.productType,
           unit:
-            item[i].value.measurable == true ? item[i].value.unit.value : "",
+            item[i].value.measurable == true
+              ? item[i].value.unit.value || item[i].value.unit : "",
           height: item[i].value.height,
           width: item[i].value.width,
           length: item[i].value.length,
@@ -390,8 +395,12 @@ function SimpleCard(props) {
     for (var i = 0; i < item.length; i++) {
       var temp = {
         productName: item[i].value.productName,
-        productType: item[i].value.productType.value,
-        unit: item[i].value.measurable == true ? item[i].value.unit.value : "",
+        productType:
+          item[i].value.productType.value || item[i].value.productType,
+        unit:
+          item[i].value.measurable == true
+            ? item[i].value.unit.value || item[i].value.unit
+            : "",
         height: item[i].value.height,
         width: item[i].value.width,
         length: item[i].value.length,
