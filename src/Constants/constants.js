@@ -169,8 +169,8 @@ const constants = {
     { name: "Warehouse", value: "Warehouse", id: 3 },
   ],
   productTypeMap: {
-    containers: {
-      label: "Hello",
+    cement: {
+      label: "Cement",
       value:'conatainers'
     }
   }
