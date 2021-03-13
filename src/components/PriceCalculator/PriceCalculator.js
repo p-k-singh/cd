@@ -266,7 +266,7 @@ const PriceCalculator = (props) => {
   const onProductTypeChange = (event, i) => {
     console.log(event);
     var items = chosenProducts.slice();
-    items[i].value.productType = event;
+    items[i].value.productType = event.value;
     setChosenProducts(items);
   };
   const onCategoryChange = (event, i) => {
@@ -370,7 +370,7 @@ const PriceCalculator = (props) => {
         toPin: pickuppin,
         fromPin: destinationpin,
         productName: chosenProducts[i].value.productName,
-        productType: chosenProducts[i].value.productType.value,
+        productType: chosenProducts[i].value.productType.value || chosenProducts[i].value.productType,
         length: chosenProducts[i].value.length,
         width: chosenProducts[i].value.width,
         height: chosenProducts[i].value.height,
@@ -849,33 +849,15 @@ const PriceCalculator = (props) => {
         </Grid>
         {/* Type of the product */}
         <Grid item xs={12} sm={4}>
-          {chosenProducts[i] === null || !chosenProducts[i].isNew ? (
-            <TextField
-              type="text"
-              id="Product Type"
-              name="Product Type"
-              label="Product Type"
-              InputLabelProps={{ shrink: true }}
-              fullWidth
-              disabled
-              value={
-                chosenProducts[i] === null ||
-                chosenProducts[i].value.productType === null
-                  ? null
-                  : chosenProducts[i].value.productType
-              }
-              variant="outlined"
-              size="small"
-              style={{ backgroundColor: "#fff" }}
-            />
-          ) : (
+          
             <Select
               styles={selectStyles}
               value={
                 chosenProducts[i] === null ||
                 chosenProducts[i].value.productType === null
                   ? null
-                  : chosenProducts[i].value.productType
+                  : (chosenProducts[i].value.productType.value?
+                    chosenProducts[i].value.productType:constants.productTypeMap[chosenProducts[i].value.productType] ) 
               }
               isDisabled={
                 chosenProducts[i] === null || !chosenProducts[i].isNew
@@ -886,7 +868,6 @@ const PriceCalculator = (props) => {
               name="color"
               options={constants.typesOfProducts}
             />
-          )}
         </Grid>
         {chosenProducts[i] === null || chosenProducts[i].value.measurable ? (
           <Grid item xs={12} sm={4}>

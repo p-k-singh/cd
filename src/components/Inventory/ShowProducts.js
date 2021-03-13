@@ -42,6 +42,7 @@ export default function CollapsibleTable(props) {
       .then((response) => {
         // Add your code here
         console.log(response);
+       // console.log(Array.isArray(response))
         setRows(response);
         setLoading(false);
       })
