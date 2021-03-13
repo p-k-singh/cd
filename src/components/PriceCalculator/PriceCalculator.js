@@ -862,7 +862,7 @@ const PriceCalculator = (props) => {
                 chosenProducts[i] === null ||
                 chosenProducts[i].value.productType === null
                   ? null
-                  : chosenProducts[i].value.productType
+                  : constants.productTypeMap[chosenProducts[i].value.productType.value].label
               }
               variant="outlined"
               size="small"

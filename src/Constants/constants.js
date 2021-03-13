@@ -168,5 +168,11 @@ const constants = {
     { name: "Offloading", value: "offloading", id: 2 },
     { name: "Warehouse", value: "Warehouse", id: 3 },
   ],
+  productTypeMap: {
+    containers: {
+      label: "Hello",
+      value:'conatainers'
+    }
+  }
 };
 export default constants;
