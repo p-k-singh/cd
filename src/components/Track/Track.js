@@ -108,7 +108,8 @@ const Track = (props) => {
   const [TruckNo, setTruckNo] = React.useState("");
   const [PickupDate, setPickupDate] = React.useState("");
   const [DeliveryDate, setDeliveryDate] = React.useState("");
-  const [taskNames, setTaskNames] = React.useState([]);
+  const [AllStageNames, setAllStageNames] = React.useState([]);
+   const [StageDescription, setStageDescription] = React.useState([]);
   const steps = getSteps();
   const [count, setCount] = useState(0);
   // function FindStage(resp) {
@@ -143,9 +144,9 @@ const Track = (props) => {
     )
       .then((resp) => {
         console.log(resp);
-        getTaskNames(resp);
+        getAllStageNames(resp);
         setTrackingData(resp);
-        getTrackingStage(resp);
+       getCurrentTrackingStage(resp);
         getDriverDetails(resp);
       
         //  FindStage(resp);
@@ -157,16 +158,18 @@ const Track = (props) => {
       });
   }
 
-  const getTaskNames = (resp) => {
-    var tempTaskNames = [];
-    resp.stages.forEach((stage) => {
-      stage.tasks.forEach((task) => {
-     
-        tempTaskNames.push(task.name);
-      });
-    });
-    setTaskNames(tempTaskNames);
+  const getAllStageNames = (resp) => {
+    var tempAllStageNames = [];
+    var tempStageDescription = [];
+    var i;
+    for (i = 0; i < resp.stages.length; i++) {
+      tempAllStageNames.push(resp.stages[i].stageLabel);
+      tempStageDescription.push(resp.stages[i].description);
+    }
+    setAllStageNames(tempAllStageNames);
+    setStageDescription(tempStageDescription);
   };
+
   const CompleteDeliveryFeeback = async () => {
     setLoading(true);
     let details = getTrackingIds(TrackingData, "CUSTOMER_FEEDBACK");
@@ -194,7 +197,7 @@ const Track = (props) => {
       .then((response) => {
         console.log(response);
         setTrackingData(response);
-        getTrackingStage(response);
+        getCurrentTrackingStage(response);
         setLoading(false);
       })
       .catch((error) => {
@@ -216,38 +219,19 @@ const Track = (props) => {
       });
     });
   };
-  function getTrackingStage(resp) {
+  function getCurrentTrackingStage(resp) {
     var count = 0;
     resp.stages.forEach((stage) => {
-      stage.tasks.forEach((task) => {
-        if (task.status == "COMPLETED") {
-          count++;
-        }
-      });
+      if (stage.status == "COMPLETED") {
+        count++;
+      }
     });
     setActiveStep(count);
   }
-
-  // function getTrackingStage(resp) {
-  //
-  //   var i;
-  //   for (i = 0; i < resp.stages.length; i++) {
-  //     if (resp.stages[i].status === "COMPLETED") {
-  //       count++;
-  //     }
-  //   }
-  // }
   function getSteps() {
-    return taskNames
-    // return [
-    //   "Order Placed",
-    //   "Order Accepted",
-    //   "Pickup in Transit",
-    //   "Arrived at Pickup Location",
-    //   "Pickup Completed",
-    //   "Arrived at Drop Location",
-    //   "Shipment Delivered",
-    // ];
+    return AllStageNames.length == 0 || AllStageNames == null
+      ? ["Waiting for Order Acceptance"]
+      : AllStageNames;
   }
 
   const getTrackingIds = (TrackingData, TaskName) => {
@@ -268,65 +252,72 @@ const Track = (props) => {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return `Your Order is placed successfully and is waiting to be accepted by the Service Provider.`;
+        return StageDescription[0];
       case 1:
-        return `Your Order has been accepted by the Service Provider,You will get notified once the Driver has left for Pickup.`;
-      case 2:
         return (
-          <div>
-            <p>
-              <br />
-              The Driver has left for pickup and will arrive at pickup location
-              on {PickupDate.substring(0, 10)} 
-            </p>
-            <p>
-              Driver Name:{" "}
-              {DriverDetails.length !== 0 ? DriverDetails.value : "x"}
-              <br />
-              Contact Number:{" "}
-              {DriverDetails.length !== 0 ? DriverDetails.phone : "x"}
-              <br />
-              Truck Number: {TruckNo !== "" ? TruckNo : "x"}
-            </p>
-          </div>
-        );
+         StageDescription[1])
+          
+         //Your Order has been accepted by the Service Provider,You will get notified once the Driver has left for Pickup.</div>) */}
+         case 2:
+        return (StageDescription[2])
+        //   <div>
+        //     <p>
+        //       <br />
+        //      {} <br />
+        //       The Driver has left for pickup and will arrive at pickup location
+        //       on {PickupDate.substring(0, 10)}
+        //     </p>
+        //     <p>
+        //       Driver Name:{" "}
+        //       {DriverDetails.length !== 0 ? DriverDetails.value : "x"}
+        //       <br />
+        //       Contact Number:{" "}
+        //       {DriverDetails.length !== 0 ? DriverDetails.phone : "x"}
+        //       <br />
+        //       Truck Number: {TruckNo !== "" ? TruckNo : "x"}
+        //     </p>
+        //   </div>
+        // );
 
       case 3:
-        return (
-          <div>
-            <p>
-              <br />
-              Driver has arrived at pickup location.
-            </p>
-            {/* <p>OTP: 394830</p> */}
-          </div>
-        );
+        return (StageDescription[3])
+        //   <div>
+        //     <p>
+        //       <br />
+        //      {} <br />
+        //       Driver has arrived at pickup location.
+        //     </p>
+        //     {/* <p>OTP: 394830</p> */}
+        //   </div>
+        // );
       case 4:
-        return (
-          <div>
-            <p>
-              <br />
-              Driver has left for Delivery and will arrive at drop location
-              on {DeliveryDate.substring(0,10)}
-            </p>
-          </div>
-        );
+        return (StageDescription[4])
+        //   <div>
+        //     <p>
+        //       <br />
+        //      {} <br />
+        //       Driver has left for Delivery and will arrive at drop location on{" "}
+        //       {DeliveryDate.substring(0, 10)}
+        //     </p>
+        //   </div>
+        // );
       case 5:
-        return (
-          <div>
-            <p>
-              <br />
-              Driver has arrived at drop location
-            </p>
-            {/* <p>OTP: 394830</p> */}
-          </div>
-        );
+        return (StageDescription[5])
+        //   <div>
+        //     <p>
+        //       <br />
+        //      {} <br />
+        //       Driver has arrived at drop location
+        //     </p>
+        //     {/* <p>OTP: 394830</p> */}
+        //   </div>
+        // );
       case 6:
-        return (
-          <div>
-            <p style={{ fontSize: 20 }}>Shipment Delivered Successfully</p>
-          </div>
-        );
+        return (StageDescription[6])
+        //   <div>
+        //     <p style={{ fontSize: 20 }}>Shipment Delivered Successfully</p>
+        //   </div>
+        // );
       default:
         return "";
     }
@@ -679,14 +670,19 @@ const Track = (props) => {
 
       <div className={classes.actionsContainer}></div>
       <div>
-        {/* <Button
-          disabled={activeStep === 0}
-          onClick={handleBack}
-          className={classes.button}
-        >
-          Back
-        </Button> */}
-        {activeStep === steps.length - 1 ? (
+        <div>
+          <Button
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            className={classes.backButton}
+          >
+            Back
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleNext}>
+            {activeStep === steps.length - 1 ? "Finish" : "Next"}
+          </Button>
+        </div>
+        {/* {activeStep === steps.length - 1 ? (
           <Button
             style={{
               padding: 5,
@@ -701,16 +697,20 @@ const Track = (props) => {
             Rate Experience
           </Button>
         ) : (
-          // <Button
-          //   variant="contained"
-          //   color="primary"
-          //   onClick={handleNext}
-          //   className={classes.button}
-          // >
-          //   {activeStep === steps.length - 1 ? " Rate Experience" : "Next"}
-          // </Button>
-          <br />
-        )}
+          <div>
+              <Button
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                className={classes.backButton}
+              >
+                Back
+              </Button>
+              <Button variant="contained" color="primary" onClick={handleNext}>
+                {activeStep === steps.length - 1 ? "Finish" : "Next"}
+              </Button>
+            </div>
+          
+        )} */}
       </div>
     </div>
   );

@@ -30,6 +30,7 @@ import {
 import { PureComponent } from "react";
 import { Sector } from "recharts";
 import { PieChart, Pie } from "recharts";
+import Spinner from "./UI/Spinner";
 
 const data = [
   {
@@ -79,7 +80,7 @@ const Home = (props) => {
   const [loading, setLoading] = React.useState(false);
 
   function loadData() {
-    setLoading("true");
+    setLoading(true);
     Auth.currentUserInfo()
       .then((userDetails) => {
         const payload = {
@@ -121,14 +122,11 @@ const Home = (props) => {
       Percent: details.length !== 0 ? details.customerOrdersDamagedCount : 0,
     },
   ];
-
+if (loading == true){
+  return <Spinner />
+}
   return (
     <div>
-      {/* <div className="widgetWrap">
-          <div className="widgetValue">
-            <div className="Value">Hello Gaurav</div>
-          </div>
-        </div> */}
       <div>
         <Link to="/myorders">
           <Card style={{ marginBottom: 10 }}>
@@ -197,7 +195,7 @@ const Home = (props) => {
               <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
                   <div class="circle" style={{ background: "orange" }}>
-                    <h3 style={{ padding: 20, fontSize: 50 }}>8</h3>
+                    <h3 style={{ padding: 20, fontSize: 50 }}>0</h3>
                   </div>
                   <div
                     style={{
@@ -216,7 +214,12 @@ const Home = (props) => {
               <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
                   <div class="circle" style={{ background: "#C57A7A" }}>
-                    <h3 style={{ padding: 20, fontSize: 50 }}>5</h3>
+                    <h3 style={{ padding: 20, fontSize: 50 }}>
+                      {" "}
+                      {details.length !== 0
+                        ? details.customerOrdersInTransitCount
+                        : 0}
+                    </h3>
                   </div>
                   <div
                     style={{
@@ -235,7 +238,12 @@ const Home = (props) => {
               <Grid item sm={2}>
                 <CardContent style={{ paddingTop: 10, paddingBottom: 10 }}>
                   <div class="circle" style={{ background: "#5995B7" }}>
-                    <h3 style={{ padding: 20, fontSize: 50 }}>2</h3>
+                    <h3 style={{ padding: 20, fontSize: 50 }}>
+                      {" "}
+                      {details.length !== 0
+                        ? details.customerOrdersFulfilledCount
+                        : 0}
+                    </h3>
                   </div>
                   <div
                     style={{
@@ -321,7 +329,10 @@ const Home = (props) => {
                     fontWeight: 700,
                   }}
                 >
-                  ₹ {details.length !== 0 ? Math.round(details.totalAmountSaved) : 0}
+                  ₹{" "}
+                  {details.length !== 0
+                    ? Math.round(details.totalAmountSaved)
+                    : 0}
                 </Grid>
               </Grid>
             </Card>
@@ -466,7 +477,10 @@ const Home = (props) => {
                 </div>
               </CardContent>
               <div class="paymentText" style={{ padding: 20, fontSize: 20 }}>
-                ₹ {details.length !== 0 ? details.totalAmount : 0}
+                ₹{" "}
+                {details.length !== 0
+                  ? Math.round(details.totalAmount)
+                  : 0}
               </div>
             </Card>
           </Grid>

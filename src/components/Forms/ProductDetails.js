@@ -917,23 +917,46 @@ const ProductDetails = (props) => {
         </Grid>
         {/* Type of the product */}
         <Grid item xs={12} sm={4}>
-          <Select
-            styles={selectStyles}
-            value={
-              props.chosenProducts[i] === null ||
-              props.chosenProducts[i].value.productType === null
-                ? null
-                : props.chosenProducts[i].value.productType
-            }
-            isDisabled={
-              props.chosenProducts[i] === null || !props.chosenProducts[i].isNew
-            }
-            onChange={(event) => onProductTypeChange(event, i)}
-            isSearchable
-            placeholder="Product Type"
-            name="color"
-            options={constants.typesOfProducts}
-          />
+          {props.chosenProducts[i] === null ||
+          !props.chosenProducts[i].isNew ? (
+            <TextField
+              type="text"
+              id="Product Type"
+              name="Product Type"
+              label="Product Type"
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              disabled
+              value={
+                props.chosenProducts[i] === null ||
+                props.chosenProducts[i].value.productType === null
+                  ? null
+                  : props.chosenProducts[i].value.productType
+              }
+              variant="outlined"
+              size="small"
+              style={{ backgroundColor: "#fff" }}
+            />
+          ) : (
+            <Select
+              styles={selectStyles}
+              value={
+                props.chosenProducts[i] === null ||
+                props.chosenProducts[i].value.productType === null
+                  ? null
+                  : props.chosenProducts[i].value.productType
+              }
+              // isDisabled={
+              //   props.chosenProducts[i] === null ||
+              //   !props.chosenProducts[i].isNew
+              // }
+              onChange={(event) => onProductTypeChange(event, i)}
+              isSearchable
+              placeholder="Product Type"
+              name="color"
+              options={constants.typesOfProducts}
+            />
+          )}
         </Grid>
         {props.chosenProducts[i] === null ||
         props.chosenProducts[i].value.measurable ? (

@@ -149,11 +149,11 @@ console.log(temp)
                     </Grid>
                     <Grid itemsm={12} xs={6}>
                       <h6>
-                        Order Date : <span>{eachOrder.pickupdate}</span>
+                        Order Date : <span>{eachOrder.pickupDate}</span>
                       </h6>
                     </Grid>
                     <Grid itemsm={12} xs={6}>
-                      <h6>Total Amount : {eachOrder.estimatedPrice}</h6>
+                      <h6>Total Amount : {Math.round(Number(eachOrder.estimatedPrice))}</h6>
                     </Grid>
                   </Grid>
                 </Grid>

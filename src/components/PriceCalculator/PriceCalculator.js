@@ -134,6 +134,7 @@ const PriceCalculator = (props) => {
             //console.log(Array.isArray(response))
             for (var i = 0; i < response.length; i++) {
               items.push({
+                productId: response[i].productId,
                 label: response[i].productName,
                 value: response[i],
                 isNew: false,
@@ -548,6 +549,7 @@ const PriceCalculator = (props) => {
           label: newValue.label,
           noOfUnits: 0,
           totalWeight: 0,
+          productId: newValue.productId,
         };
         items[i] = temp;
       }
@@ -675,8 +677,8 @@ const PriceCalculator = (props) => {
         <Grid item xs={12} sm={6}>
           <TextField
             type="number"
-            id="density"
-            name="density"
+            id="TotalWeight"
+            name="TotalWeight"
             onInput={(e) => {
               e.target.value = Math.max(0, parseInt(e.target.value))
                 .toString()
@@ -705,72 +707,72 @@ const PriceCalculator = (props) => {
         spacing={4}
         style={{ paddingTop: 30, paddingLeft: 30, paddingRight: 30 }}
       >
-        <Grid item xs={12} sm={4}>
-          <TextField
-            type="text"
-            id="unit"
-            name="unit"
-            label="Unit"
-            fullWidth
-            disabled
-            value={chosenProducts[i].value.unit.label}
-            variant="outlined"
-            size="small"
-            style={{ backgroundColor: "#fff" }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="text"
             id="weightPerunit"
             name="weightPerunit"
             label="Weight Per Unit"
             fullWidth
-            disabled
+            onChange={(event) => onWeightPerUnitChangeController(event, i)}
             value={chosenProducts[i].value.weightPerUnit}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={9}></Grid>
+        <Grid item xs={12} sm={3}>
+          <Select
+            styles={selectStyles}
+            className="basic-single"
+            classNamePrefix="Unit"
+            isSearchable
+            name="unit"
+            placeholder="Unit"
+            value={chosenProducts[i].value.unit}
+            onChange={(event) => unitChangeController(event, i)}
+            options={constants.lengthDimensions}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="text"
             id="length"
             name="lenght"
-            label="Length of a unit"
+            label="Length"
             fullWidth
-            disabled
+            onChange={(event) => onLengthChangeController(event, i)}
             value={chosenProducts[i].value.length}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="text"
             id="width"
             name="width"
-            label="Width of a unit"
+            label="Width"
             fullWidth
-            disabled
             value={chosenProducts[i].value.width}
+            onChange={(event) => onWidthChangeController(event, i)}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
           />
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
             type="text"
             id="height"
             name="height"
-            label="Height of a unit"
+            label="Height"
             fullWidth
-            disabled
             value={chosenProducts[i].value.height}
             variant="outlined"
+            onChange={(event) => onHeightChangeController(event, i)}
             size="small"
             style={{ backgroundColor: "#fff" }}
           />
@@ -786,18 +788,26 @@ const PriceCalculator = (props) => {
         spacing={4}
         style={{ paddingTop: 30, paddingLeft: 30, paddingRight: 30 }}
       >
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={3}>
           <TextField
-            type="text"
-            id="density"
-            name="density"
-            label="Density"
+            type="number"
+            id="TotalWeight"
+            name="TotalWeight"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            label="Total Weight"
             fullWidth
-            disabled
-            value={`${chosenProducts[i].value.density} kg per cubic meter`}
+            value={chosenProducts[i].totalWeight}
+            onChange={(event) => onTotalWeightChange(event, i)}
             variant="outlined"
             size="small"
             style={{ backgroundColor: "#fff" }}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">Kg</InputAdornment>,
+            }}
           />
         </Grid>
       </Grid>
@@ -805,19 +815,8 @@ const PriceCalculator = (props) => {
   );
 
   var list = chosenProducts.map((e, i) => (
-    <div
-    //   style={
-    //     i % 2 === 1
-    //       ? { backgroundColor: "#f9f9fb" }
-    //       : { backgroundColor: "#fff" }
-    //   }
-    >
+    <div>
       {i !== 0 && <Divider style={{ marginBottom: 30, marginTop: 30 }} />}
-      {/* <Typography gutterBottom style={{marginLeft:30,marginBottom:30,marginTop:30}}>
-            <h5>Product {i + 1}</h5> <IconButton onClick={() => handleItemDeleted(i)}>
-            <DeleteIcon style={{ fontSize: "30" }} />
-          </IconButton>
-          </Typography> */}
       <Grid
         container
         direction="row"
@@ -850,21 +849,44 @@ const PriceCalculator = (props) => {
         </Grid>
         {/* Type of the product */}
         <Grid item xs={12} sm={4}>
-          <Select
-            styles={selectStyles}
-            value={
-              chosenProducts[i] === null ||
-              chosenProducts[i].value.productType === null
-                ? null
-                : chosenProducts[i].value.productType
-            }
-            isDisabled={chosenProducts[i] === null || !chosenProducts[i].isNew}
-            onChange={(event) => onProductTypeChange(event, i)}
-            isSearchable
-            placeholder="Product Type"
-            name="color"
-            options={constants.typesOfProducts}
-          />
+          {chosenProducts[i] === null || !chosenProducts[i].isNew ? (
+            <TextField
+              type="text"
+              id="Product Type"
+              name="Product Type"
+              label="Product Type"
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              disabled
+              value={
+                chosenProducts[i] === null ||
+                chosenProducts[i].value.productType === null
+                  ? null
+                  : chosenProducts[i].value.productType
+              }
+              variant="outlined"
+              size="small"
+              style={{ backgroundColor: "#fff" }}
+            />
+          ) : (
+            <Select
+              styles={selectStyles}
+              value={
+                chosenProducts[i] === null ||
+                chosenProducts[i].value.productType === null
+                  ? null
+                  : chosenProducts[i].value.productType
+              }
+              isDisabled={
+                chosenProducts[i] === null || !chosenProducts[i].isNew
+              }
+              onChange={(event) => onProductTypeChange(event, i)}
+              isSearchable
+              placeholder="Product Type"
+              name="color"
+              options={constants.typesOfProducts}
+            />
+          )}
         </Grid>
         {chosenProducts[i] === null || chosenProducts[i].value.measurable ? (
           <Grid item xs={12} sm={4}>
@@ -939,18 +961,6 @@ const PriceCalculator = (props) => {
           <React.Fragment></React.Fragment>
         ) : chosenProducts[i].isNew === true ? (
           <React.Fragment>
-            {/* <FormControlLabel
-                style={{ margin: 20 }}
-                control={
-                <Switch
-                    checked={chosenProducts[i].value.measurable}
-                    onChange={()=>handleMeasurableChange(i)}
-                    name="checkedB"
-                    color="primary"
-                />
-                }
-                label="(Measureable Dimensions)"
-                /> */}
             <Grid
               component="label"
               container
@@ -972,10 +982,39 @@ const PriceCalculator = (props) => {
               ? measureablePerUnit(i)
               : notMeasureable(i)}
           </React.Fragment>
-        ) : chosenProducts[i].value.measurable === true ? (
-          fixedMeasurable(i)
         ) : (
-          fixedNotMeasurable(i)
+          <React.Fragment>
+            <Typography
+              style={{
+                fontSize: 18,
+                marginTop: 20,
+                marginBottom: 10,
+                marginLeft: 20,
+              }}
+            >
+              Product Dimensions
+            </Typography>
+            <Grid
+              component="label"
+              container
+              style={{ fontSize: 18, marginTop: 20, marginBottom: 20 }}
+              alignItems="center"
+              spacing={1}
+            >
+              <Grid item>Total Weight</Grid>
+              <Grid item>
+                <AntSwitch
+                  checked={chosenProducts[i].value.measurable}
+                  onChange={() => handleMeasurableChange(i)}
+                  name="checkedC"
+                />
+              </Grid>
+              <Grid item>No. Of Units</Grid>
+            </Grid>
+            {chosenProducts[i].value.measurable === true
+              ? fixedMeasurable(i)
+              : fixedNotMeasurable(i)}
+          </React.Fragment>
         )}
         <Grid item xs={12} sm={4}></Grid>
       </Grid>
