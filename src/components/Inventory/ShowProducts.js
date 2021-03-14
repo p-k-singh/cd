@@ -180,7 +180,7 @@ export default function CollapsibleTable(props) {
                   <TableCell component="th" scope="row">
                     {row.productName}
                   </TableCell>
-                  <TableCell>{row.productType}</TableCell>
+                  <TableCell>{row.productType.toString()}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell
@@ -220,7 +220,9 @@ export default function CollapsibleTable(props) {
                               <th>Unit Of Measurement: </th>
                               <td>
                                 {" "}
-                                {row.unit === null ? "-" : row.unit}{" "}
+                                {row.unit === null
+                                  ? "-"
+                                  : row.unit.toString()}{" "}
                               </td>
                             </TableRow>
                           </React.Fragment>

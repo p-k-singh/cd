@@ -377,7 +377,7 @@ const PriceCalculator = (props) => {
         weightPerUnit: chosenProducts[i].value.weightPerUnit,
         Unit:
           chosenProducts[i].value.measurable == true
-            ? chosenProducts[i].value.unit.value
+            ? chosenProducts[i].value.unit.value || chosenProducts[i].value.unit
             : "",
         noOfUnits: chosenProducts[i].noOfUnits,
         measurable: chosenProducts[i].value.measurable,
@@ -457,14 +457,6 @@ const PriceCalculator = (props) => {
         msg = "Measurement unit cannot be empty";
         return;
       }
-
-      // if (
-      //   (item.value.measurable == null || item.value.measurable == false) &&
-      //   (item.value.density == 0 || item.value.density == null)
-      // ) {
-      //   msg = "Weight Per Cubic meter cannot be empty";
-      //   return;
-      // }
       if (
         (item.value.measurable == null || item.value.measurable == false) &&
         item.totalWeight == 0
@@ -730,7 +722,15 @@ const PriceCalculator = (props) => {
             isSearchable
             name="unit"
             placeholder="Unit"
-            value={chosenProducts[i].value.unit}
+            value={
+              chosenProducts[i] === null ||
+              chosenProducts[i].value.unit === null
+                ? null
+                : chosenProducts[i].value.unit.value
+                ? chosenProducts[i].value.unit
+                : constants.dimensionsMap[chosenProducts[i].value.unit]
+            }
+
             onChange={(event) => unitChangeController(event, i)}
             options={constants.lengthDimensions}
           />

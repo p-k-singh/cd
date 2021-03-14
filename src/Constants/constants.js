@@ -169,10 +169,76 @@ const constants = {
     { name: "Warehouse", value: "Warehouse", id: 3 },
   ],
   productTypeMap: {
-    cement: {
-      label: "Cement",
-      value:'conatainers'
-    }
-  }
+    autoParts: { label: "Auto Parts", value: "autoParts" },
+    bardanaJute: { label: "Bardana Jute", value: "bardanaJute" },
+    buildingMaterial: { label: "Building Material", value: "buildingMaterial" },
+    cement: { label: "Cement", value: "cement" },
+    chemicals: { label: "Chemicals", value: "chemicals" },
+    coalAndAsh: { label: "Coal and Ash", value: "coalAndAsh" },
+    containers: { label: "Containers", value: "containers" },
+    cottonSeed: { label: "Cotton Seed", value: "cottonSeed" },
+    electronicsConsumerDurable: {
+      label: "Electronics Consumer Durable",
+      value: "electronicsConsumerDurable",
+    },
+    fertilizers: { label: "Fertilizers", value: "fertilizers" },
+    fruitsAndVegetables: {
+      label: "Fruits and Vegetables",
+      value: "fruitsAndVegetables",
+    },
+    furnitureAndWoodProducts: {
+      label: "Furniture and Wood Products",
+      value: "furnitureAndWoodProducts",
+    },
+    houseHoldGoods: { label: "House Hold Goods", value: "houseHoldGoods" },
+    industrialEquipments: {
+      label: "Industrial Equipments",
+      value: "industrialEquipments",
+    },
+    ironSheetsOrBarsOrScraps: {
+      label: "Iron sheets / bars / scraps",
+      value: "ironSheetsOrBarsOrScraps",
+    },
+    liquidInDrums: { label: "Liquid in drums", value: "liquidInDrums" },
+
+    // liquids/oil:{ label: "Liquids/Oil", value: "liquids/oil" },
+
+    machineryNewOrOld: {
+      label: "Machinery new or old",
+      value: "machineryNewOrOld",
+    },
+    medicals: { label: "Medicals", value: "medicals" },
+    metals: { label: "Metals", value: "metals" },
+    millJuteOil: { label: "Mill Jute Oil", value: "millJuteOil" },
+    packedFood: { label: "Packed Food", value: "packedFood" },
+    plasticPipes: { label: "Plastic pipes", value: "plasticPipes" },
+    powderBags: { label: "Powder Bags", value: "powderBags" },
+    printedBooksOrPaperRolls: {
+      label: "printed books or paper rolls",
+      value: "printedBooksOrPaperRolls",
+    },
+    refrigeratedGoods: {
+      label: "Refrigerated Goods",
+      value: "refrigeratedGoods",
+    },
+    riceOrWheatOrAgricultureProducts: {
+      label: "Rice or wheat or agriculture products",
+      value: "riceOrWheatOrAgricultureProducts",
+    },
+    scrap: { label: "scrap", value: "scrap" },
+    spices: { label: "spices", value: "spices" },
+    textiles: { label: "Textiles", value: "textiles" },
+    tyresAndRubberProducts: {
+      label: "Tyres and rubber products",
+      value: "tyresAndRubberProducts",
+    },
+  },
+
+dimensionsMap: {
+   centimeter:{ label: "Centimeter", value: "centimeter" },
+    inches:{ label: "Inches", value: "inches" },
+    feet:{ label: "Feet", value: "feet" },
+    millimeter:{ label: "Millimeter", value: "millimeter" },
+}
 };
 export default constants;
