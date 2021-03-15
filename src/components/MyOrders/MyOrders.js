@@ -140,8 +140,7 @@ console.log(temp)
                           marginRight: 40,
                         }}
                       >
-                        Product Name :{" "}
-                        <span>{eachOrder.items[0].productName}</span>
+                        Name : <span>{eachOrder.items[0].productName}</span>
                       </h6>
                     </Grid>
                     <Grid itemsm={12} xs={6}>
@@ -153,7 +152,10 @@ console.log(temp)
                       </h6>
                     </Grid>
                     <Grid itemsm={12} xs={6}>
-                      <h6>Total Amount : {Math.round(Number(eachOrder.estimatedPrice))}</h6>
+                      <h6>
+                        Total Amount : ₹
+                         {Math.round(Number(eachOrder.estimatedPrice))}
+                      </h6>
                     </Grid>
                   </Grid>
                 </Grid>

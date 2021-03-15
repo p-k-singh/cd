@@ -84,7 +84,7 @@ const OrderDetails = (props) => {
               <th scope="row">{constants.DimensionPerUnit + " : "}</th>
               <td>
                 {props.value.height} x {props.value.width} x{" "}
-                {props.value.breadth} {props.value.unit}
+                {props.value.breadth} {props.value.unit || props.value.unit.label}
               </td>
             </tr>
           </Grid>
@@ -92,62 +92,116 @@ const OrderDetails = (props) => {
       </table>
     );
   } else if (props.value.items.length == 1) {
-    return (
-      <table>
-        <Grid
-          container
-          spacing={3}
-          style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
-        >
-          <Grid item xs={12} sm={6}>
-            <tr>
-              <th scope="row">Order Date :</th>
-              <td>{today}</td>
-            </tr>
-          </Grid>
+   return (
+     <Card>
+       <table>
+         <Grid
+           container
+           spacing={3}
+           style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
+         >
+           <Grid item xs={12} sm={12}>
+             <tr>
+               <th scope="row">Order Date :</th>
+               <td>{today}</td>
+             </tr>
+           </Grid>
+           <Grid item xs={12} sm={12}>
+             <tr>
+               <th scope="row">{constants.pickupAddress + " : "}</th>
+               <td>
+                 {props.value.fromAddress},{props.value.fromPin}
+               </td>
+             </tr>
+           </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <tr>
-              <th scope="row">{constants.pickupAddress + " : "}</th>
-              <td>
-                {props.value.fromAddress},{props.value.fromPin}
-              </td>
-            </tr>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <tr>
-              <th scope="row">{constants.destinationAddress + " : "}</th>
-              <td>
-                {props.value.toAddress},{props.value.toPin}
-              </td>
-            </tr>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <tr>
-              <th scope="row">{constants.noOfUnits + " : "}</th>
-              <td> {props.value.items.map((unit) => unit.noOfUnits)}</td>
-            </tr>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <tr>
-              <th scope="row">{constants.weightPerUnit + " : "}</th>
-              <td> {props.value.items.map((unit) => unit.weightPerUnit)}</td>
-            </tr>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <tr>
-              <th scope="row">{constants.DimensionPerUnit + " : "}</th>
-              <td>
-                {props.value.items.map((unit) => unit.height)} x{" "}
-                {props.value.items.map((unit) => unit.width)} x{" "}
-                {props.value.items.map((unit) => unit.length)}{" "}
-                {/* {props.value.items.map((unit) => unit ? unit.unit.label: 'x')} */}
-              </td>
-            </tr>
-          </Grid>
-        </Grid>
-      </table>
-    );
+           <Grid item xs={12} sm={12}>
+             <tr>
+               <th scope="row">{constants.destinationAddress + " : "}</th>
+               <td>
+                 {props.value.toAddress},{props.value.toPin}
+               </td>
+             </tr>
+           </Grid>
+         </Grid>
+       </table>
+       {props.value.items.map((each, index) => (
+         <div>
+           <table>
+             <Grid
+               container
+               spacing={3}
+               style={{ padding: 50, paddingTop: 10, paddingBottom: 30 }}
+             >
+               <Grid item xs={12} sm={6}>
+                 <tr>
+                   <th scope="row">{"Product Name : "}</th>
+                   <td>{each.productName}</td>
+                 </tr>
+               </Grid>
+
+               {each.measurable == true ? (
+                 <Grid item xs={12} sm={6}>
+                   <tr>
+                     <th scope="row">{"No. of Units : "}</th>
+                     <td>{each.noOfUnits}</td>
+                   </tr>
+                 </Grid>
+               ) : (
+                 <p></p>
+               )}
+               {each.measurable == true ? (
+                 <Grid item xs={12} sm={6}>
+                   <tr>
+                     <th scope="row">{"Weight per Unit : "}</th>
+                     <td>{each.weightPerUnit} Kg</td>
+                   </tr>
+                 </Grid>
+               ) : (
+                 <p></p>
+               )}
+               {each.measurable == false ? (
+                 <Grid item xs={12} sm={6}>
+                   <tr>
+                     <th scope="row">{"Total Weight : "}</th>
+                     <td>{each.totalWeight} Kg</td>
+                   </tr>
+                 </Grid>
+               ) : (
+                 <p></p>
+               )}
+               <Grid item xs={12} sm={6}>
+                 <tr>
+                   <th scope="row">{"Product Type : "}</th>
+                   <td>{each.productType.label || each.productType}</td>
+                 </tr>
+               </Grid>
+               {each.measurable == true ? (
+                 <Grid item xs={12} sm={6}>
+                   <tr>
+                     <th scope="row">{"Dimensions : "}</th>
+                     <td>
+                       {each.height} x {each.length} x {each.width}{" "}
+                       {each.unit.label || each.unit}
+                     </td>
+                   </tr>
+                 </Grid>
+               ) : (
+                 <p></p>
+               )}
+
+               <Grid item xs={12} sm={6}>
+                 <tr>
+                   <th scope="row">{"Category: "}</th>
+                   <td>{each.categories.map((unit) => unit.label + ",")} </td>
+                 </tr>
+               </Grid>
+             </Grid>
+           </table>
+         </div>
+       ))}
+     </Card>
+   );
   } else if (props.value.items.length > 1) {
     return (
       <Card>
@@ -202,33 +256,55 @@ const OrderDetails = (props) => {
                     <td>{each.productName}</td>
                   </tr>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <tr>
-                    <th scope="row">{"No. of Units : "}</th>
-                    <td>{each.noOfUnits}</td>
-                  </tr>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <tr>
-                    <th scope="row">{"Weight per Unit : "}</th>
-                    <td>{each.weightPerUnit}</td>
-                  </tr>
-                </Grid>
+                {each.measurable == true ? (
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">{"No. of Units : "}</th>
+                      <td>{each.noOfUnits}</td>
+                    </tr>
+                  </Grid>
+                ) : (
+                  <p></p>
+                )}
+                {each.measurable == true ? (
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">{"Weight per Unit : "}</th>
+                      <td>{each.weightPerUnit} Kg</td>
+                    </tr>
+                  </Grid>
+                ) : (
+                  <p></p>
+                )}
+                {each.measurable == false ? (
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">{"Total Weight : "}</th>
+                      <td>{each.totalWeight} Kg</td>
+                    </tr>
+                  </Grid>
+                ) : (
+                  <p></p>
+                )}
                 <Grid item xs={12} sm={6}>
                   <tr>
                     <th scope="row">{"Product Type : "}</th>
-                    <td>{each.productType.label}</td>
+                    <td>{each.productType.label || each.productType}</td>
                   </tr>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <tr>
-                    <th scope="row">{"Dimensions : "}</th>
-                    <td>
-                      {each.height} x {each.length} x {each.width}{" "}
-                      {each.unit.label}
-                    </td>
-                  </tr>
-                </Grid>
+                {each.measurable == true ? (
+                  <Grid item xs={12} sm={6}>
+                    <tr>
+                      <th scope="row">{"Dimensions : "}</th>
+                      <td>
+                        {each.height} x {each.length} x {each.width}{" "}
+                        {each.unit.label || each.unit}
+                      </td>
+                    </tr>
+                  </Grid>
+                ) : (
+                  <p></p>
+                )}
 
                 <Grid item xs={12} sm={6}>
                   <tr>

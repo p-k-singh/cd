@@ -477,10 +477,7 @@ if (loading == true){
                 </div>
               </CardContent>
               <div class="paymentText" style={{ padding: 20, fontSize: 20 }}>
-                ₹{" "}
-                {details.length !== 0
-                  ? Math.round(details.totalAmount)
-                  : 0}
+                ₹ {details.length !== 0 ? Math.round(details.totalAmount) : 0}
               </div>
             </Card>
           </Grid>
@@ -506,8 +503,8 @@ if (loading == true){
               <div class="paymentText" style={{ padding: 20, fontSize: 20 }}>
                 ₹{" "}
                 {details.length !== 0
-                  ? Number(details.totalAmount) -
-                    Number(details.totalAmountPaid)
+                  ? Math.round(Number(details.totalAmount) -
+                    Number(details.totalAmountPaid))
                   : 0}
               </div>
             </Card>
