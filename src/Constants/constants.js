@@ -201,7 +201,7 @@ const constants = {
     },
     liquidInDrums: { label: "Liquid in drums", value: "liquidInDrums" },
 
-    // liquids/oil:{ label: "Liquids/Oil", value: "liquids/oil" },
+    liquidsOrOil: { label: "Liquids/Oil", value: "liquidsOrOil" },
 
     machineryNewOrOld: {
       label: "Machinery new or old",
@@ -234,11 +234,11 @@ const constants = {
     },
   },
 
-dimensionsMap: {
-   centimeter:{ label: "Centimeter", value: "centimeter" },
-    inches:{ label: "Inches", value: "inches" },
-    feet:{ label: "Feet", value: "feet" },
-    millimeter:{ label: "Millimeter", value: "millimeter" },
-}
+  dimensionsMap: {
+    centimeter: { label: "Centimeter", value: "centimeter" },
+    inches: { label: "Inches", value: "inches" },
+    feet: { label: "Feet", value: "feet" },
+    millimeter: { label: "Millimeter", value: "millimeter" },
+  },
 };
 export default constants;
