@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import "../../Globalcss/globalcss.css";
-/// /inventory      get(id,owner,type)
-// /pricing get(length,width,height,toPin,fromPin,weightPerUnit,measureable=true/false,other)
 import {
   TextField,
   FormControlLabel,

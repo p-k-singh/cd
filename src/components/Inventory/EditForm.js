@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-/// /inventory      get(id,owner,type)
-// /pricing get(length,width,height,toPin,fromPin,weightPerUnit,measureable=true/false,other)
+import Select from "react-select";
 import {
   TextField,
   Grid,
   FormControl,
   InputLabel,
   Button,
-  Select,
   Breadcrumbs,
+  IconButton
 } from "@material-ui/core";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { Auth, API } from "aws-amplify";
 import Spinner from "../UI/Spinner";
 import Typography from "@material-ui/core/Typography";
@@ -52,30 +53,25 @@ const useStyles = makeStyles({
 const AddProductForm = (props) => {
   const classes = useStyles();
   const [newProductName, setNewProductName] = useState(props.row.productName);
-  const [newProductType, setNewProductType] = useState(props.row.productType);
-  const [unit, setUnit] = useState("centimeters");
+  const [newProductType, setNewProductType] = useState(
+    constants.productTypeMap[props.row.productType]
+  );
+  const [unit, setUnit] = useState(constants.dimensionsMap[props.row.unit]);
   const [height, setHeight] = useState(props.row.height);
   const [width, setWidth] = useState(props.row.width);
   const [length, setLength] = useState(props.row.length);
   const [weightPerUnit, setWeightPerunit] = useState(props.row.weightPerUnit);
-  const [features, setFeatures] = useState([]);
   const [loading, setLoading] = useState(false);
-  const capabilityOptions = {
-    options: constants.inventoryFeatures,
-  };
   const [lengthValidator, setLengthValidator] = useState("");
   const [widthValidator, setWidthValidator] = useState("");
   const [heightValidator, setHeightValidator] = useState("");
   const [weightPerUnitValidator, setWeightPerUnitValidator] = useState("");
+  const [fillDimensions, setFillDimensions] = useState(false);
+  const [categories, setCategories] = useState(props.row.categories);
 
-  const onMultiSelect = (selectedList, selectedItem) => {
-    // selectedList.map((select) => alert(select.name))
-    setFeatures(selectedList);
-  };
-  const onMultiRemove = (selectedList, removedItem) => {
-    // alert(selectedList)
-    setFeatures(selectedList);
-  };
+  //  useEffect(() => {
+  //    alert(props.row.productId);
+  //      }, []);
   const onHeightChangeController = (event) => {
     if (event.target.value < 0) {
       setHeightValidator("Height cannot be negative");
@@ -90,7 +86,6 @@ const AddProductForm = (props) => {
     } else {
       setWidthValidator("");
     }
-
     setWidth(event.target.value);
   };
   const onLengthChangeController = (event) => {
@@ -102,13 +97,16 @@ const AddProductForm = (props) => {
     setLength(event.target.value);
   };
   const unitChangeController = (event) => {
-    setUnit(event.target.value);
+    setUnit(event)
   };
   const onProductNameChange = (event) => {
     setNewProductName(event.target.value);
   };
-  const onProductTypeChange = (event) => {
-    setNewProductType(event.target.value);
+  const handleTypeChange = (event) => {
+    setNewProductType(event);
+  };
+  const onCategoryChange = (event) => {
+    setCategories(event);
   };
   const onWeightPerUnitChangeController = (event) => {
     if (event.target.value < 0) {
@@ -119,84 +117,190 @@ const AddProductForm = (props) => {
     setWeightPerunit(event.target.value);
   };
 
-  const submitTruck = () => {
+  const submitProducts = async () => {
     if (newProductName == "") {
       alert("Product Name can't be empty");
       return;
     }
-
-    // if (features == null || features == "") {
-    //   alert("Product Features can't be empty");
-    //   return;
-    // }
-    if (
-      weightPerUnit == null ||
-      height == null ||
-      length == null ||
-      width == null
-    ) {
-      alert("Product Dimensions can't be empty");
+    if (categories == null || categories == "") {
+      alert("Product Category can't be empty");
       return;
     }
-    if (unit === "") {
-      alert("Select measurement Unit for your Product");
-      return;
-    }
-    if (lengthValidator !== "") {
-      alert(lengthValidator);
-      return;
-    }
-     if (widthValidator !== "") {
-       alert(widthValidator);
-       return;
-     }
+    if (fillDimensions == true){
+      if (
+        weightPerUnit == null ||
+        weightPerUnit == "" ||
+        height == null ||
+        height == "" ||
+        length == null ||
+        length == "" ||
+        width == null ||
+        width == ""
+      ) {
+        alert("Product Dimensions can't be empty");
+        return;
+      }
+      if (unit === "") {
+        alert("Select measurement Unit for your Product");
+        return;
+      }
+      if (lengthValidator !== "") {
+        alert(lengthValidator);
+        return;
+      }
+      if (widthValidator !== "") {
+        alert(widthValidator);
+        return;
+      }
       if (heightValidator !== "") {
         alert(heightValidator);
         return;
       }
-       if (weightPerUnitValidator !== "") {
-         alert(weightPerUnitValidator);
-         return;
-       }
-    //   if ( density == null) {
-    //     alert("Density cannot be empty");
-    //     return;
-    //   }
+      if (weightPerUnitValidator !== "") {
+        alert(weightPerUnitValidator);
+        return;
+      }
+      
+    }
 
     setLoading(true);
-    // alert(props.row.productType)
-    const data = {
-      owner: props.row.owner,
-      productName: newProductName,
+    var currentUser = await Auth.currentUserInfo();
+    var owner = currentUser.username;
+    var data;
+
+    data = {
+      owner: owner,
       productId: props.row.productId,
-      productType: props.row.productType,
-      unit: unit,
+      productName: newProductName,
+      productType: newProductType.value,
+      unit: unit.value,
       height: height,
       width: width,
       length: length,
       weightPerUnit: weightPerUnit,
-      location: "ok",
-      features: features,
+      location: "-",
+      categories: categories,
+      measurable: true,
+      pincode: "-",
     };
     const payload = {
       body: data,
     };
-    API.put("GoFlexeOrderPlacement", `/inventory?type=owner`, payload)
-      .then((response) => {
-        // Add your code here
-        console.log(response);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error.response);
-        alert("Please Try again Later");
-        setLoading(false);
-      });
-    console.log(data);
+    API.put("GoFlexeOrderPlacement", `/inventory`, payload).catch((error) => {
+      console.log(error);
+    });
     setLoading(false);
     props.editButtonClicked();
-    // var params = `type=owner&owner=${props.row.owner}&location=${location}&productType=${newProductType}&productName=${newProductName}&productId=${props.row.productId}`
   };
+
+  var measureablePerUnit = (
+    <React.Fragment>
+      <Grid container spacing={3} style={{ padding: 50, paddingTop: 20 }}>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            type="number"
+            error={weightPerUnitValidator !== ""}
+            helperText={
+              weightPerUnitValidator === "" ? " " : weightPerUnitValidator
+            }
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            id="weightPerUnit"
+            name="weightPerUnit"
+            label="Weight Per Unit(Kg)"
+            fullWidth
+            value={weightPerUnit}
+            variant="outlined"
+            size="small"
+            // endAdornment={<InputAdornment position="end">Kg</InputAdornment>}
+            autoComplete="weightPerUnit"
+            onChange={(event) => onWeightPerUnitChangeController(event)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={9}></Grid>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            type="number"
+            error={heightValidator !== ""}
+            helperText={heightValidator === "" ? " " : heightValidator}
+            id="height"
+            name="height"
+            label="Height"
+            fullWidth
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            value={height}
+            autoComplete="Height"
+            variant="outlined"
+            size="small"
+            // style={{backgroundColor:'#fff'}}
+            onChange={(event) => onHeightChangeController(event)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            type="number"
+            error={widthValidator !== ""}
+            helperText={widthValidator === "" ? " " : widthValidator}
+            id="width"
+            name="width"
+            label="Width"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            fullWidth
+            value={width}
+            autoComplete="width"
+            variant="outlined"
+            size="small"
+            // style={{backgroundColor:'#fff'}}
+            onChange={(event) => onWidthChangeController(event)}
+          />
+        </Grid>
+        <Grid item xs={12} sm={3}>
+          <TextField
+            type="number"
+            error={lengthValidator !== ""}
+            helperText={lengthValidator === "" ? " " : lengthValidator}
+            id="length"
+            name="length"
+            onInput={(e) => {
+              e.target.value = Math.max(0, parseInt(e.target.value))
+                .toString()
+                .slice(0, 5);
+            }}
+            label="Length"
+            value={length}
+            fullWidth
+            variant="outlined"
+            size="small"
+            onChange={(event) => onLengthChangeController(event)}
+            autoComplete="Length"
+          />
+        </Grid>
+        <Grid item xs={12} sm={2}>
+          <Select
+            className="basic-single"
+            classNamePrefix="Unit"
+            isSearchable
+            name="unit"
+            value={unit}
+            placeholder="Unit"
+            onChange={(event) => unitChangeController(event)}
+            options={constants.lengthDimensions}
+          />
+        </Grid>
+      </Grid>
+    </React.Fragment>
+  );
 
   if (loading === true) {
     return <Spinner />;
@@ -221,7 +325,11 @@ const AddProductForm = (props) => {
         <Grid
           container
           spacing={3}
-          style={{ paddingLeft: 50, paddingRight: 50, paddingTop: 10 }}
+          style={{
+            paddingLeft: 50,
+            paddingRight: 50,
+            paddingTop: 20,
+          }}
         >
           <Grid item xs={12} sm={6}>
             <TextField
@@ -231,23 +339,26 @@ const AddProductForm = (props) => {
               name="productName"
               label="Enter Product Name"
               value={newProductName}
+              variant="outlined"
+              size="small"
+              // style={{backgroundColor:'#fff'}}
               onChange={(event) => onProductNameChange(event)}
               fullWidth
             />
           </Grid>
-          {/* <Grid item xs={12} sm={6}>
-                <TextField
-                    required
-                    type="text"
-                    id="productType"
-                    name="productType"
-                    label="Enter Product Type"
-                    value={newProductType}
-                    onChange={(event) => onProductTypeChange(event)}
-                    fullWidth          
-                />
-            </Grid> */}
-          <Grid item xs={12} sm={8}>
+          <Grid item xs={12} sm={6}>
+            <Select
+              className="basic-single"
+              classNamePrefix="select"
+              value={newProductType}
+              onChange={(event) => handleTypeChange(event)}
+              isSearchable
+              name="productType"
+              placeholder="Product Type"
+              options={constants.typesOfProducts}
+            />
+          </Grid>
+          {/* <Grid item xs={12} sm={8}>
             <Multiselect
               style={{
                 borderLeft: "0px",
@@ -260,99 +371,52 @@ const AddProductForm = (props) => {
               displayValue="name" // Property name to display in the dropdown options
               placeholder="Features(Select Many)"
             />
+          </Grid> */}
+          <Grid item xs={12} sm={6}>
+            <Select
+              //defaultValue={[colourOptions[2], colourOptions[3]]}
+              isMulti
+              name="categories"
+              options={constants.inventoryCategory}
+              value={categories}
+              placeholder="Category(Select Multiple)"
+              className="basic-multi-select"
+              onChange={(event) => onCategoryChange(event)}
+              classNamePrefix="select"
+            />
           </Grid>
         </Grid>
+        <Grid
+          container
+          spacing={3}
+          style={{
+            paddingLeft: 50,
+            paddingRight: 50,
+            paddingTop: 40,
+          }}
+        ></Grid>
+        <IconButton
+          style={{ padding: 0, marginLeft: 40, outline: "none" }}
+          aria-label="expand row"
+          size="small"
+          onClick={() =>
+            fillDimensions == true
+              ? setFillDimensions(false)
+              : setFillDimensions(true)
+          }
+        >
+          Add Dimensions (optional){" "}
+          {fillDimensions == true ? (
+            <KeyboardArrowUpIcon />
+          ) : (
+            <KeyboardArrowDownIcon />
+          )}
+        </IconButton>
 
-        <Typography className={classes.formHeadings}>
-          Dimensions per unit
-        </Typography>
-        <Grid container spacing={3} style={{ padding: 50, paddingTop: 10 }}>
-          <Grid item xs={12} sm={6}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="age-native-simple">Unit</InputLabel>
-              <Select
-                native
-                //value="inches"
-                onChange={unitChangeController}
-                inputProps={{
-                  name: "age",
-                  id: "age-native-simple",
-                }}
-              >
-                {constants.dimensionOptions.map((d) => (
-                  <option value={d.value}>{d.name}</option>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              error={heightValidator !== ""}
-              helperText={heightValidator === "" ? " " : heightValidator}
-              required
-              type="number"
-              id="height"
-              name="height"
-              label="Height"
-              fullWidth
-              value={height}
-              autoComplete="Height"
-              onChange={(event) => onHeightChangeController(event)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              error={widthValidator !== ""}
-              helperText={widthValidator === "" ? " " : widthValidator}
-              type="number"
-              id="width"
-              name="width"
-              label="Width"
-              fullWidth
-              value={width}
-              autoComplete="width"
-              onChange={(event) => onWidthChangeController(event)}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              error={lengthValidator !== ""}
-              helperText={lengthValidator === "" ? " " : lengthValidator}
-              required
-              type="number"
-              id="length"
-              name="length"
-              label="Length"
-              value={length}
-              fullWidth
-              onChange={(event) => onLengthChangeController(event)}
-              autoComplete="Length"
-            />
-          </Grid>
-        </Grid>
-        <Typography className={classes.formHeadings}>Other Details</Typography>
-        <Grid container spacing={3} style={{ padding: 50, paddingTop: 10 }}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              error={weightPerUnitValidator !== ""}
-              helperText={
-                weightPerUnitValidator === "" ? " " : weightPerUnitValidator
-              }
-              type="number"
-              id="weightPerUnit"
-              name="weightPerUnit"
-              label="Weight Per Unit(in Kg)"
-              fullWidth
-              value={weightPerUnit}
-              autoComplete="weightPerUnit"
-              onChange={(event) => onWeightPerUnitChangeController(event)}
-            />
-          </Grid>
-        </Grid>
+        {fillDimensions == true ? measureablePerUnit : <br />}
 
         <Button
-          onClick={submitTruck}
+          onClick={submitProducts}
           className="row"
           variant="contained"
           style={{

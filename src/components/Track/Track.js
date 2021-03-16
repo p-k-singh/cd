@@ -255,29 +255,28 @@ const Track = (props) => {
         return StageDescription[0];
       case 1:
         return (
-         StageDescription[1])
+          <div>
+            <p>
+              <br />
+              {StageDescription[1]} <br />
+              The Driver has left for pickup and will arrive at pickup location
+              on {PickupDate.substring(0, 10)}
+            </p>
+            <p>
+              Driver Name:{" "}
+              {DriverDetails.length !== 0 ? DriverDetails.value : "x"}
+              <br />
+              Contact Number:{" "}
+              {DriverDetails.length !== 0 ? DriverDetails.phone : "x"}
+              <br />
+              Truck Number: {TruckNo !== "" ? TruckNo : "x"}
+            </p>
+          </div>
+        );
           
          //Your Order has been accepted by the Service Provider,You will get notified once the Driver has left for Pickup.</div>) */}
          case 2:
         return (StageDescription[2])
-        //   <div>
-        //     <p>
-        //       <br />
-        //      {} <br />
-        //       The Driver has left for pickup and will arrive at pickup location
-        //       on {PickupDate.substring(0, 10)}
-        //     </p>
-        //     <p>
-        //       Driver Name:{" "}
-        //       {DriverDetails.length !== 0 ? DriverDetails.value : "x"}
-        //       <br />
-        //       Contact Number:{" "}
-        //       {DriverDetails.length !== 0 ? DriverDetails.phone : "x"}
-        //       <br />
-        //       Truck Number: {TruckNo !== "" ? TruckNo : "x"}
-        //     </p>
-        //   </div>
-        // );
 
       case 3:
         return (StageDescription[3])
@@ -652,7 +651,7 @@ const Track = (props) => {
       </Typography>
       {activeStep === steps.length && (
         <Paper square elevation={0} className={classes.resetContainer}>
-          <Typography>Shipment Delivered Successfully</Typography>
+          <center><Typography> <h3>Shipment Delivered Successfully</h3></Typography></center>
         </Paper>
       )}
       <Stepper activeStep={activeStep} orientation="vertical">
@@ -671,7 +670,7 @@ const Track = (props) => {
       <div className={classes.actionsContainer}></div>
       <div>
         <div>
-          <Button
+          {/* <Button
             disabled={activeStep === 0}
             onClick={handleBack}
             className={classes.backButton}
@@ -680,7 +679,7 @@ const Track = (props) => {
           </Button>
           <Button variant="contained" color="primary" onClick={handleNext}>
             {activeStep === steps.length - 1 ? "Finish" : "Next"}
-          </Button>
+          </Button> */}
         </div>
         {/* {activeStep === steps.length - 1 ? (
           <Button

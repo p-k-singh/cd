@@ -139,15 +139,15 @@ const useStyles = makeStyles((theme) => ({
 function Dashboard() {
     const list = [
       { title: "Dashboard", to: "/", icon: <DashboardIcon /> },
-      {
-        title: "My WorkList",
-        to: "/TaskManager",
-        icon: (
-          // <Badge badgeContent={5} color="secondary">
-          <AssignmentIcon />
-          // </Badge>
-        ),
-      },
+    //   {
+    //     title: "My WorkList",
+    //     to: "/TaskManager",
+    //     icon: (
+    //       // <Badge badgeContent={5} color="secondary">
+    //       <AssignmentIcon />
+    //       // </Badge>
+    //     ),
+    //   },
       { title: "My Orders", to: "/myorders", icon: <AddShoppingCartIcon /> },
       {
         title: "Price Calculator",

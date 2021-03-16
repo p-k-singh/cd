@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Spinner from "../UI/Spinner";
 import { makeStyles } from "@material-ui/core/styles";
@@ -147,6 +148,7 @@ export default function CollapsibleTable(props) {
             <TableCell />
             <TableCell>Name</TableCell>
             <TableCell>Type</TableCell>
+            <TableCell>Categories</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -181,6 +183,10 @@ export default function CollapsibleTable(props) {
                     {row.productName}
                   </TableCell>
                   <TableCell>{row.productType.toString()}</TableCell>
+                  <TableCell>
+                    {" "}
+                    {row.categories.map((category) => category.label + " ")}
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell
@@ -227,52 +233,8 @@ export default function CollapsibleTable(props) {
                             </TableRow>
                           </React.Fragment>
                         ) : (
-                          <React.Fragment>
-                            <TableRow>
-                              <th>Density: </th>
-                              <td> {row.density} kg per cubic meter</td>
-                            </TableRow>
-                          </React.Fragment>
+                          <br />
                         )}
-                        {/* {row.measurable===true ?
-                    <React.Fragment>
-                        <TableRow>
-                        <th>Length: </th>
-                        <td> {row.length}</td>
-                        </TableRow>
-                        <TableRow>
-                        <th>Width: </th>
-                        <td> {row.width} </td>
-                        </TableRow>
-                        <TableRow>
-                        <th>Height: </th>
-                        <td> {row.height} </td>
-                        </TableRow>
-                        <TableRow>
-                        <th>Unit Of Measurement: </th>
-                        <td> {row.unit} </td>
-                        </TableRow>
-                    </React.Fragment>
-                    :
-                    <React.Fragment>
-                      <TableRow>
-                        <th>Length: </th>
-                        <td> </td>
-                        </TableRow>
-                        <TableRow>
-                        <th>Width: </th>
-                        <td>  </td>
-                        </TableRow>
-                        <TableRow>
-                        <th>Height: </th>
-                        <td>  </td>
-                        </TableRow>
-                        <TableRow>
-                        <th>Unit Of Measurement: </th>
-                        <td>  </td>
-                        </TableRow>
-                    </React.Fragment>
-               } */}
                       </Box>
                     </Collapse>
                   </TableCell>

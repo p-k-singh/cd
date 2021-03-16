@@ -389,7 +389,9 @@ const OrderSummary = (props) => {
                 <Grid item xs={12} sm={6}>
                   <tr>
                     <th scope="row">{"Product Type : "}</th>
-                    <td>{each.value.productType.label}</td>
+                    <td>
+                      {each.value.productType.label || each.value.productType}
+                    </td>
                   </tr>
                 </Grid>
                 {each.value.measurable === true ? (
@@ -398,7 +400,8 @@ const OrderSummary = (props) => {
                       <th scope="row">{"Dimensions : "}</th>
                       <td>
                         {each.value.height} x {each.value.length} x{" "}
-                        {each.value.width} {each.value.unit.label}
+                        {each.value.width}{" "}
+                        {each.value.unit.label || each.value.unit}
                       </td>
                     </tr>
                   </Grid>

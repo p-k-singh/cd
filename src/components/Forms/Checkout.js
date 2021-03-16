@@ -13,6 +13,9 @@ import { Auth } from "aws-amplify";
 // /serviceorder/acceptance?orderId=""&providerId=""
 import PaymentPromise from "./PaymentPromise";
 import { API } from "aws-amplify";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,6 +55,13 @@ function SimpleCard(props) {
   const [chosenProducts, setChosenProducts] = useState([null]);
   const [estimatedPrice, setEstimatedPrice] = useState(0);
   const [OrderId, setOrderId] = useState(0);
+  const steps = getSteps();
+
+
+  function getSteps() {
+    return ["Location Details", "Product Details", "Payment Promise","Order Summary"];
+  }
+
 
   function getStepContent(step, chosenProducts, setChosenProducts) {
     switch (step) {
@@ -463,6 +473,17 @@ function SimpleCard(props) {
   }
   let content = (
     <Card className={classes.root}>
+      <Stepper activeStep={activeStep}>
+        {steps.map((label, index) => {
+          const stepProps = {};
+          const labelProps = {};
+          return (
+            <Step key={label} {...stepProps}>
+              <StepLabel {...labelProps}>{label}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
       {redirect}
       {getStepContent(activeStep, chosenProducts, setChosenProducts)}
       <div
